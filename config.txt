@@ -1,0 +1,3 @@
+workers: 10
+totalmb: 100
+chunks: 10
