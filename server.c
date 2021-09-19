@@ -1,14 +1,21 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <pthread.h>
 #include <unistd.h>
+#include <fcntl.h>
 #include <signal.h>
 #include <sys/socket.h>
 #include <sys/un.h>
+#include <sys/epoll.h>
 
 #include "include/logger.h"
 #include "include/workers.h"
+
+#define PERROR_DIE(action, eq) if ((action) == eq) {\
+        perror("ERROR! ");\
+        exit(-1);}
 
 #define BUF_SIZ 512
 
@@ -30,13 +37,11 @@ typedef struct {
 } config_t;
 
 typedef struct {
+    char *data;
     int sfd2;
-    struct sockaddr_un remote;
-    char *buf;
+    int bytes;
 } thargs_t;
 
-
-static pthread_mutex_t *mtxptr;
 
 config_t parse_config(char *path_config) {
     FILE *fp;
@@ -101,29 +106,24 @@ void parse_args(int argc, char **argv, arg_t **result, int *length, int **map) {
     }
 }
 
-
 void *th_routine(void *args) {
     workers_t workers;
     thargs_t thargs_cpy;
-    int bytes;
 
     workers = (workers_t)args;
 
     while(1) {
         pthread_mutex_lock(get_mtxptr(workers));
 
-        printf("Client connected!\n");
-
         workers_args_lock(workers);
         thargs_cpy = *((thargs_t *)get_args(workers));
         workers_args_unlock(workers);
 
-        while ((bytes = read(thargs_cpy.sfd2, (void *)thargs_cpy.buf, 1024)) > 0) {
-            write(STDOUT_FILENO, thargs_cpy.buf, bytes);
-        }
+        // printf("Read done from fd=%d! Bytes read: %d\n", thargs_cpy.sfd2, bytes);
+        if (thargs_cpy.data[0] == 'a') sleep(5);
+        write(thargs_cpy.sfd2, thargs_cpy.data, thargs_cpy.bytes);
+        free(thargs_cpy.data);
 
-        printf("Client disconnected!\n");
-        free(thargs_cpy.buf);
     }
 
     return NULL;
@@ -131,18 +131,19 @@ void *th_routine(void *args) {
 
 void hdl_SIGUSR1(int sig) {
 
-    pthread_mutex_unlock(mtxptr);
 
 }
 
 int main(int argc, char **argv) {
-    int len_args, sfd, t;
+    int len_args, sfd, sfd2, t, epollfd, evt_cnt, i, bytes;
+    struct epoll_event event, events[4];
+    struct sockaddr_un local, remote;
     arg_t *args;
     config_t conf;
     int *map_args;
     workers_t workers;
-    struct sockaddr_un local;
     thargs_t thargs;
+    char buf[1024];
     
     parse_args(argc, argv, &args, &len_args, &map_args);
 
@@ -159,44 +160,65 @@ int main(int argc, char **argv) {
     //TODO: check if config values are correct (like workers > 0)
 
 
-    if ((sfd = socket(AF_UNIX, SOCK_STREAM, 0)) == -1) {
-        perror("ERORR: unable to initialize the socket");
-        exit(-1);
-    }
+    PERROR_DIE(sfd = socket(AF_UNIX, SOCK_STREAM, 0), -1);
 
     local.sun_family = AF_UNIX;
     strcpy(local.sun_path, "./socket.sk");
     unlink(local.sun_path);
 
-    if (bind(sfd, (struct sockaddr *)&local, strlen(local.sun_path) + sizeof(local.sun_family)) == -1) {
-        perror("ERORR: unable to bind the socket");
-        exit(-1);
-    }
+    PERROR_DIE(bind(sfd, (struct sockaddr *)&local, strlen(local.sun_path) + sizeof(local.sun_family)), -1);
+    PERROR_DIE(listen(sfd, 10), -1);
 
-    if (listen(sfd, 10) == -1) {
-        perror("ERORR: unable to listen the socket");
-        exit(-1);
-    }
+    PERROR_DIE(epollfd = epoll_create1(0), -1);
 
+    event.events = EPOLLIN;
+    event.data.fd = sfd;
+
+    PERROR_DIE(epoll_ctl(epollfd, EPOLL_CTL_ADD, sfd, &event), -1);
 
     workers = workers_init(4, &thargs);
-    mtxptr = get_mtxptr(workers);
 
     signal(SIGUSR1, hdl_SIGUSR1);
     workers_start(workers, th_routine);
 
+    while (1) {
 
-    while(1) {
-        t = sizeof(thargs.remote);
-        if ((thargs.sfd2 = accept(sfd, (struct sockaddr *)&thargs.remote, &t)) == -1) {
-            perror("ERORR: unable to accept the incoming connection");
-            exit(-1);
+        PERROR_DIE(evt_cnt = epoll_wait(epollfd, events, 4, -1), -1);
+
+        for (i = 0; i < evt_cnt; i++) {
+
+            if (events[i].data.fd == sfd) {
+                t = sizeof(remote);
+                PERROR_DIE(sfd2 = accept(events[i].data.fd, (struct sockaddr *)&remote, &t), -1);
+
+                // fcntl(sfd2, F_SETFL, fcntl(sfd2, F_GETFL, 0) & ~O_NONBLOCK);
+                event.events = EPOLLIN;
+                event.data.fd = sfd2;
+
+                PERROR_DIE(epoll_ctl(epollfd, EPOLL_CTL_ADD, sfd2, &event), -1);
+
+            } else {
+                
+                if (!(bytes = read(events[i].data.fd, (void *)buf, 1024))) {
+                    PERROR_DIE(epoll_ctl(epollfd, EPOLL_CTL_DEL, events[i].data.fd, &event), -1);
+                    close(events[i].data.fd);
+                    continue;
+                }
+
+                workers_args_lock(workers);
+                thargs.sfd2 = events[i].data.fd;
+                thargs.bytes = bytes;
+                thargs.data = (char *)malloc(bytes * sizeof *thargs.data);
+                memcpy(thargs.data, buf, bytes);
+                workers_args_unlock(workers);
+
+                workers_wakeup(workers);
+
+            }
+
         }
 
-        thargs.buf = malloc(1024 * sizeof *thargs.buf);
-        workers_wakeup(workers);
     }
-
 
     //TODO: mutex is not ok, it doesn't consider a lot of "unlocks" because
     //mutex can go up to 1 and not higher values. Consider a queue or a semaphore instead of a mutex
@@ -205,6 +227,7 @@ int main(int argc, char **argv) {
 
     /** FREE EVERYTHING **/
     workers_delete(workers);
+    close(epollfd);
     close(sfd);
 
     free(args);
