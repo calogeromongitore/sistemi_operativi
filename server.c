@@ -29,6 +29,12 @@ typedef struct {
     int chunks;
 } config_t;
 
+typedef struct {
+    int sfd2;
+    struct sockaddr_un remote;
+    char *buf;
+} thargs_t;
+
 
 static pthread_mutex_t *mtxptr;
 
@@ -97,26 +103,27 @@ void parse_args(int argc, char **argv, arg_t **result, int *length, int **map) {
 
 
 void *th_routine(void *args) {
-    // pthread_mutex_t *mutex;
-    int id, cnt;
     workers_t workers;
+    thargs_t thargs_cpy;
+    int bytes;
 
-    // mutex = (pthread_mutex_t *)args;
-    printf("suca");
-    workers = *((workers_t *)args);
+    workers = (workers_t)args;
 
-    cnt = 0;
     while(1) {
         pthread_mutex_lock(get_mtxptr(workers));
 
-        id = rand();
-        printf("%d) Hello from a thread %d!\n", cnt, id);
+        printf("Client connected!\n");
 
-        sleep(5);
+        workers_args_lock(workers);
+        thargs_cpy = *((thargs_t *)get_args(workers));
+        workers_args_unlock(workers);
 
-        printf("%d) Bye from a thread %d!\n", cnt, id);
+        while ((bytes = read(thargs_cpy.sfd2, (void *)thargs_cpy.buf, 1024)) > 0) {
+            write(STDOUT_FILENO, thargs_cpy.buf, bytes);
+        }
 
-        cnt++;
+        printf("Client disconnected!\n");
+        free(thargs_cpy.buf);
     }
 
     return NULL;
@@ -129,14 +136,13 @@ void hdl_SIGUSR1(int sig) {
 }
 
 int main(int argc, char **argv) {
-    int len_args, sfd, sfd2;
+    int len_args, sfd, t;
     arg_t *args;
     config_t conf;
     int *map_args;
     workers_t workers;
-    struct sockaddr_un local, remote;
-    int t;
-    char buf[1024];
+    struct sockaddr_un local;
+    thargs_t thargs;
     
     parse_args(argc, argv, &args, &len_args, &map_args);
 
@@ -173,26 +179,22 @@ int main(int argc, char **argv) {
     }
 
 
-    workers = workers_init(4, NULL);
+    workers = workers_init(4, &thargs);
     mtxptr = get_mtxptr(workers);
 
     signal(SIGUSR1, hdl_SIGUSR1);
     workers_start(workers, th_routine);
 
+
     while(1) {
-        t = sizeof(remote);
-        if ((sfd2 = accept(sfd, (struct sockaddr *)&remote, &t)) == -1) {
+        t = sizeof(thargs.remote);
+        if ((thargs.sfd2 = accept(sfd, (struct sockaddr *)&thargs.remote, &t)) == -1) {
             perror("ERORR: unable to accept the incoming connection");
             exit(-1);
         }
 
-        printf("Client connected!\n");
-
-        while (read(sfd2, (void *)buf, 1024) > 0) {
-            printf("Data received: %s\n", buf);
-        }
-
-        printf("Client disconnected!\n");
+        thargs.buf = malloc(1024 * sizeof *thargs.buf);
+        workers_wakeup(workers);
     }
 
 
@@ -203,6 +205,7 @@ int main(int argc, char **argv) {
 
     /** FREE EVERYTHING **/
     workers_delete(workers);
+    close(sfd);
 
     free(args);
     free(map_args);
