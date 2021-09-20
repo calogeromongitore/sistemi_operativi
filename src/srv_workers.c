@@ -2,33 +2,37 @@
 
 #include <pthread.h>
 #include <stdlib.h>
+#include <semaphore.h>
+#include <unistd.h>
+
+#include "../include/common.h"
 
 struct workers_s {
     pthread_t *workers;
     int n_workers;
-    pthread_mutex_t mtx;
-    void *args;
-    pthread_mutex_t args_mtx;
+    int pipefds[2];
+    pthread_mutex_t piperd_mtx;
 };
 
-workers_t workers_init(int n_workers, void *args) {
+workers_t workers_init(int n_workers) {
     workers_t workers;
 
     workers = (workers_t)malloc(sizeof *workers);
     workers->workers = malloc(n_workers * sizeof(pthread_t));
-    workers->args = args;
     workers->n_workers = n_workers;
     
-    pthread_mutex_init(&workers->mtx, NULL);
-    pthread_mutex_init(&workers->args_mtx, NULL);
+    pipe(workers->pipefds);
+    pthread_mutex_init(&workers->piperd_mtx, NULL);
 
     return workers;
 }
 
 void workers_delete(workers_t workers) {
 
-    pthread_mutex_destroy(&workers->args_mtx);
-    pthread_mutex_destroy(&workers->mtx);
+    pthread_mutex_destroy(&workers->piperd_mtx);
+
+    close(workers->pipefds[0]);
+    close(workers->pipefds[1]);
 
     free(workers->workers);
     free(workers);
@@ -36,9 +40,6 @@ void workers_delete(workers_t workers) {
 
 void workers_start(workers_t workers, void *(*routine)(void *)) {
     int i;
-
-    // after init, the mutex is at 1. After lock it's at 0
-    pthread_mutex_lock(&workers->mtx);
 
     for (i = 0; i < workers->n_workers; i++) {
         pthread_create(&workers->workers[i], NULL, routine, (void *)workers);
@@ -55,22 +56,24 @@ void workers_mainloop(workers_t workers) {
 
 }
 
-pthread_mutex_t *get_mtxptr(workers_t workers) {
-    return &workers->mtx;
+int workers_piperead(workers_t workers, void *buf, size_t nbytes) {
+    int retval;
+
+    pthread_mutex_lock(&workers->piperd_mtx);
+    retval = read(workers->pipefds[0], buf, nbytes);
+    pthread_mutex_unlock(&workers->piperd_mtx);
+
+    return retval;
 }
 
-void *get_args(workers_t workers) {
-    return workers->args;
+int workers_pipewrite(workers_t workers, void *buf, size_t nbytes) {
+    int retval;
+
+    retval = write(workers->pipefds[1], buf, nbytes);
+
+    return retval;
 }
 
-void workers_wakeup(workers_t workers) {
-    pthread_mutex_unlock(&workers->mtx);
-}
-
-void workers_args_lock(workers_t workers) {
-    pthread_mutex_lock(&workers->args_mtx);
-}
-
-void workers_args_unlock(workers_t workers) {
-    pthread_mutex_unlock(&workers->args_mtx);
+int workers_getmaxfd(workers_t workers) {
+    return workers->pipefds[0] > workers->pipefds[1] ? workers->pipefds[0] : workers->pipefds[1];
 }

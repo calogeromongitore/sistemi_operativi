@@ -9,14 +9,13 @@
 #include <errno.h>
 #include <sys/socket.h>
 #include <sys/un.h>
-#include <sys/epoll.h>
+#include <sys/select.h>
 
+#include "include/common.h"
 #include "include/logger.h"
 #include "include/workers.h"
 
-#define PERROR_DIE(action, eq) if ((action) == eq) {\
-        perror("ERROR! ");\
-        exit(-1);}
+#define SET_FDMAX(actual, newfd) actual = ((newfd > actual) ? newfd : actual)
 
 #define BUF_SIZ 512
 
@@ -114,30 +113,27 @@ void *th_routine(void *args) {
     workers = (workers_t)args;
 
     while(1) {
-        pthread_mutex_lock(get_mtxptr(workers));
 
-        workers_args_lock(workers);
-        thargs_cpy = *((thargs_t *)get_args(workers));
-        workers_args_unlock(workers);
+        workers_piperead(workers, &thargs_cpy, sizeof thargs_cpy);
 
-        // printf("Read done from fd=%d! Bytes read: %d\n", thargs_cpy.sfd2, bytes);
-        if (thargs_cpy.data[0] == 'a') sleep(5);
+        printf("Data read at 0x%p: %c\n", thargs_cpy.data, thargs_cpy.data[0]);
+        if (thargs_cpy.data[0] <= 'a') {
+            sleep(10);
+        }
+
+        // TODO: write performed by the master thread. 
+        // send the result to it through another pipe
         write(thargs_cpy.sfd2, thargs_cpy.data, thargs_cpy.bytes);
-        free(thargs_cpy.data);
 
+        free(thargs_cpy.data);
     }
 
     return NULL;
 }
 
-void hdl_SIGUSR1(int sig) {
-
-
-}
-
 int main(int argc, char **argv) {
-    int len_args, sfd, sfd2, t, epollfd, evt_cnt, i, bytes;
-    struct epoll_event event, events[4];
+    int len_args, sfd, sfd2, t, ready_fds, i, bytes, fdmax;
+    fd_set rfds, rfds_cpy;
     struct sockaddr_un local, remote;
     arg_t *args;
     config_t conf;
@@ -156,12 +152,14 @@ int main(int argc, char **argv) {
         exit(-1);
     }
 
+    fdmax = STDERR_FILENO;
     conf = parse_config((char *)(args[map_args[ARG_SETTINGS]].value));
 
     //TODO: check if config values are correct (like workers > 0)
 
 
     PERROR_DIE(sfd = socket(AF_UNIX, SOCK_STREAM, 0), -1);
+    SET_FDMAX(fdmax, sfd);
 
     local.sun_family = AF_UNIX;
     strcpy(local.sun_path, "./socket.sk");
@@ -170,33 +168,35 @@ int main(int argc, char **argv) {
     PERROR_DIE(bind(sfd, (struct sockaddr *)&local, strlen(local.sun_path) + sizeof(local.sun_family)), -1);
     PERROR_DIE(listen(sfd, 10), -1);
 
-    PERROR_DIE(epollfd = epoll_create1(0), -1);
+    FD_ZERO(&rfds_cpy);
+    FD_ZERO(&rfds);
+    FD_SET(sfd, &rfds);
 
-    event.events = EPOLLIN;
-    event.data.fd = sfd;
+    signal(SIGPIPE, SIG_IGN);
 
-    PERROR_DIE(epoll_ctl(epollfd, EPOLL_CTL_ADD, sfd, &event), -1);
-
-    workers = workers_init(4, &thargs);
-
-    signal(SIGUSR1, hdl_SIGUSR1);
+    workers = workers_init(4);
     workers_start(workers, th_routine);
+    SET_FDMAX(fdmax, workers_getmaxfd(workers));
 
     while (1) {
+        rfds_cpy = rfds;
+        ready_fds = select(fdmax + 1, &rfds_cpy, NULL, NULL, NULL);
 
-        PERROR_DIE(evt_cnt = epoll_wait(epollfd, events, 4, -1), -1);
+        //STDERR_FILENO = 2
+        for (i = STDERR_FILENO + 1; i <= fdmax && ready_fds; i++) {
 
-        for (i = 0; i < evt_cnt; i++) {
+            if (!FD_ISSET(i, &rfds_cpy)) {
+                continue;
+            }
 
-            if (events[i].data.fd == sfd) {
+            --ready_fds;
+            if (i == sfd) {
                 t = sizeof(remote);
-                PERROR_DIE(sfd2 = accept(events[i].data.fd, (struct sockaddr *)&remote, &t), -1);
+                PERROR_DIE(sfd2 = accept(i, (struct sockaddr *)&remote, &t), -1);
 
                 // fcntl(sfd2, F_SETFL, fcntl(sfd2, F_GETFL, 0) | O_NONBLOCK);
-                event.events = EPOLLIN;
-                event.data.fd = sfd2;
-
-                PERROR_DIE(epoll_ctl(epollfd, EPOLL_CTL_ADD, sfd2, &event), -1);
+                FD_SET(sfd2, &rfds);
+                SET_FDMAX(fdmax, sfd2);
 
             } else {
                 
@@ -204,24 +204,23 @@ int main(int argc, char **argv) {
                 //check if errno == EAGAIN or EWOULDBLOCK, if so means ok
                 //if it returns 0 the fd must be deleted from the epoll
                 //at each successful read, realloc the buffer
-                if (!(bytes = read(events[i].data.fd, (void *)buf, 1024))) {
-                    PERROR_DIE(epoll_ctl(epollfd, EPOLL_CTL_DEL, events[i].data.fd, &event), -1);
-                    close(events[i].data.fd);
+                if (!(bytes = read(i, (void *)buf, 1024))) {
+                    FD_CLR(i, &rfds);
+                    // close(i);
                     continue;
                 }
 
                 // read(events[i].data.fd, (void *)buf, 1024);
                 // perror("READ");
                 // printf("errno: %d\n", errno);
-
-                workers_args_lock(workers);
-                thargs.sfd2 = events[i].data.fd;
+                thargs.sfd2 = i;
                 thargs.bytes = bytes;
                 thargs.data = (char *)malloc(bytes * sizeof *thargs.data);
                 memcpy(thargs.data, buf, bytes);
-                workers_args_unlock(workers);
+                workers_pipewrite(workers, &thargs, sizeof thargs);
 
-                workers_wakeup(workers);
+                printf("\n\nData wrote at 0x%p: %c\n", thargs.data, thargs.data[0]);
+
 
             }
 
@@ -229,14 +228,11 @@ int main(int argc, char **argv) {
 
     }
 
-    //TODO: mutex is not ok, it doesn't consider a lot of "unlocks" because
-    //mutex can go up to 1 and not higher values. Consider a queue or a semaphore instead of a mutex
     workers_mainloop(workers);
 
 
     /** FREE EVERYTHING **/
     workers_delete(workers);
-    close(epollfd);
     close(sfd);
 
     free(args);
