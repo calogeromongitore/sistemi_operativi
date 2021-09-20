@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <signal.h>
+#include <errno.h>
 #include <sys/socket.h>
 #include <sys/un.h>
 #include <sys/epoll.h>
@@ -191,7 +192,7 @@ int main(int argc, char **argv) {
                 t = sizeof(remote);
                 PERROR_DIE(sfd2 = accept(events[i].data.fd, (struct sockaddr *)&remote, &t), -1);
 
-                // fcntl(sfd2, F_SETFL, fcntl(sfd2, F_GETFL, 0) & ~O_NONBLOCK);
+                // fcntl(sfd2, F_SETFL, fcntl(sfd2, F_GETFL, 0) | O_NONBLOCK);
                 event.events = EPOLLIN;
                 event.data.fd = sfd2;
 
@@ -199,11 +200,19 @@ int main(int argc, char **argv) {
 
             } else {
                 
+                //fd is non blocking, so do a while and call read till it returns -1
+                //check if errno == EAGAIN or EWOULDBLOCK, if so means ok
+                //if it returns 0 the fd must be deleted from the epoll
+                //at each successful read, realloc the buffer
                 if (!(bytes = read(events[i].data.fd, (void *)buf, 1024))) {
                     PERROR_DIE(epoll_ctl(epollfd, EPOLL_CTL_DEL, events[i].data.fd, &event), -1);
                     close(events[i].data.fd);
                     continue;
                 }
+
+                // read(events[i].data.fd, (void *)buf, 1024);
+                // perror("READ");
+                // printf("errno: %d\n", errno);
 
                 workers_args_lock(workers);
                 thargs.sfd2 = events[i].data.fd;
