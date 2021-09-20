@@ -17,12 +17,12 @@ void check_args(args__cont__t args) {
 
 int main(int argc, char **argv) {
     args__cont__t args;
-    struct timespec absVal = {.tv_sec = 12, .tv_nsec = 0};
+    struct timespec absVal = {.tv_sec = 1, .tv_nsec = 800000000};
 
     parse_args(argc, argv, &args);
     check_args(args);
 
-    openConnection((char *)ARGS_VALUE(args, ARG_SOCKETFILE), 5000, absVal);
+    PERROR_DIE(openConnection((char *)ARGS_VALUE(args, ARG_SOCKETFILE), 500, absVal), -1);
 
     args_free(&args);
 
