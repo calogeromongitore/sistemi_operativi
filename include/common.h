@@ -2,6 +2,7 @@
 #define _COMMON_H_
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <errno.h>
 
 #define PERROR_DIE(action, eq) if ((action) == eq) {\

@@ -14,21 +14,11 @@
 #include "include/common.h"
 #include "include/logger.h"
 #include "include/workers.h"
+#include "include/args.h"
 
 #define SET_FDMAX(actual, newfd) actual = ((newfd > actual) ? newfd : actual)
 
 #define BUF_SIZ 512
-
-typedef enum {
-    ARG_SETTINGS,
-    ARG_SOCKETFILE,
-    ARG_LAST_NOTVALID
-} flagarg_t;
-
-typedef struct {
-    flagarg_t arg_type;
-    void *value;   
-} arg_t;
 
 typedef struct {
     int workers;
@@ -80,31 +70,6 @@ config_t parse_config(char *path_config) {
     return conf;
 }
 
-void parse_args(int argc, char **argv, arg_t **result, int *length, int **map) {
-    int i, idx;
-
-    *length = ((argc-1)/2); 
-    *result = (arg_t *)malloc(*length + sizeof **result);
-    *map = (int *)malloc(ARG_LAST_NOTVALID * sizeof **map);
-
-    for (i = 0; i < ARG_LAST_NOTVALID; i++) {
-        (*map)[i] = -1;
-    }
-    
-    for (idx = 0, i = 1; i < argc; i += 2) {
-
-        if (strcmp(argv[i], "-s") == 0 && (i+1) <= argc) {
-            (*result)[idx].arg_type = ARG_SETTINGS;
-            (*result)[idx].value = argv[i+1];
-            (*map)[ARG_SETTINGS] = idx++;
-        } else if (strcmp(argv[i], "-f") == 0 && (i+1) <= argc) {
-            (*result)[idx].arg_type = ARG_SOCKETFILE;
-            (*result)[idx].value = argv[i+1];
-            (*map)[ARG_SOCKETFILE] = idx++;
-        }
-
-    }
-}
 
 void *th_routine(void *args) {
     workers_t workers;
@@ -116,7 +81,7 @@ void *th_routine(void *args) {
 
         workers_piperead(workers, &thargs_cpy, sizeof thargs_cpy);
 
-        printf("Data read at 0x%p: %c\n", thargs_cpy.data, thargs_cpy.data[0]);
+        // printf("Data read at 0x%p: %c\n", thargs_cpy.data, thargs_cpy.data[0]);
         if (thargs_cpy.data[0] <= 'a') {
             sleep(10);
         }
@@ -132,28 +97,27 @@ void *th_routine(void *args) {
 }
 
 int main(int argc, char **argv) {
-    int len_args, sfd, sfd2, t, ready_fds, i, bytes, fdmax;
+    int sfd, sfd2, t, ready_fds, i, bytes, fdmax;
     fd_set rfds, rfds_cpy;
     struct sockaddr_un local, remote;
-    arg_t *args;
+    args__cont__t args;
     config_t conf;
-    int *map_args;
     workers_t workers;
     thargs_t thargs;
     char buf[1024];
     
-    parse_args(argc, argv, &args, &len_args, &map_args);
+    parse_args(argc, argv, &args);
 
-    if (len_args == 0) {
-        fprintf(stderr, "ERORR: 0 args. At least '-s' is needed\n");
-        exit(-1);
-    } else if (map_args[ARG_SETTINGS] == -1) {
+    if (ARGS_ISNULL(args, ARG_SETTINGS)) {
         fprintf(stderr, "ERORR: argument '-s' is required\n");
+        exit(-1);
+    } else if (ARGS_ISNULL(args, ARG_SOCKETFILE)) {
+        fprintf(stderr, "ERORR: argument '-f' is required\n");
         exit(-1);
     }
 
     fdmax = STDERR_FILENO;
-    conf = parse_config((char *)(args[map_args[ARG_SETTINGS]].value));
+    conf = parse_config((char *)ARGS_VALUE(args, ARG_SETTINGS));
 
     //TODO: check if config values are correct (like workers > 0)
 
@@ -162,7 +126,7 @@ int main(int argc, char **argv) {
     SET_FDMAX(fdmax, sfd);
 
     local.sun_family = AF_UNIX;
-    strcpy(local.sun_path, "./socket.sk");
+    strcpy(local.sun_path, (char *)ARGS_VALUE(args, ARG_SOCKETFILE));
     unlink(local.sun_path);
 
     PERROR_DIE(bind(sfd, (struct sockaddr *)&local, strlen(local.sun_path) + sizeof(local.sun_family)), -1);
@@ -219,7 +183,7 @@ int main(int argc, char **argv) {
                 memcpy(thargs.data, buf, bytes);
                 workers_pipewrite(workers, &thargs, sizeof thargs);
 
-                printf("\n\nData wrote at 0x%p: %c\n", thargs.data, thargs.data[0]);
+                // printf("\n\nData wrote at 0x%p: %c\n", thargs.data, thargs.data[0]);
 
 
             }
@@ -233,10 +197,9 @@ int main(int argc, char **argv) {
 
     /** FREE EVERYTHING **/
     workers_delete(workers);
+    args_free(&args);
     close(sfd);
 
-    free(args);
-    free(map_args);
 
     return 0;
 };
