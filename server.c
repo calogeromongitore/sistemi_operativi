@@ -15,6 +15,7 @@
 #include "include/logger.h"
 #include "include/workers.h"
 #include "include/args.h"
+#include "include/storage.h"
 
 #define SET_FDMAX(actual, newfd) actual = ((newfd > actual) ? newfd : actual)
 
@@ -105,6 +106,10 @@ int main(int argc, char **argv) {
     workers_t workers;
     thargs_t thargs;
     char buf[1024];
+    char *ptr, *data1, *data2;
+    char buf2[1024], buf3[1024];
+    storage_t storage;
+    int i2, i3;
     
     parse_args(argc, argv, &args);
 
@@ -141,6 +146,17 @@ int main(int argc, char **argv) {
     workers = workers_init(4);
     workers_start(workers, th_routine);
     SET_FDMAX(fdmax, workers_getmaxfd(workers));
+
+    storage = storage_init(128, 4);
+
+    i = sprintf(buf, "ciaoaoaoaoaoaoaoaoaoaoaoaaoaooaoaoaoaaoaoaoao\n");
+    i2 = sprintf(buf2, "asdassadasdasdasdasdasdasdsdada\n");
+    storage_insert(storage, buf, i, "/home/pietra/santa.txt", buf3, (size_t *)&i3);
+    storage_insert(storage, buf2, i2, "/home/pietra/roccia.txt", buf3, (size_t *)&i3);
+    storage_insert(storage, buf, i, "/home/pietra/santa2.txt", buf3, (size_t *)&i3);
+    storage_insert(storage, buf2, i2, "/home/pietra/roccia2.txt", buf3, (size_t *)&i3);
+    storage_insert(storage, buf2, 1, "/home/pietra/signle.txt", buf3, (size_t *)&i3);
+
 
     while (1) {
         rfds_cpy = rfds;

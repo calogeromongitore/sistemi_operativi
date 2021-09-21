@@ -10,7 +10,8 @@
 #include "../include/common.h"
 
 static struct sockaddr_un remote; 
-static int sfd;
+static int sfd = -1;
+static char socketname[108] = "";
 
 
 static inline void timespec_diff(struct timespec *a, struct timespec *b, struct timespec *result) {
@@ -35,7 +36,7 @@ static inline int timecmp(struct timespec t1, struct timespec t2) {
 
 }
 
-int retry(struct timespec timeout, struct timespec *abstime) {
+static int retry(struct timespec timeout, struct timespec *abstime) {
     struct timespec cmpres;
     int cmp;
 
@@ -59,7 +60,12 @@ int openConnection(const char* sockname, int msec, const struct timespec abstime
     struct timespec timeout, abstime_int;
     int len;
 
-    PERROR_DIE(sfd = socket(AF_UNIX, SOCK_STREAM, 0), -1);
+    if (sfd != -1) {
+        errno = EMFILE;
+        return -1;
+    }
+
+    IF_RETEQ(sfd = socket(AF_UNIX, SOCK_STREAM, 0), -1);
 
     remote.sun_family = AF_UNIX;
     strcpy(remote.sun_path, sockname);
@@ -74,6 +80,21 @@ int openConnection(const char* sockname, int msec, const struct timespec abstime
             return -1;
         }
     }
+
+    strcpy(socketname, sockname);
+
+    return 1;
+}
+
+int closeConnection(const char* sockname) {
+
+    if (strcmp(socketname, sockname)) {
+        errno = ENOENT;
+        return -1;
+    } 
+
+    IF_RETEQ(close(sfd), -1);
+    sfd = -1;
 
     return 1;
 }

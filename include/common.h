@@ -9,5 +9,8 @@
         perror("ERROR! ");\
         exit(errno);}
 
+#define IF_RET(action, eq, retval) if ((action) == eq) return retval;
+#define IF_RETEQ(action, eq) if ((action) == eq) return eq;
+
 
 #endif
