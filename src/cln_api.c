@@ -8,6 +8,7 @@
 #include <time.h>
 
 #include "../include/common.h"
+#include "../include/reqframe.h"
 
 static struct sockaddr_un remote; 
 static int sfd = -1;
@@ -97,4 +98,36 @@ int closeConnection(const char* sockname) {
     sfd = -1;
 
     return 1;
+}
+
+int readFile(const char* pathname, void** buf, size_t* size) {
+    char reqframe[2048];
+    struct reqcall reqc;
+    size_t reqsize, filesize;
+
+    if (sfd == -1) {
+        return -1; //TODO: set errno
+    }
+
+    reqcall_default(&reqc);
+    reqc.pathname = pathname;
+    reqc.N = 1;
+
+    prepareRequest((char *)reqframe, &reqsize, REQ_GETSIZ, &reqc);
+    if (write(sfd, reqframe, reqsize) != reqsize) {
+        return -1;
+    }
+
+    read(sfd, reqframe, sizeof filesize);
+    memcpy(&filesize, reqframe, sizeof filesize);
+
+    prepareRequest((char *)reqframe, &reqsize, REQ_READ, &reqc);
+    if (write(sfd, reqframe, reqsize) != reqsize) {
+        return -1;
+    }
+
+    *buf = (char *)malloc(filesize * sizeof(char));
+    *size = read(sfd, *buf, filesize);
+
+    return 0;
 }

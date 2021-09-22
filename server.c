@@ -16,6 +16,7 @@
 #include "include/workers.h"
 #include "include/args.h"
 #include "include/storage.h"
+#include "include/reqframe.h"
 
 #define SET_FDMAX(actual, newfd) actual = ((newfd > actual) ? newfd : actual)
 
@@ -31,6 +32,7 @@ typedef struct {
     char *data;
     int sfd2;
     int bytes;
+    storage_t storage;
 } thargs_t;
 
 
@@ -75,21 +77,68 @@ config_t parse_config(char *path_config) {
 void *th_routine(void *args) {
     workers_t workers;
     thargs_t thargs_cpy;
+    reqcode_t req;
+    ssize_t loc;
+    char buf[1024], buf2[1024];
+    int len;
+    int thid;
 
     workers = (workers_t)args;
+    thid = rand() % 0x40;
 
     while(1) {
 
         workers_piperead(workers, &thargs_cpy, sizeof thargs_cpy);
 
-        // printf("Data read at 0x%p: %c\n", thargs_cpy.data, thargs_cpy.data[0]);
-        if (thargs_cpy.data[0] <= 'a') {
-            sleep(10);
+        printf("[#%02d] Data read at 0x%p\n", thid, thargs_cpy.data);
+
+        loc = 0;
+        if (thargs_cpy.data[loc++] == PARAM_SEP) {
+
+            req = thargs_cpy.data[loc++];
+
+            while (loc < thargs_cpy.bytes) {
+                switch (((char *)thargs_cpy.data)[loc++]) {
+                    case PARAM_PATHNAME:
+
+                        memcpy(&len, thargs_cpy.data + loc, sizeof len);
+                        loc += sizeof len;
+
+                        memcpy(buf, thargs_cpy.data + loc, len);
+                        buf[len] = '\0';
+                        loc += len;
+
+                        break;
+                    
+                    default:
+                        break;
+
+                }
+
+                if (thargs_cpy.data[loc++] != PARAM_SEP) {
+                    break;
+                }
+            }
+
+            switch(req) {
+
+                case REQ_READ:
+                    storage_read(thargs_cpy.storage, thargs_cpy.sfd2, buf, buf2, &loc);
+                    break;
+
+                case REQ_GETSIZ:
+                    storage_getsize(thargs_cpy.storage, thargs_cpy.sfd2, buf, &loc);
+                    memcpy(buf2, &loc, sizeof loc);
+                    loc = sizeof loc;
+                    break;
+
+            }
         }
+
 
         // TODO: write performed by the master thread. 
         // send the result to it through another pipe
-        write(thargs_cpy.sfd2, thargs_cpy.data, thargs_cpy.bytes);
+        write(thargs_cpy.sfd2, buf2, loc);
 
         free(thargs_cpy.data);
     }
@@ -151,11 +200,11 @@ int main(int argc, char **argv) {
 
     i = sprintf(buf, "ciaoaoaoaoaoaoaoaoaoaoaoaaoaooaoaoaoaaoaoaoao\n");
     i2 = sprintf(buf2, "asdassadasdasdasdasdasdasdsdada\n");
-    storage_insert(storage, buf, i, "/home/pietra/santa.txt", buf3, (size_t *)&i3);
     storage_insert(storage, buf2, i2, "/home/pietra/roccia.txt", buf3, (size_t *)&i3);
     storage_insert(storage, buf, i, "/home/pietra/santa2.txt", buf3, (size_t *)&i3);
     storage_insert(storage, buf2, i2, "/home/pietra/roccia2.txt", buf3, (size_t *)&i3);
     storage_insert(storage, buf2, 1, "/home/pietra/signle.txt", buf3, (size_t *)&i3);
+    storage_insert(storage, buf, i, "suca.txt", buf3, (size_t *)&i3);
 
 
     while (1) {
@@ -196,6 +245,7 @@ int main(int argc, char **argv) {
                 thargs.sfd2 = i;
                 thargs.bytes = bytes;
                 thargs.data = (char *)malloc(bytes * sizeof *thargs.data);
+                thargs.storage = storage;
                 memcpy(thargs.data, buf, bytes);
                 workers_pipewrite(workers, &thargs, sizeof thargs);
 

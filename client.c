@@ -17,12 +17,19 @@ void check_args(args__cont__t args) {
 int main(int argc, char **argv) {
     args__cont__t args;
     struct timespec absVal = {.tv_sec = 0, .tv_nsec = 800000000};
+    char *buf;
+    size_t size;
 
     parse_args(argc, argv, &args);
     check_args(args);
 
     PERROR_DIE(openConnection((char *)ARGS_VALUE(args, ARG_SOCKETFILE), 500, absVal), -1);
 
+    PERROR_DIE(readFile("suca.txt", (void **)&buf, &size), -1);;
+    printf("%s\n", buf);
+
+    PERROR_DIE(readFile("/home/pietra/roccia2.txt", (void **)&buf, &size), -1);;
+    printf("%s\n", buf);
 
     PERROR_DIE(closeConnection((char *)ARGS_VALUE(args, ARG_SOCKETFILE)), -1);
     args_free(&args);

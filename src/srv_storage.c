@@ -7,15 +7,21 @@
 
 #include "../include/fifo.h"
 
-#define NODE_SETNULL(node) (node.locptr = NULL)
-#define NODE_ISNULL(node) (node.locptr == NULL)
+#define NODE_SETNULL(node) ((node).locptr = NULL)
+#define NODE_ISNULL(node) ((node).locptr == NULL)
+
+
+struct lockstat {
+    int clientid;
+    char locked;
+};
 
 struct node {
     char *filename;
     size_t filename_length;
     void *locptr;
     int size;
-    char locked;
+    struct lockstat locked;
 };
 
 struct storage_s {
@@ -27,6 +33,8 @@ struct storage_s {
     fifo_t fifo;
     pthread_mutex_t storagemtx;
 };
+
+static const struct lockstat lockstat_default = { .clientid = -1, .locked = 0 };
 
 static void ___remove(storage_t storage, int index) {
 
@@ -89,7 +97,7 @@ void storage_insert(storage_t storage, void *buf, size_t size, char *filename, v
 
     storage->memory[i].filename_length = strlen(filename);
     storage->memory[i].filename = (char *)malloc((storage->memory[i].filename_length + 1) * sizeof *storage->memory[i].filename);
-    storage->memory[i].locked = 0;
+    storage->memory[i].locked = lockstat_default;
     storage->memory[i].size = size;
     storage->memory[i].locptr = malloc(size);
 
@@ -101,4 +109,53 @@ void storage_insert(storage_t storage, void *buf, size_t size, char *filename, v
     storage->actual_nfiles++;
 
     pthread_mutex_unlock(&storage->storagemtx);
+}
+
+int storage_read(storage_t storage, int clientid, const char *filename, void *buf, size_t *size) {
+    struct node *inode;
+    int retval;
+
+    pthread_mutex_lock(&storage->storagemtx);
+
+    *size = 0;
+    retval = -1;
+    for (inode = storage->memory; inode < storage->memory + storage->maxfiles; inode++) {
+        if (!NODE_ISNULL(*inode) && !strcmp(inode->filename, filename)) {
+
+            if (inode->locked.clientid == clientid || !inode->locked.locked) {
+                *size = inode->size;
+                memcpy(buf, inode->locptr, *size);
+                retval = 0;
+            } 
+
+            break;
+        }
+    }
+
+    pthread_mutex_unlock(&storage->storagemtx);
+    return retval;
+}
+
+int storage_getsize(storage_t storage, int clientid, const char *filename, size_t *size) {
+    struct node *inode;
+    int retval;
+
+    pthread_mutex_lock(&storage->storagemtx);
+
+    *size = 0;
+    retval = -1;
+    for (inode = storage->memory; inode < storage->memory + storage->maxfiles; inode++) {
+        if (!NODE_ISNULL(*inode) && !strcmp(inode->filename, filename)) {
+
+            if (inode->locked.clientid == clientid || !inode->locked.locked) {
+                *size = inode->size;
+                retval = 0;
+            } 
+
+            break;
+        }
+    }
+
+    pthread_mutex_unlock(&storage->storagemtx);
+    return retval;
 }
