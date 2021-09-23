@@ -17,6 +17,7 @@ struct workers_s {
     int n_workers;
     int pipefds[2];
     pthread_mutex_t piperd_mtx;
+    pthread_mutex_t pipewd_mtx;
     // int pipewbfds[2];
     // pthread_mutex_t pipewrb_mtx;
 };
@@ -31,6 +32,7 @@ workers_t workers_init(int n_workers) {
     pipe(workers->pipefds);
     // pipe(workers->pipewbfds);
     pthread_mutex_init(&workers->piperd_mtx, NULL);
+    pthread_mutex_init(&workers->pipewd_mtx, NULL);
     // pthread_mutex_init(&workers->pipewrb_mtx, NULL);
 
     return workers;
@@ -39,6 +41,7 @@ workers_t workers_init(int n_workers) {
 void workers_delete(workers_t workers) {
 
     pthread_mutex_destroy(&workers->piperd_mtx);
+    pthread_mutex_destroy(&workers->pipewd_mtx);
     // pthread_mutex_destroy(&workers->pipewrb_mtx);
 
     close(workers->pipefds[PIPE_RFD]);
@@ -79,7 +82,13 @@ int workers_piperead(workers_t workers, void *buf, size_t nbytes) {
 }
 
 int workers_pipewrite(workers_t workers, void *buf, size_t nbytes) {
-    return write(workers->pipefds[PIPE_WFD], buf, nbytes);
+    int retval;
+
+    pthread_mutex_lock(&workers->pipewd_mtx);
+    retval = write(workers->pipefds[PIPE_WFD], buf, nbytes);
+    pthread_mutex_unlock(&workers->pipewd_mtx);
+
+    return retval;
 }
 
 // int workers_pipereadback(workers_t workers, void *buf, size_t nbytes) {

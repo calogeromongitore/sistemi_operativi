@@ -4,10 +4,12 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "../include/common.h"
+
 void reqcall_default(struct reqcall *req) {
     req->buf = NULL;
     req->diname = NULL;
-    req->flags = 0;
+    req->flags = O_NULL;
     req->N = -1;
     req->pathname = NULL;
     req->size = -1;
@@ -45,6 +47,15 @@ void prepareRequest(char *buf, size_t *size, reqcode_t req, struct reqcall *reqc
 
         strcpy(buf + loc, reqc->pathname);
         loc += len;
+        buf[loc++] = PARAM_SEP;
+    }
+
+    if (reqc->flags != O_NULL) {
+        buf[loc++] = PARAM_FLAGS;
+
+        memcpy(buf + loc, &reqc->flags, sizeof reqc->flags);
+        loc += sizeof reqc->flags;
+
         buf[loc++] = PARAM_SEP;
     }
     

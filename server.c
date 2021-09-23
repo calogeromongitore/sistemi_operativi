@@ -17,6 +17,7 @@
 #include "include/args.h"
 #include "include/storage.h"
 #include "include/reqframe.h"
+#include "include/fifo.h"
 
 #define SET_FDMAX(actual, newfd) actual = ((newfd > actual) ? newfd : actual)
 
@@ -33,6 +34,10 @@ typedef struct {
     int sfd2;
     int bytes;
     storage_t storage;
+    fifo_t fifo;
+    workers_t workers;
+    workers_t workersqueue;
+    int reqid;
 } thargs_t;
 
 
@@ -76,11 +81,11 @@ config_t parse_config(char *path_config) {
 
 void *th_routine(void *args) {
     workers_t workers;
-    thargs_t thargs_cpy;
+    thargs_t thargs_cpy, *thargsqueue;
     reqcode_t req;
     ssize_t loc;
-    char buf[1024], buf2[1024];
-    int len;
+    char buf[1024], buf2[1024], bufresp[1024];
+    int len, flags, retval;
     int thid;
 
     workers = (workers_t)args;
@@ -109,6 +114,13 @@ void *th_routine(void *args) {
                         loc += len;
 
                         break;
+
+                    case PARAM_FLAGS:
+
+                        memcpy(&flags, thargs_cpy.data + loc, sizeof flags);
+                        loc += sizeof flags;
+
+                        break;
                     
                     default:
                         break;
@@ -118,16 +130,56 @@ void *th_routine(void *args) {
                 if (thargs_cpy.data[loc++] != PARAM_SEP) {
                     break;
                 }
+
             }
 
             switch(req) {
 
+                case REQ_OPEN:
+                    retval = storage_open(thargs_cpy.storage, thargs_cpy.sfd2, buf, flags);
+                    if (retval == A_LKWAIT) {
+                        fifo_enqueue(thargs_cpy.fifo, &thargs_cpy, sizeof thargs_cpy);
+                        printf("queued reqid %d\n", thargs_cpy.reqid);
+                        continue;
+                    }
+
+                    loc = 0;
+                    break;
+
+                case REQ_CLOSEFILE:
+                    retval = storage_close(thargs_cpy.storage, thargs_cpy.sfd2, buf);
+                    workers_pipewrite(thargs_cpy.workersqueue, &thargs_cpy.fifo, sizeof thargs_cpy.fifo);
+                    loc = 0;
+                    break;
+
                 case REQ_READ:
-                    storage_read(thargs_cpy.storage, thargs_cpy.sfd2, buf, buf2, &loc);
+                    retval = storage_read(thargs_cpy.storage, thargs_cpy.sfd2, buf, buf2, &loc);
+                    break;
+
+                case REQ_LOCK:
+                    retval = storage_lock(thargs_cpy.storage, thargs_cpy.sfd2, buf);
+                    if (retval == A_LKWAIT) {
+                        fifo_enqueue(thargs_cpy.fifo, &thargs_cpy, sizeof thargs_cpy);
+                        printf("queued reqid %d\n", thargs_cpy.reqid);
+                        continue;
+                    }
+
+                    loc = 0;
+                    break;
+
+                case REQ_UNLOCK:
+                    retval = storage_unlock(thargs_cpy.storage, thargs_cpy.sfd2, buf);
+                    loc = 0;
+                    break;
+                
+                case REQ_REMOVE:
+                    retval = storage_remove(thargs_cpy.storage, thargs_cpy.sfd2, buf);
+                    workers_pipewrite(thargs_cpy.workersqueue, &thargs_cpy.fifo, sizeof thargs_cpy.fifo);
+                    loc = 0;
                     break;
 
                 case REQ_GETSIZ:
-                    storage_getsize(thargs_cpy.storage, thargs_cpy.sfd2, buf, &loc);
+                    retval = storage_getsize(thargs_cpy.storage, thargs_cpy.sfd2, buf, &loc);
                     memcpy(buf2, &loc, sizeof loc);
                     loc = sizeof loc;
                     break;
@@ -135,12 +187,49 @@ void *th_routine(void *args) {
             }
         }
 
+        req = (retval != E_ITSOK) ? REQ_FAILED : REQ_SUCCESS; 
+        memcpy(bufresp, &req, sizeof req);
+
+        if (req == REQ_FAILED) {
+            memcpy(bufresp + sizeof req, &retval, sizeof retval);
+            loc = sizeof retval;
+        } else {
+            memcpy(bufresp + sizeof req, buf2, loc);
+        }
 
         // TODO: write performed by the master thread. 
         // send the result to it through another pipe
-        write(thargs_cpy.sfd2, buf2, loc);
+        write(thargs_cpy.sfd2, bufresp, sizeof req + loc);
 
         free(thargs_cpy.data);
+    }
+
+    return NULL;
+}
+
+void *th_routine_queue(void *args) {
+    thargs_t thargscpy;
+    fifo_t fifo;
+    workers_t workers;
+    size_t fifosize;
+
+    workers = (workers_t)args;
+
+    while(1) {
+
+        workers_piperead(workers, (void *)&fifo, sizeof fifo);
+        printf("Queue checking waked up!\n");
+
+        fifosize = fifo_usedspace(fifo);
+        while (fifosize > 0 && fifosize >= sizeof thargscpy) {
+
+            fifo_dequeue(fifo, &thargscpy, sizeof thargscpy);
+            printf("dequeued reqid %d\n", thargscpy.reqid);
+
+            workers_pipewrite(thargscpy.workers, &thargscpy, sizeof thargscpy);
+            fifosize -= sizeof thargscpy;
+        }
+
     }
 
     return NULL;
@@ -152,13 +241,15 @@ int main(int argc, char **argv) {
     struct sockaddr_un local, remote;
     args__cont__t args;
     config_t conf;
-    workers_t workers;
+    workers_t workers, workers_queue;
     thargs_t thargs;
+    storage_t storage;
+    fifo_t fifo;
     char buf[1024];
     char *ptr, *data1, *data2;
     char buf2[1024], buf3[1024];
-    storage_t storage;
     int i2, i3;
+    int reqid = 0;
     
     parse_args(argc, argv, &args);
 
@@ -197,6 +288,11 @@ int main(int argc, char **argv) {
     SET_FDMAX(fdmax, workers_getmaxfd(workers));
 
     storage = storage_init(128, 4);
+    fifo = fifo_init(64 * sizeof(thargs_t));
+
+    workers_queue = workers_init(1);
+    workers_start(workers_queue, th_routine_queue);
+    SET_FDMAX(fdmax, workers_getmaxfd(workers));
 
     i = sprintf(buf, "ciaoaoaoaoaoaoaoaoaoaoaoaaoaooaoaoaoaaoaoaoao\n");
     i2 = sprintf(buf2, "asdassadasdasdasdasdasdasdsdada\n");
@@ -246,6 +342,10 @@ int main(int argc, char **argv) {
                 thargs.bytes = bytes;
                 thargs.data = (char *)malloc(bytes * sizeof *thargs.data);
                 thargs.storage = storage;
+                thargs.fifo = fifo;
+                thargs.workers = workers;
+                thargs.workersqueue = workers_queue;
+                thargs.reqid = reqid++;
                 memcpy(thargs.data, buf, bytes);
                 workers_pipewrite(workers, &thargs, sizeof thargs);
 

@@ -5,9 +5,15 @@
 
 typedef enum {
     REQ_OPEN = (char)0,
-    REQ_CLOSE = (char)1,
+    REQ_CLOSECONN = (char)1,
     REQ_READ = (char)2,
-    REQ_GETSIZ = (char)3
+    REQ_GETSIZ = (char)3,
+    REQ_FAILED = (char)4,
+    REQ_SUCCESS = (char)5,
+    REQ_CLOSEFILE = (char)6,
+    REQ_LOCK = (char)7,
+    REQ_UNLOCK = (char)8,
+    REQ_REMOVE = (char)9
 } reqcode_t;
 
 typedef enum {
@@ -16,7 +22,8 @@ typedef enum {
     PARAM_DIRNAME,
     PARAM_PATHNAME,
     PARAM_BUF,
-    PARAM_SIZE
+    PARAM_SIZE,
+    PARAM_FLAGS
 } param_t;
 
 struct reqcall {

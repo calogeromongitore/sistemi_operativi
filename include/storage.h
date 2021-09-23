@@ -10,5 +10,10 @@ void storage_destroy(storage_t storage);
 void storage_insert(storage_t storage, void *buf, size_t size, char *filename, void *bufret, size_t *sizeret);
 int storage_read(storage_t storage, int clientid, const char *filename, void *buf, size_t *size);
 int storage_getsize(storage_t storage, int clientid, const char *filename, size_t *size);
+int storage_open(storage_t storage, int clientid, const char *filename, int flags);
+int storage_close(storage_t storage, int clientid, const char *filename);
+int storage_lock(storage_t storage, int clientid, const char *filename);
+int storage_unlock(storage_t storage, int clientid, const char *filename);
+int storage_remove(storage_t storage, int clientid, const char *filename);
 
 #endif

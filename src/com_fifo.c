@@ -14,6 +14,7 @@ struct fifo_s {
     int first;
     int last;
     size_t length;
+    size_t used;
 };
 
 
@@ -31,6 +32,7 @@ fifo_t fifo_init(size_t sizebytes) {
     fifo->length = sizebytes;
     fifo->first = fifo->length-1;
     fifo->last = 0;
+    fifo->used = 0;
 
     return fifo;
 }
@@ -54,16 +56,6 @@ int fifo_read(fifo_t fifo, void *idx, void *buf, size_t len) {
     return 0;
 }
 
-int fifo_read_destroy(fifo_t fifo, void *readptr) {
-    
-    if (!CHECK_BOUND(fifo, readptr)) {
-        return -1;
-    }
-
-    free(readptr);
-    return 0;
-}
-
 void *fifo_enqueue(fifo_t fifo, void *buf, size_t len) {
     size_t len_tillend, len_remain;
     void *ptr;
@@ -80,6 +72,7 @@ void *fifo_enqueue(fifo_t fifo, void *buf, size_t len) {
 
     fifo->last += len;
     fifo->last %= fifo->length;
+    fifo->used += len;
 
     return ptr;
 }
@@ -98,6 +91,11 @@ int fifo_dequeue(fifo_t fifo, void *dst, size_t len) {
     memcpy(dst + tillend, fifo->memfifo, remain);
 
     fifo->first = (fifo->first + len) % fifo->length;
+    fifo->used -= len;
 
     return 0;
+}
+
+size_t fifo_usedspace(fifo_t fifo) {
+    return fifo->used;
 }

@@ -10,6 +10,8 @@
 #include "../include/common.h"
 #include "../include/reqframe.h"
 
+#define SIZE_OF(of) (sizeof(reqcode_t) + sizeof of)
+
 static struct sockaddr_un remote; 
 static int sfd = -1;
 static char socketname[108] = "";
@@ -100,6 +102,34 @@ int closeConnection(const char* sockname) {
     return 1;
 }
 
+int openFile(const char* pathname, int flags) {
+    char reqframe[2048];
+    struct reqcall reqc;
+    size_t reqsize;
+
+    if (sfd == -1) {
+        return -1; //TODO: set errno
+    }
+
+    reqcall_default(&reqc);
+    reqc.pathname = pathname;
+    reqc.N = 1;
+    reqc.flags = flags;
+
+    prepareRequest((char *)reqframe, &reqsize, REQ_OPEN, &reqc);
+    if (write(sfd, reqframe, reqsize) != reqsize) {
+        return -1;
+    }
+
+    read(sfd, reqframe, sizeof(reqcode_t));
+    if (*((reqcode_t *)reqframe) == REQ_FAILED) {
+        errno = EACCES;
+        return -1;
+    }
+
+    return 0;
+}
+
 int readFile(const char* pathname, void** buf, size_t* size) {
     char reqframe[2048];
     struct reqcall reqc;
@@ -108,6 +138,8 @@ int readFile(const char* pathname, void** buf, size_t* size) {
     if (sfd == -1) {
         return -1; //TODO: set errno
     }
+
+    *size = 0;
 
     reqcall_default(&reqc);
     reqc.pathname = pathname;
@@ -118,11 +150,23 @@ int readFile(const char* pathname, void** buf, size_t* size) {
         return -1;
     }
 
-    read(sfd, reqframe, sizeof filesize);
-    memcpy(&filesize, reqframe, sizeof filesize);
+    read(sfd, reqframe, SIZE_OF(filesize));
+    if (*((reqcode_t *)reqframe) == REQ_FAILED) {
+        errno = EACCES;
+        return -1;
+    }
+
+    memcpy(&filesize, reqframe + sizeof(reqcode_t), sizeof filesize);
+
 
     prepareRequest((char *)reqframe, &reqsize, REQ_READ, &reqc);
     if (write(sfd, reqframe, reqsize) != reqsize) {
+        return -1;
+    }
+
+    read(sfd, reqframe, sizeof(reqcode_t));
+    if (*((reqcode_t *)reqframe) == REQ_FAILED) {
+        errno = EACCES;
         return -1;
     }
 
@@ -130,4 +174,113 @@ int readFile(const char* pathname, void** buf, size_t* size) {
     *size = read(sfd, *buf, filesize);
 
     return 0;
+}
+
+int closeFile(const char* pathname) {
+    char reqframe[2048];
+    struct reqcall reqc;
+    size_t reqsize;
+
+    if (sfd == -1) {
+        return -1; //TODO: set errno
+    }
+
+    reqcall_default(&reqc);
+    reqc.pathname = pathname;
+    reqc.N = 1;
+
+    prepareRequest((char *)reqframe, &reqsize, REQ_CLOSEFILE, &reqc);
+    if (write(sfd, reqframe, reqsize) != reqsize) {
+        return -1;
+    }
+
+    read(sfd, reqframe, sizeof(reqcode_t));
+    if (*((reqcode_t *)reqframe) == REQ_FAILED) {
+        errno = EACCES;
+        return -1;
+    }
+
+    return 0;
+}
+
+int lockFile(const char* pathname) {
+    char reqframe[2048];
+    struct reqcall reqc;
+    size_t reqsize;
+
+    if (sfd == -1) {
+        return -1; //TODO: set errno
+    }
+
+    reqcall_default(&reqc);
+    reqc.pathname = pathname;
+    reqc.N = 1;
+
+    prepareRequest((char *)reqframe, &reqsize, REQ_LOCK, &reqc);
+    if (write(sfd, reqframe, reqsize) != reqsize) {
+        return -1;
+    }
+
+    read(sfd, reqframe, sizeof(reqcode_t));
+    if (*((reqcode_t *)reqframe) == REQ_FAILED) {
+        errno = EACCES;
+        return -1;
+    }
+
+    return 0;
+}
+
+int unlockFile(const char* pathname) {
+    char reqframe[2048];
+    struct reqcall reqc;
+    size_t reqsize;
+
+    if (sfd == -1) {
+        return -1; //TODO: set errno
+    }
+
+    reqcall_default(&reqc);
+    reqc.pathname = pathname;
+    reqc.N = 1;
+
+    prepareRequest((char *)reqframe, &reqsize, REQ_UNLOCK, &reqc);
+    if (write(sfd, reqframe, reqsize) != reqsize) {
+        return -1;
+    }
+
+    read(sfd, reqframe, sizeof(reqcode_t));
+    if (*((reqcode_t *)reqframe) == REQ_FAILED) {
+        errno = EACCES;
+        return -1;
+    }
+
+    return 0;
+}
+
+int removeFile(const char* pathname) {
+    char reqframe[2048];
+    struct reqcall reqc;
+    size_t reqsize;
+
+    if (sfd == -1) {
+        return -1; //TODO: set errno
+    }
+
+    reqcall_default(&reqc);
+    reqc.pathname = pathname;
+    reqc.N = 1;
+
+    prepareRequest((char *)reqframe, &reqsize, REQ_REMOVE, &reqc);
+    if (write(sfd, reqframe, reqsize) != reqsize) {
+        return -1;
+    }
+
+    read(sfd, reqframe, sizeof(reqcode_t));
+    if (*((reqcode_t *)reqframe) == REQ_FAILED) {
+        errno = EACCES;
+        return -1;
+    }
+
+    return 0;
+
 }
