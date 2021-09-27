@@ -4,16 +4,17 @@
 #include <stdio.h>
 
 typedef enum {
-    REQ_OPEN = (char)0,
-    REQ_CLOSECONN = (char)1,
-    REQ_READ = (char)2,
-    REQ_GETSIZ = (char)3,
-    REQ_FAILED = (char)4,
-    REQ_SUCCESS = (char)5,
-    REQ_CLOSEFILE = (char)6,
-    REQ_LOCK = (char)7,
-    REQ_UNLOCK = (char)8,
-    REQ_REMOVE = (char)9
+    REQ_OPEN = 0,
+    REQ_CLOSECONN = 1,
+    REQ_READ = 2,
+    REQ_GETSIZ = 3,
+    REQ_FAILED = 4,
+    REQ_SUCCESS = 5,
+    REQ_CLOSEFILE = 6,
+    REQ_LOCK = 7,
+    REQ_UNLOCK = 8,
+    REQ_REMOVE = 9,
+    REQ_WRITE = 10
 } reqcode_t;
 
 typedef enum {

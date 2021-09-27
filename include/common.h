@@ -9,6 +9,7 @@
 #define O_LOCK   0x2
 #define O_NULL   0x4
 
+#define E_EXISTS  -6
 #define E_DENIED  -5
 #define E_NEXISTS -4
 #define E_NOPEN   -3

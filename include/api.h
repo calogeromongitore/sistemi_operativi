@@ -11,5 +11,6 @@ int closeFile(const char* pathname);
 int lockFile(const char* pathname);
 int unlockFile(const char* pathname);
 int removeFile(const char* pathname);
+int writeFile(const char* pathname, const char* dirname);
 
 #endif

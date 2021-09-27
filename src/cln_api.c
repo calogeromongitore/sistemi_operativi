@@ -5,7 +5,9 @@
 #include <sys/un.h>
 #include <string.h>
 #include <unistd.h>
+#include <fcntl.h>
 #include <time.h>
+#include <sys/stat.h>
 
 #include "../include/common.h"
 #include "../include/reqframe.h"
@@ -282,5 +284,58 @@ int removeFile(const char* pathname) {
     }
 
     return 0;
+}
 
+int writeFile(const char* pathname, const char* dirname) {
+    char reqframe[2048];
+    struct reqcall reqc;
+    size_t reqsize, filesize;
+    char *buf;
+    int fd;
+    struct stat st;
+
+    if (sfd == -1) {
+        return -1; //TODO: set errno
+    }
+
+    fd = open(pathname, O_RDONLY);
+    if (fd < 0) {
+        return -1;
+    }
+
+    reqcall_default(&reqc);
+    stat(pathname, &st);
+
+    reqc.size = st.st_size;
+    reqc.buf = malloc(reqc.size);
+    reqc.size = read(fd, reqc.buf, reqc.size);
+    reqc.pathname = pathname;
+    reqc.diname = dirname;
+    reqc.N = 1;
+
+    close(fd);
+    prepareRequest((char *)reqframe, &reqsize, REQ_WRITE, &reqc);
+    if (write(sfd, reqframe, reqsize) != reqsize) {
+        return -1;
+    }
+
+    read(sfd, reqframe, SIZE_OF(filesize));
+    if (*((reqcode_t *)reqframe) == REQ_FAILED) {
+        errno = EACCES;
+        return -1;
+    }
+
+    memcpy(&filesize, reqframe + sizeof(reqcode_t), sizeof filesize);
+
+    if (dirname) {
+        buf = (char *)malloc(filesize * sizeof(char));
+        read(sfd, buf, filesize);
+
+        read(sfd, &filesize, sizeof filesize);
+        read(sfd, reqframe, filesize);
+        reqframe[filesize] = '\0';
+        if (filesize > 0) printf("returned file %s: %s\n", reqframe, buf);
+    }
+
+    return 0;
 }

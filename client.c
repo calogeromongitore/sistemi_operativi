@@ -26,21 +26,12 @@ int main(int argc, char **argv) {
 
     PERROR_DIE(openConnection((char *)ARGS_VALUE(args, ARG_SOCKETFILE), 500, absVal), -1);
 
-    PERROR_DIE(openFile("suca.txt", 0), -1);
-    PERROR_DIE(openFile("/home/pietra/roccia2.txt", 0), -1);
-    PERROR_DIE(lockFile("/home/pietra/roccia2.txt"), -1);
+    PERROR_DIE(openFile("/home/gabriele97/repos/sistemi_operativi/config.txt", O_CREATE | O_LOCK), -1);
+    PERROR_DIE(writeFile("/home/gabriele97/repos/sistemi_operativi/config.txt", "./out/"), -1);
+    PERROR_DIE(openFile("suca.txt", O_LOCK), -1);
+    PERROR_DIE(readFile("suca.txt", (void *)&buf, &size), -1);
 
-    PERROR_DIE(readFile("suca.txt", (void **)&buf, &size), -1);;
     printf("%s\n", buf);
-
-    PERROR_DIE(readFile("/home/pietra/roccia2.txt", (void **)&buf, &size), -1);;
-    printf("%s\n", buf);
-
-    PERROR_DIE(removeFile("/home/pietra/roccia2.txt"), -1);
-
-    sleep(30);
-    printf("CLOSSSING\n");
-    PERROR_DIE(closeFile("/home/pietra/roccia2.txt"), -1);
 
     while(1) {
         sleep(20);

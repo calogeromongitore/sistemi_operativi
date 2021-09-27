@@ -18,6 +18,7 @@
 #include "include/storage.h"
 #include "include/reqframe.h"
 #include "include/fifo.h"
+#include "include/list.h"
 
 #define SET_FDMAX(actual, newfd) actual = ((newfd > actual) ? newfd : actual)
 
@@ -83,8 +84,9 @@ void *th_routine(void *args) {
     workers_t workers;
     thargs_t thargs_cpy, *thargsqueue;
     reqcode_t req;
-    ssize_t loc;
-    char buf[1024], buf2[1024], bufresp[1024];
+    size_t loc, filesize, fileretsize;
+    char buf[1024], buf2[1024], buf3[1024], buf4[1024], bufresp[1024];
+    char *newptr;
     int len, flags, retval;
     int thid;
 
@@ -97,6 +99,7 @@ void *th_routine(void *args) {
 
         printf("[#%02d] Data read at 0x%p\n", thid, thargs_cpy.data);
 
+        filesize = 0;
         loc = 0;
         if (thargs_cpy.data[loc++] == PARAM_SEP) {
 
@@ -121,7 +124,17 @@ void *th_routine(void *args) {
                         loc += sizeof flags;
 
                         break;
+
+                    case PARAM_SIZE:
+                        memcpy(&filesize, thargs_cpy.data + loc, sizeof filesize);
+                        loc += sizeof filesize;
+                        break;
                     
+                    case PARAM_BUF:
+                        memcpy(buf3, thargs_cpy.data + loc, filesize);
+                        loc += filesize;
+                        break;
+
                     default:
                         break;
 
@@ -178,6 +191,18 @@ void *th_routine(void *args) {
                     loc = 0;
                     break;
 
+                case REQ_WRITE:
+                    retval = storage_write(thargs_cpy.storage, thargs_cpy.sfd2, buf3, filesize, buf, buf2, &loc, buf4, &fileretsize);
+                    memcpy(buf2 + sizeof loc, buf2, loc);
+                    memcpy(buf2, &loc, sizeof loc);
+                    loc += sizeof loc;
+                    memcpy(buf2 + loc, &fileretsize, sizeof fileretsize);
+                    loc += sizeof fileretsize;
+                    memcpy(buf2 + loc, buf4, fileretsize);
+                    loc += fileretsize;
+                    
+                    break;
+
                 case REQ_GETSIZ:
                     retval = storage_getsize(thargs_cpy.storage, thargs_cpy.sfd2, buf, &loc);
                     memcpy(buf2, &loc, sizeof loc);
@@ -190,16 +215,17 @@ void *th_routine(void *args) {
         req = (retval != E_ITSOK) ? REQ_FAILED : REQ_SUCCESS; 
         memcpy(bufresp, &req, sizeof req);
 
+        flags = sizeof retval;
         if (req == REQ_FAILED) {
-            memcpy(bufresp + sizeof req, &retval, sizeof retval);
-            loc = sizeof retval;
+            memcpy(bufresp + sizeof req, &retval, loc = sizeof retval);
         } else {
             memcpy(bufresp + sizeof req, buf2, loc);
         }
 
+        // memcpy(newptr, buf2, loc);
         // TODO: write performed by the master thread. 
         // send the result to it through another pipe
-        write(thargs_cpy.sfd2, bufresp, sizeof req + loc);
+        write(thargs_cpy.sfd2, bufresp, loc + sizeof req);
 
         free(thargs_cpy.data);
     }
@@ -247,8 +273,8 @@ int main(int argc, char **argv) {
     fifo_t fifo;
     char buf[1024];
     char *ptr, *data1, *data2;
-    char buf2[1024], buf3[1024];
-    int i2, i3;
+    char buf2[1024], buf3[1024], buf4[1024];
+    int i2, i3, i4;
     int reqid = 0;
     
     parse_args(argc, argv, &args);
@@ -296,11 +322,11 @@ int main(int argc, char **argv) {
 
     i = sprintf(buf, "ciaoaoaoaoaoaoaoaoaoaoaoaaoaooaoaoaoaaoaoaoao\n");
     i2 = sprintf(buf2, "asdassadasdasdasdasdasdasdsdada\n");
-    storage_insert(storage, buf2, i2, "/home/pietra/roccia.txt", buf3, (size_t *)&i3);
-    storage_insert(storage, buf, i, "/home/pietra/santa2.txt", buf3, (size_t *)&i3);
-    storage_insert(storage, buf2, i2, "/home/pietra/roccia2.txt", buf3, (size_t *)&i3);
-    storage_insert(storage, buf2, 1, "/home/pietra/signle.txt", buf3, (size_t *)&i3);
-    storage_insert(storage, buf, i, "suca.txt", buf3, (size_t *)&i3);
+    storage_insert(storage, buf2, i2, "/home/pietra/roccia.txt", buf3, (size_t *)&i3, buf4, (size_t *)&i4);
+    storage_insert(storage, buf2, i2, "/home/pietra/santa2.txt", buf3, (size_t *)&i3, buf4, (size_t *)&i4);
+    storage_insert(storage, buf2, i2, "/home/pietra/roccia2.txt", buf3, (size_t *)&i3, buf4, (size_t *)&i4);
+    storage_insert(storage, buf2, 1, "/home/pietra/signle.txt", buf3, (size_t *)&i3, buf4, (size_t *)&i4);
+    storage_insert(storage, buf, i, "suca.txt", buf3, (size_t *)&i3, buf4, (size_t *)&i4);
 
 
     while (1) {
@@ -329,9 +355,13 @@ int main(int argc, char **argv) {
                 //check if errno == EAGAIN or EWOULDBLOCK, if so means ok
                 //if it returns 0 the fd must be deleted from the epoll
                 //at each successful read, realloc the buffer
-                if (!(bytes = read(i, (void *)buf, 1024))) {
+                if ((bytes = read(i, (void *)buf, 1024)) <= 0) {
                     FD_CLR(i, &rfds);
                     // close(i);
+                    // TODO: do a funciton like storage.closeallfilesfrom(i) in order
+                    // to close all the files opened by clientid = i
+                    // then wake up the fifo thread
+                    // workers_pipewrite(workers_queue, &fifo, sizeof fifo);
                     continue;
                 }
 

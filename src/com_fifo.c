@@ -80,7 +80,7 @@ void *fifo_enqueue(fifo_t fifo, void *buf, size_t len) {
 int fifo_dequeue(fifo_t fifo, void *dst, size_t len) {
     size_t tillend, remain, newpos;
 
-    if (fifo->first + 1 == fifo->last) {
+    if (fifo->first + len == fifo->last) {
         return -1;
     }
 

@@ -6,6 +6,7 @@
 #include <string.h>
 
 #include "../include/fifo.h"
+#include "../include/list.h"
 #include "../include/common.h"
 
 #define NODE_SETNULL(node) ((node).locptr = NULL)
@@ -20,7 +21,7 @@ struct lockstat {
 
 struct openstat {
     int clientid;
-    char write;
+    char *filename;
 };
 
 struct node {
@@ -29,7 +30,7 @@ struct node {
     void *locptr;
     int size;
     struct lockstat locked;
-    struct openstat openby[32];
+    int openby[32];
     int openby_length;
 };
 
@@ -39,6 +40,7 @@ struct storage_s {
     size_t actual_storage;
     int actual_nfiles;
     struct node *memory;
+    list_t tempopen;
     fifo_t fifo;
     pthread_mutex_t storagemtx;
 };
@@ -68,13 +70,17 @@ static struct node * ___get_inode(storage_t storage, const char *filename) {
 static int ___is_openedby(int clientid, struct node *inode) {
     int i;
 
-    for (i = 0; i < inode->openby_length && inode->openby[i].clientid != clientid; i++);    
+    if (inode == NULL) {
+        return E_GENERIC;
+    }
+
+    for (i = 0; i < inode->openby_length && inode->openby[i] != clientid; i++);    
 
     return i >= inode->openby_length ? E_NOPEN : i;
 }
 
 static inline char ___is_accessible(int clientid, struct node *inode) {
-    return ___is_openedby(clientid, inode) || !inode->locked.locked || (inode->locked.locked && inode->openby[inode->locked.index].clientid == clientid);
+    return ___is_openedby(clientid, inode) || !inode->locked.locked || (inode->locked.locked && inode->openby[inode->locked.index] == clientid);
 }
 
 storage_t storage_init(size_t totstorage, int maxfiles) {
@@ -87,6 +93,7 @@ storage_t storage_init(size_t totstorage, int maxfiles) {
     storage->totstorage = totstorage;
     storage->maxfiles = maxfiles;
     storage->actual_nfiles = 0;
+    storage->tempopen = list_init();
 
     pthread_mutex_init(&storage->storagemtx, NULL);
 
@@ -100,21 +107,23 @@ storage_t storage_init(size_t totstorage, int maxfiles) {
 void storage_destroy(storage_t storage) {
     free(storage->memory);
     fifo_destroy(storage->fifo);
+    list_destroy(storage->tempopen);
     pthread_mutex_destroy(&storage->storagemtx);
     free(storage);
 }
 
-void storage_insert(storage_t storage, void *buf, size_t size, char *filename, void *bufret, size_t *sizeret) {
+void storage_insert(storage_t storage, void *buf, size_t size, char *filename, void *bufret, size_t *sizeret, char *filenameret, size_t *filenamesize) {
     int i;
 
     pthread_mutex_lock(&storage->storagemtx);
 
-    i = 0;
-    *sizeret = 0;
-
+    *sizeret = *filenameret = i = 0;
     if (storage->actual_storage + size > storage->totstorage || storage->actual_nfiles == storage->maxfiles) {
 
         fifo_dequeue(storage->fifo, (void *)&i, sizeof i);
+
+        strcpy(filenameret, storage->memory[i].filename);
+        *filenamesize = storage->memory[i].filename_length;
 
         memcpy(bufret, storage->memory[i].locptr, storage->memory[i].size);
         *sizeret = storage->memory[i].size;
@@ -151,7 +160,9 @@ int storage_read(storage_t storage, int clientid, const char *filename, void *bu
     retval = E_GENERIC;
 
     inode = ___get_inode(storage, filename);
-    if (___is_openedby(clientid, inode) == E_NOPEN) {
+    if (inode == NULL) {
+        retval = E_NEXISTS;
+    } else if (___is_openedby(clientid, inode) == E_NOPEN) {
         retval = E_NOPEN;
     } else if (___is_accessible(clientid, inode)) {
         *size = inode->size;
@@ -175,7 +186,9 @@ int storage_getsize(storage_t storage, int clientid, const char *filename, size_
     *size = 0;
 
     inode = ___get_inode(storage, filename);
-    if (___is_openedby(clientid, inode) == E_NOPEN) {
+    if (inode == NULL) {
+        retval = E_NEXISTS;
+    } else if (___is_openedby(clientid, inode) == E_NOPEN) {
         retval = E_NOPEN;
     } else if (___is_accessible(clientid, inode)) {
         *size = inode->size;
@@ -191,21 +204,32 @@ int storage_getsize(storage_t storage, int clientid, const char *filename, size_
 int storage_open(storage_t storage, int clientid, const char *filename, int flags) {
     struct node *inode;
     int retval;
+    struct openstat *open;
 
     pthread_mutex_lock(&storage->storagemtx);
 
     retval = E_ITSOK;
     inode = ___get_inode(storage, filename);
 
-    if (inode == NULL || ___is_openedby(clientid, inode) == E_NOPEN) {
-
-        if (inode == NULL) {
+    if (inode == NULL) {
+        if (!(flags & O_CREATE)) {
             retval = E_NEXISTS;
-        } else if (inode->locked.locked && inode->openby[inode->locked.index].clientid != clientid) {
+        } else if (flags & O_LOCK) {
+            open = (struct openstat *)malloc(sizeof *open);
+            open->filename = malloc((strlen(filename) + 1) * sizeof *filename);
+            open->clientid = clientid;
+
+            strcpy(open->filename, filename);
+            list_append(storage->tempopen, open);
+        }
+    } else if (flags & O_CREATE) {
+        retval = E_EXISTS;
+    } else if (___is_openedby(clientid, inode) == E_NOPEN) {
+
+        if (inode->locked.locked && inode->openby[inode->locked.index] != clientid) {
             retval = A_LKWAIT;
         } else {
-            inode->openby[inode->openby_length].clientid = clientid;
-            inode->openby[inode->openby_length].write = flags & O_CREATE;
+            inode->openby[inode->openby_length] = clientid;
 
             if (flags & O_LOCK) {
                 inode->locked.index = inode->openby_length;
@@ -321,5 +345,44 @@ int storage_remove(storage_t storage, int clientid, const char *filename) {
     }
 
     pthread_mutex_unlock(&storage->storagemtx);
+    return retval;
+}
+
+static char ___searchfn(void *val, void *what) {
+    struct openstat *t1, *t2;
+    char ret;
+
+    t1 = (struct openstat *)val;
+    t2 = (struct openstat *)what;
+
+    ret = t1->clientid == t2->clientid && !strcmp(t1->filename, t2->filename);
+
+    if (ret) t1->filename = t2->filename;
+
+    return ret;
+}
+
+int storage_write(storage_t storage, int clientid, void *buf, size_t size, char *filename, void *bufret, size_t *sizeret, char *filenameret, size_t *fileretsize) {
+    void *opened;
+    int retval;
+    struct openstat t1;
+    struct node *inode;
+
+    t1.filename = filename;
+    t1.clientid = clientid;
+
+    retval = E_ITSOK;
+    opened = list_search(storage->tempopen, &t1, ___searchfn);
+
+    if (opened == NULL) {
+        retval = E_NEXISTS;
+    } else {
+        // free(t1.filename); TODO
+        storage_insert(storage, buf, size, filename, bufret, sizeret, filenameret, fileretsize);
+        list_delete(storage->tempopen, opened);
+
+        retval = storage_open(storage, clientid, filename, O_LOCK);
+    }
+
     return retval;
 }
