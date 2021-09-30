@@ -82,10 +82,10 @@ config_t parse_config(char *path_config) {
 
 void *th_routine(void *args) {
     workers_t workers;
-    thargs_t thargs_cpy;
+    thargs_t thargs_cpy, *thargsqueue;
     reqcode_t req, reqst;
-    size_t loc, filesize, fileretsize, rem;
-    char buf[1024], buf3[1024], buf4[1024], rbuf2[1024];
+    size_t loc, tloc, filesize, fileretsize, rem;
+    char buf[1024], buf3[1024], buf4[1024], bufresp[1024], rbuf2[1024];
     char *buf2;
     int len, flags, retval;
     int thid;
@@ -193,13 +193,53 @@ void *th_routine(void *args) {
                     break;
 
                 case REQ_WRITE:
+                    // retval = storage_write(thargs_cpy.storage, thargs_cpy.sfd2, buf3, filesize, buf, buf2, &loc, buf4, &fileretsize);
                     retval = storage_write(thargs_cpy.storage, thargs_cpy.sfd2, buf3, filesize, buf);
                     loc = 0;
+
+                    // loc = 0;
+                    // len = -1;
+                    // while (storage_getremoved(thargs_cpy.storage, &rem, buf2, &tloc, buf4, &fileretsize), ++len, rem) {
+                    //     memcpy(buf+ loc, &tloc, sizeof tloc);
+                    //     loc += sizeof tloc;
+                    //     memcpy(buf + loc, buf2, tloc);
+                    //     loc += tloc;
+
+                    //     memcpy(buf + loc, &fileretsize, sizeof fileretsize);
+                    //     loc += sizeof fileretsize;
+                    //     memcpy(buf + loc, buf4, fileretsize);
+                    //     loc += fileretsize;
+                    // }                       
+
+                    // memcpy(buf2 + sizeof len, buf, loc);
+                    // memcpy(buf2, &len, sizeof len);
+                    // loc += sizeof len;
+
                     break;
 
                 case REQ_APPEND:
+                    // retval = storage_append(thargs_cpy.storage, thargs_cpy.sfd2, buf3, filesize, buf, buf2, &loc, buf4, &fileretsize);
                     retval = storage_append(thargs_cpy.storage, thargs_cpy.sfd2, buf3, filesize, buf);
                     loc = 0;
+
+                    // loc = 0;
+                    // len = -1;
+                    // while (storage_getremoved(thargs_cpy.storage, &rem, buf2, &tloc, buf4, &fileretsize), ++len, rem) {
+                    //     memcpy(buf+ loc, &tloc, sizeof tloc);
+                    //     loc += sizeof tloc;
+                    //     memcpy(buf + loc, buf2, tloc);
+                    //     loc += tloc;
+
+                    //     memcpy(buf + loc, &fileretsize, sizeof fileretsize);
+                    //     loc += sizeof fileretsize;
+                    //     memcpy(buf + loc, buf4, fileretsize);
+                    //     loc += fileretsize;
+                    // }                       
+
+                    // memcpy(buf2 + sizeof len, buf, loc);
+                    // memcpy(buf2, &len, sizeof len);
+                    // loc += sizeof len;
+
                     break;
 
                 case REQ_GETSIZ:
@@ -237,6 +277,24 @@ void *th_routine(void *args) {
                 write(thargs_cpy.sfd2, (void *)&len, sizeof len);
             }
 
+
+            // loc = 0;
+            // len = -1;
+            // while (storage_getremoved(thargs_cpy.storage, &rem, buf2, &tloc, buf4, &fileretsize), ++len, rem) {
+            //     memcpy(buf+ loc, &tloc, sizeof tloc);
+            //     loc += sizeof tloc;
+            //     memcpy(buf + loc, buf2, tloc);
+            //     loc += tloc;
+
+            //     memcpy(buf + loc, &fileretsize, sizeof fileretsize);
+            //     loc += sizeof fileretsize;
+            //     memcpy(buf + loc, buf4, fileretsize);
+            //     loc += fileretsize;
+            // }                       
+
+            // memcpy(buf2 + sizeof len, buf, loc);
+            // memcpy(buf2, &len, sizeof len);
+            // loc += sizeof len;
         } else {
             write(thargs_cpy.sfd2, buf2, loc);
         }

@@ -150,20 +150,19 @@ void storage_destroy(storage_t storage) {
     free(storage);
 }
 
-void storage_getremoved(storage_t storage, size_t *n, void *data, size_t *datasize, char *filename, size_t *filenamesize) {
+void storage_getremoved(storage_t storage, size_t *n, void **data, size_t *datasize, char *filename, size_t *filenamesize) {
     struct node inode;
 
     *n = fifo_usedspace(storage->fiforet) / sizeof(struct node);
     if (*n) {
         fifo_dequeue(storage->fiforet, (void *)&inode, sizeof inode);
 
-        memcpy(data, inode.locptr, inode.size);
+        *data = inode.locptr;
         *datasize = inode.size;
 
         strcpy(filename, inode.filename);
         *filenamesize = inode.filename_length;
         
-        free(inode.locptr);
         free(inode.filename);
     }
 
@@ -198,7 +197,7 @@ void storage_insert(storage_t storage, void *buf, size_t size, char *filename) {
     pthread_mutex_unlock(&storage->storagemtx);
 }
 
-int storage_read(storage_t storage, int clientid, const char *filename, void *buf, size_t *size) {
+int storage_read(storage_t storage, int clientid, const char *filename, void **buf, size_t *size) {
     struct node *inode;
     int retval;
 
@@ -214,7 +213,7 @@ int storage_read(storage_t storage, int clientid, const char *filename, void *bu
         retval = E_NOPEN;
     } else if (___is_accessible(clientid, inode)) {
         *size = inode->size;
-        memcpy(buf, inode->locptr, *size);
+        *buf = inode->locptr;
         retval = E_ITSOK;
     } else {
         retval = E_LKNOACQ;

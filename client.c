@@ -74,8 +74,8 @@ int main(int argc, char **argv) {
                     PERROR_DIE(writeFile(ARGS_VALUE(args, ARG_WRITELIST) + j, rejstore_path), -1);
 
                     for (i = 0; i <= st.st_size / CHUNK_SIZE; i++) {
-                        printf("\t:: file size %d\n", st.st_size);
-                        printf("\t-- chunk %d/%d\n", i + 1, st.st_size / CHUNK_SIZE + 1);
+                        printf("\t:: file size %ld\n", st.st_size);
+                        printf("\t-- chunk %d/%ld\n", i + 1, st.st_size / CHUNK_SIZE + 1);
                         chunkread = read(fd, chunkbuf, CHUNK_SIZE);
                         if (chunkread > 0) {
                             PERROR_DIE(appendToFile(ARGS_VALUE(args, ARG_WRITELIST) + j, chunkbuf, chunkread, rejstore_path), -1);

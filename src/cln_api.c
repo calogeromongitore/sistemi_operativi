@@ -341,13 +341,13 @@ int writeFile(const char* pathname, const char* dirname) {
             buf2 = (char *)malloc(filesize * sizeof(char));
             read(sfd, buf2, filesize);
 
-            read(sfd, &filesize, sizeof filesize);
-            read(sfd, reqframe, filesize);
-            reqframe[filesize] = '\0';
+            read(sfd, &reqsize, sizeof reqsize);
+            read(sfd, reqframe, reqsize);
+            reqframe[reqsize] = '\0';
 
             if (filesize > 0) {
                 sprintf(fname, "%s/%s", dirname, reqframe);
-                fd = open(fname, O_WRONLY);
+                PERROR_DIE(fd = open(fname, O_WRONLY | O_CREAT, 0644), -1);
                 write(fd, buf2, filesize);
                 close(fd);
             }
@@ -397,13 +397,13 @@ int appendToFile(const char* pathname, void* buf, size_t size, const char* dirna
             buf2 = (char *)malloc(filesize * sizeof(char));
             read(sfd, buf2, filesize);
 
-            read(sfd, &filesize, sizeof filesize);
-            read(sfd, reqframe, filesize);
-            reqframe[filesize] = '\0';
+            read(sfd, &reqsize, sizeof reqsize);
+            read(sfd, reqframe, reqsize);
+            reqframe[reqsize] = '\0';
 
             if (filesize > 0) {
                 sprintf(fname, "%s/%s", dirname, reqframe);
-                fd = open(fname, O_WRONLY);
+                PERROR_DIE(fd = open(fname, O_WRONLY | O_CREAT, 0644), -1);
                 write(fd, buf2, filesize);
                 close(fd);
             }
