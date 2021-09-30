@@ -84,7 +84,7 @@ void *th_routine(void *args) {
     workers_t workers;
     thargs_t thargs_cpy, *thargsqueue;
     reqcode_t req;
-    size_t loc, filesize, fileretsize;
+    size_t loc, tloc, filesize, fileretsize, rem;
     char buf[1024], buf2[1024], buf3[1024], buf4[1024], bufresp[1024];
     char *newptr;
     int len, flags, retval;
@@ -192,15 +192,51 @@ void *th_routine(void *args) {
                     break;
 
                 case REQ_WRITE:
-                    retval = storage_write(thargs_cpy.storage, thargs_cpy.sfd2, buf3, filesize, buf, buf2, &loc, buf4, &fileretsize);
-                    memcpy(buf2 + sizeof loc, buf2, loc);
-                    memcpy(buf2, &loc, sizeof loc);
-                    loc += sizeof loc;
-                    memcpy(buf2 + loc, &fileretsize, sizeof fileretsize);
-                    loc += sizeof fileretsize;
-                    memcpy(buf2 + loc, buf4, fileretsize);
-                    loc += fileretsize;
-                    
+                    // retval = storage_write(thargs_cpy.storage, thargs_cpy.sfd2, buf3, filesize, buf, buf2, &loc, buf4, &fileretsize);
+                    retval = storage_write(thargs_cpy.storage, thargs_cpy.sfd2, buf3, filesize, buf);
+
+                    loc = 0;
+                    len = -1;
+                    while (storage_getremoved(thargs_cpy.storage, &rem, buf2, &tloc, buf4, &fileretsize), ++len, rem) {
+                        memcpy(buf+ loc, &tloc, sizeof tloc);
+                        loc += sizeof tloc;
+                        memcpy(buf + loc, buf2, tloc);
+                        loc += tloc;
+
+                        memcpy(buf + loc, &fileretsize, sizeof fileretsize);
+                        loc += sizeof fileretsize;
+                        memcpy(buf + loc, buf4, fileretsize);
+                        loc += fileretsize;
+                    }                       
+
+                    memcpy(buf2 + sizeof len, buf, loc);
+                    memcpy(buf2, &len, sizeof len);
+                    loc += sizeof len;
+
+                    break;
+
+                case REQ_APPEND:
+                    // retval = storage_append(thargs_cpy.storage, thargs_cpy.sfd2, buf3, filesize, buf, buf2, &loc, buf4, &fileretsize);
+                    retval = storage_append(thargs_cpy.storage, thargs_cpy.sfd2, buf3, filesize, buf);
+
+                    loc = 0;
+                    len = -1;
+                    while (storage_getremoved(thargs_cpy.storage, &rem, buf2, &tloc, buf4, &fileretsize), ++len, rem) {
+                        memcpy(buf+ loc, &tloc, sizeof tloc);
+                        loc += sizeof tloc;
+                        memcpy(buf + loc, buf2, tloc);
+                        loc += tloc;
+
+                        memcpy(buf + loc, &fileretsize, sizeof fileretsize);
+                        loc += sizeof fileretsize;
+                        memcpy(buf + loc, buf4, fileretsize);
+                        loc += fileretsize;
+                    }                       
+
+                    memcpy(buf2 + sizeof len, buf, loc);
+                    memcpy(buf2, &len, sizeof len);
+                    loc += sizeof len;
+
                     break;
 
                 case REQ_GETSIZ:
@@ -271,7 +307,7 @@ int main(int argc, char **argv) {
     thargs_t thargs;
     storage_t storage;
     fifo_t fifo;
-    char buf[1024];
+    char buf[2048];
     char *ptr, *data1, *data2;
     char buf2[1024], buf3[1024], buf4[1024];
     int i2, i3, i4;
@@ -313,20 +349,20 @@ int main(int argc, char **argv) {
     workers_start(workers, th_routine);
     SET_FDMAX(fdmax, workers_getmaxfd(workers));
 
-    storage = storage_init(128, 4);
+    storage = storage_init(13630, 4);
     fifo = fifo_init(64 * sizeof(thargs_t));
 
     workers_queue = workers_init(1);
     workers_start(workers_queue, th_routine_queue);
     SET_FDMAX(fdmax, workers_getmaxfd(workers));
 
-    i = sprintf(buf, "ciaoaoaoaoaoaoaoaoaoaoaoaaoaooaoaoaoaaoaoaoao\n");
-    i2 = sprintf(buf2, "asdassadasdasdasdasdasdasdsdada\n");
-    storage_insert(storage, buf2, i2, "/home/pietra/roccia.txt", buf3, (size_t *)&i3, buf4, (size_t *)&i4);
-    storage_insert(storage, buf2, i2, "/home/pietra/santa2.txt", buf3, (size_t *)&i3, buf4, (size_t *)&i4);
-    storage_insert(storage, buf2, i2, "/home/pietra/roccia2.txt", buf3, (size_t *)&i3, buf4, (size_t *)&i4);
-    storage_insert(storage, buf2, 1, "/home/pietra/signle.txt", buf3, (size_t *)&i3, buf4, (size_t *)&i4);
-    storage_insert(storage, buf, i, "suca.txt", buf3, (size_t *)&i3, buf4, (size_t *)&i4);
+    // i = sprintf(buf, "ciaoaoaoaoaoaoaoaoaoaoaoaaoaooaoaoaoaaoaoaoao\n");
+    // i2 = sprintf(buf2, "asdassadasdasdasdasdasdasdsdada\n");
+    // storage_insert(storage, buf2, i2, "/home/pietra/roccia.txt");
+    // storage_insert(storage, buf2, i2, "/home/pietra/santa2.txt");
+    // storage_insert(storage, buf2, i2, "/home/pietra/roccia2.txt");
+    // storage_insert(storage, buf2, 1, "/home/pietra/signle.txt");
+    // storage_insert(storage, buf, i, "suca.txt");
 
 
     while (1) {

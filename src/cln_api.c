@@ -287,11 +287,12 @@ int removeFile(const char* pathname) {
 }
 
 int writeFile(const char* pathname, const char* dirname) {
-    char reqframe[2048];
+    char reqframe[2048], fname[2048];
+    char *buf2;
     struct reqcall reqc;
     size_t reqsize, filesize;
     char *buf;
-    int fd;
+    int fd, len;
     struct stat st;
 
     if (sfd == -1) {
@@ -306,10 +307,17 @@ int writeFile(const char* pathname, const char* dirname) {
     reqcall_default(&reqc);
     stat(pathname, &st);
 
+    for (len = strlen(pathname) - 1; len >= 0; len--) {
+        if (pathname[len] == '/') {
+            break;
+        }
+    }
+
+    len++;
     reqc.size = st.st_size;
-    reqc.buf = malloc(reqc.size);
-    reqc.size = read(fd, reqc.buf, reqc.size);
-    reqc.pathname = pathname;
+    reqc.buf = (st.st_size > CHUNK_SIZE) ? NULL : malloc(reqc.size);
+    reqc.size = (st.st_size > CHUNK_SIZE) ? 0 : read(fd, reqc.buf, reqc.size);
+    reqc.pathname = pathname + len;
     reqc.diname = dirname;
     reqc.N = 1;
 
@@ -319,22 +327,89 @@ int writeFile(const char* pathname, const char* dirname) {
         return -1;
     }
 
-    read(sfd, reqframe, SIZE_OF(filesize));
+    read(sfd, reqframe, SIZE_OF(len));
     if (*((reqcode_t *)reqframe) == REQ_FAILED) {
         errno = EACCES;
         return -1;
     }
 
-    memcpy(&filesize, reqframe + sizeof(reqcode_t), sizeof filesize);
+    memcpy(&len, reqframe + sizeof(reqcode_t), sizeof len);
 
     if (dirname) {
-        buf = (char *)malloc(filesize * sizeof(char));
-        read(sfd, buf, filesize);
+        while (len--) {
+            read(sfd, &filesize, sizeof filesize);
+            buf2 = (char *)malloc(filesize * sizeof(char));
+            read(sfd, buf2, filesize);
 
-        read(sfd, &filesize, sizeof filesize);
-        read(sfd, reqframe, filesize);
-        reqframe[filesize] = '\0';
-        if (filesize > 0) printf("returned file %s: %s\n", reqframe, buf);
+            read(sfd, &filesize, sizeof filesize);
+            read(sfd, reqframe, filesize);
+            reqframe[filesize] = '\0';
+
+            if (filesize > 0) {
+                sprintf(fname, "%s/%s", dirname, reqframe);
+                fd = open(fname, O_WRONLY);
+                write(fd, buf2, filesize);
+                close(fd);
+            }
+
+            free(buf2);
+        }
+    }
+
+    return 0;
+}
+
+int appendToFile(const char* pathname, void* buf, size_t size, const char* dirname) {
+    char reqframe[2048], fname[2048];
+    struct reqcall reqc;
+    size_t reqsize, filesize;
+    char *buf2;
+    int fd, len;
+
+    if (sfd == -1) {
+        return -1; //TODO: set errno
+    }
+
+    reqcall_default(&reqc);
+
+    reqc.buf = buf;
+    reqc.size = size;
+    reqc.pathname = pathname;
+    reqc.diname = dirname;
+    reqc.N = 1;
+
+    prepareRequest((char *)reqframe, &reqsize, REQ_APPEND, &reqc);
+    if (write(sfd, reqframe, reqsize) != reqsize) {
+        return -1;
+    }
+
+    read(sfd, reqframe, SIZE_OF(len));
+    if (*((reqcode_t *)reqframe) == REQ_FAILED) {
+        errno = EACCES;
+        return -1;
+    }
+
+    memcpy(&len, reqframe + sizeof(reqcode_t), sizeof len);
+
+    if (dirname) {
+        while (len--) {
+            read(sfd, &filesize, sizeof filesize);
+            buf2 = (char *)malloc(filesize * sizeof(char));
+            read(sfd, buf2, filesize);
+
+            read(sfd, &filesize, sizeof filesize);
+            read(sfd, reqframe, filesize);
+            reqframe[filesize] = '\0';
+
+            if (filesize > 0) {
+                sprintf(fname, "%s/%s", dirname, reqframe);
+                fd = open(fname, O_WRONLY);
+                write(fd, buf2, filesize);
+                close(fd);
+            }
+
+            free(buf2);
+        }
     }
 
     return 0;

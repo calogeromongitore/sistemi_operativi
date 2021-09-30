@@ -87,8 +87,10 @@ int fifo_dequeue(fifo_t fifo, void *dst, size_t len) {
     newpos = (size_t)(fifo->first + 1) % fifo->length;
     __get_len(fifo, len, newpos, &tillend, &remain);
 
-    memcpy(dst, fifo->memfifo + newpos, tillend);
-    memcpy(dst + tillend, fifo->memfifo, remain);
+    if (dst) {
+        memcpy(dst, fifo->memfifo + newpos, tillend);
+        memcpy(dst + tillend, fifo->memfifo, remain);
+    }
 
     fifo->first = (fifo->first + len) % fifo->length;
     fifo->used -= len;

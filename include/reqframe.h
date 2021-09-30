@@ -14,7 +14,8 @@ typedef enum {
     REQ_LOCK = 7,
     REQ_UNLOCK = 8,
     REQ_REMOVE = 9,
-    REQ_WRITE = 10
+    REQ_WRITE = 10,
+    REQ_APPEND = 11
 } reqcode_t;
 
 typedef enum {

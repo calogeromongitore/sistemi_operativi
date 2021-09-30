@@ -42,15 +42,20 @@ struct storage_s {
     struct node *memory;
     list_t tempopen;
     fifo_t fifo;
+    fifo_t fiforet;
     pthread_mutex_t storagemtx;
 };
 
 static const struct lockstat lockstat_default = { .index = -1, .locked = 0 };
 
-static void ___remove(storage_t storage, int index) {
+static void ___remove(storage_t storage, int index, char dofree) {
     NODE_SETNULL(storage->memory[index]);
-    free(storage->memory[index].locptr);
-    free(storage->memory[index].filename);
+
+    if (dofree) {
+        free(storage->memory[index].locptr);
+        free(storage->memory[index].filename);
+    }
+
     storage->actual_storage -= storage->memory[index].size;
     storage->actual_nfiles--;
 }
@@ -83,6 +88,37 @@ static inline char ___is_accessible(int clientid, struct node *inode) {
     return ___is_openedby(clientid, inode) || !inode->locked.locked || (inode->locked.locked && inode->openby[inode->locked.index] == clientid);
 }
 
+static int ___full_remove(storage_t storage, size_t size, struct node *inode) {
+    int i, firsti, nfiles, inode_i;
+
+    i = firsti = inode_i = -1;
+    nfiles = storage->actual_nfiles;
+
+    while (nfiles > 0 && storage->actual_storage + size > storage->totstorage || (!inode && storage->actual_nfiles == storage->maxfiles)) {
+
+        fifo_dequeue(storage->fifo, (void *)&i, sizeof i);
+
+        if (inode != &storage->memory[i]) {
+            fifo_enqueue(storage->fiforet, &storage->memory[i], sizeof storage->memory[i]);
+            ___remove(storage, i, 0);
+        } else {
+            inode_i = i;
+        }
+
+        if (firsti == -1) {
+            firsti = i;
+        }
+
+        nfiles--;
+    }
+
+    if (inode_i >= 0) {
+        fifo_enqueue(storage->fifo, (void *)&i, sizeof i);
+    }
+
+    return i;
+}
+
 storage_t storage_init(size_t totstorage, int maxfiles) {
     storage_t storage;
     int i;
@@ -90,6 +126,7 @@ storage_t storage_init(size_t totstorage, int maxfiles) {
     storage = (storage_t)malloc(sizeof *storage);
     storage->memory = (struct node *)malloc(maxfiles * sizeof *storage->memory);
     storage->fifo = fifo_init(maxfiles * sizeof(int));
+    storage->fiforet = fifo_init(maxfiles * sizeof(struct node));
     storage->totstorage = totstorage;
     storage->maxfiles = maxfiles;
     storage->actual_nfiles = 0;
@@ -107,30 +144,41 @@ storage_t storage_init(size_t totstorage, int maxfiles) {
 void storage_destroy(storage_t storage) {
     free(storage->memory);
     fifo_destroy(storage->fifo);
+    fifo_destroy(storage->fiforet);
     list_destroy(storage->tempopen);
     pthread_mutex_destroy(&storage->storagemtx);
     free(storage);
 }
 
-void storage_insert(storage_t storage, void *buf, size_t size, char *filename, void *bufret, size_t *sizeret, char *filenameret, size_t *filenamesize) {
+void storage_getremoved(storage_t storage, size_t *n, void *data, size_t *datasize, char *filename, size_t *filenamesize) {
+    struct node inode;
+
+    *n = fifo_usedspace(storage->fiforet) / sizeof(struct node);
+    if (*n) {
+        fifo_dequeue(storage->fiforet, (void *)&inode, sizeof inode);
+
+        memcpy(data, inode.locptr, inode.size);
+        *datasize = inode.size;
+
+        strcpy(filename, inode.filename);
+        *filenamesize = inode.filename_length;
+        
+        free(inode.locptr);
+        free(inode.filename);
+    }
+
+}
+
+void storage_insert(storage_t storage, void *buf, size_t size, char *filename) {
     int i;
 
     pthread_mutex_lock(&storage->storagemtx);
 
-    *sizeret = *filenameret = i = 0;
-    if (storage->actual_storage + size > storage->totstorage || storage->actual_nfiles == storage->maxfiles) {
+    while (fifo_usedspace(storage->fiforet)) {
+        fifo_dequeue(storage->fiforet, NULL, sizeof(struct node));
+    }
 
-        fifo_dequeue(storage->fifo, (void *)&i, sizeof i);
-
-        strcpy(filenameret, storage->memory[i].filename);
-        *filenamesize = storage->memory[i].filename_length;
-
-        memcpy(bufret, storage->memory[i].locptr, storage->memory[i].size);
-        *sizeret = storage->memory[i].size;
-
-        ___remove(storage, i);
-
-    } else {
+    if ((i = ___full_remove(storage, size, NULL)) < 0) {
         for (i = 0; i < storage->maxfiles && !NODE_ISNULL(storage->memory[i]); i++);
     }
 
@@ -341,7 +389,7 @@ int storage_remove(storage_t storage, int clientid, const char *filename) {
         retval = E_LKNOACQ;
     } else {
         for (i = 0; strcmp(filename, storage->memory[i].filename); i++);
-        ___remove(storage, i);
+        ___remove(storage, i, 1);
     }
 
     pthread_mutex_unlock(&storage->storagemtx);
@@ -362,7 +410,7 @@ static char ___searchfn(void *val, void *what) {
     return ret;
 }
 
-int storage_write(storage_t storage, int clientid, void *buf, size_t size, char *filename, void *bufret, size_t *sizeret, char *filenameret, size_t *fileretsize) {
+int storage_write(storage_t storage, int clientid, void *buf, size_t size, char *filename) {
     void *opened;
     int retval;
     struct openstat t1;
@@ -376,13 +424,54 @@ int storage_write(storage_t storage, int clientid, void *buf, size_t size, char 
 
     if (opened == NULL) {
         retval = E_NEXISTS;
+    } else if (size > storage->totstorage) {
+        retval E_NOSPACE;
     } else {
         // free(t1.filename); TODO
-        storage_insert(storage, buf, size, filename, bufret, sizeret, filenameret, fileretsize);
+        storage_insert(storage, buf, size, filename);
         list_delete(storage->tempopen, opened);
 
         retval = storage_open(storage, clientid, filename, O_LOCK);
     }
 
     return retval;
+}
+
+int storage_append(storage_t storage, int clientid, void *buf, size_t size, char *filename) {
+    int retval;
+    struct node *inode;
+    void *copyloc;
+
+    retval = E_ITSOK;
+    inode = ___get_inode(storage, filename);
+
+    if (inode == NULL) {
+        retval = E_NEXISTS;
+    } else if (!___is_accessible(clientid, inode)) {
+        retval = E_DENIED;
+    } else if (inode->size + size > storage->totstorage) {
+        retval = E_NOSPACE;
+    } else {
+        // free(t1.filename); TODO
+
+        // making free space
+        ___full_remove(storage, size, inode);
+
+        // original chunk copy
+        copyloc = malloc(inode->size + size);
+        memcpy(copyloc, inode->locptr, inode->size);
+
+        // new chunk append
+        memcpy(copyloc + inode->size, buf, size);
+
+        // original chunk pointer remove & replace
+        free(inode->locptr);
+        inode->locptr = copyloc;
+        inode->size += size;
+        storage->actual_storage += size;
+
+    }
+
+    return retval;
+
 }

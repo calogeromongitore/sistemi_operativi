@@ -22,6 +22,16 @@ void parse_args(int argc, char **argv, args__cont__t *argscont) {
             argscont->args[idx].arg_type = ARG_SETTINGS;
         } else if (strcmp(argv[i], "-f") == 0) {
             argscont->args[idx].arg_type = ARG_SOCKETFILE;
+        } else if (strcmp(argv[i], "-h") == 0) {
+            argscont->args[idx].arg_type = ARG_HELP;
+        } else if (strcmp(argv[i], "-t") == 0) {
+            argscont->args[idx].arg_type = ARG_TIME;
+        } else if (strcmp(argv[i], "-w") == 0) {
+            argscont->args[idx].arg_type = ARG_WRITELIST;
+        } else if (strcmp(argv[i], "-D") == 0) {
+            argscont->args[idx].arg_type = ARG_BIGD;
+        } else if (strcmp(argv[i], "-r") == 0) {
+            argscont->args[idx].arg_type = ARG_READS;
         } else {
             continue;
         }

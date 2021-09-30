@@ -9,6 +9,7 @@
 #define O_LOCK   0x2
 #define O_NULL   0x4
 
+#define E_NOSPACE -7
 #define E_EXISTS  -6
 #define E_DENIED  -5
 #define E_NEXISTS -4
@@ -17,6 +18,9 @@
 #define E_GENERIC -1
 #define E_ITSOK   +0
 #define A_LKWAIT  +1
+
+
+#define CHUNK_SIZE 256
 
 
 #define PERROR_DIE(action, eq) if ((action) == eq) {\

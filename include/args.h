@@ -8,12 +8,17 @@
 typedef enum {
     ARG_SETTINGS,
     ARG_SOCKETFILE,
+    ARG_HELP,
+    ARG_TIME,
+    ARG_WRITELIST,
+    ARG_BIGD,
+    ARG_READS,
     ARG_LAST_NOTVALID
 } flagarg_t;
 
 typedef struct {
     flagarg_t arg_type;
-    void *value;   
+    char *value;   
 } arg_t;
 
 typedef struct {
