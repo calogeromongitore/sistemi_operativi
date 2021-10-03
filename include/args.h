@@ -12,6 +12,7 @@ typedef enum {
     ARG_TIME,
     ARG_WRITELIST,
     ARG_BIGD,
+    ARG_SMALLD,
     ARG_READS,
     ARG_LAST_NOTVALID
 } flagarg_t;

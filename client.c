@@ -17,8 +17,13 @@ void check_args(args__cont__t args) {
         exit(-1);
     }
 
-    if (ARGS_ISNULL(args, ARG_BIGD) && !ARGS_ISNULL(args, ARG_WRITELIST)) {
+    if (!ARGS_ISNULL(args, ARG_BIGD) && ARGS_ISNULL(args, ARG_WRITELIST)) {
         fprintf(stderr, "-D is requested with -w\n");
+        exit(-1);
+    }
+
+    if (!ARGS_ISNULL(args, ARG_SMALLD) && ARGS_ISNULL(args, ARG_READS)) {
+        fprintf(stderr, "-d is requested with -r\n");
         exit(-1);
     }
 
@@ -27,9 +32,10 @@ void check_args(args__cont__t args) {
 int main(int argc, char **argv) {
     args__cont__t args;
     struct timespec absVal = {.tv_sec = 0, .tv_nsec = 800000000};
-    char *buf, *rejstore_path = NULL;
+    char *buf, *rejstore_path = NULL, *readstore_path = NULL;
+    void *data;
     char chunkbuf[CHUNK_SIZE];
-    int len, i, j, fd, chunkread;
+    int len, i, j, k, fd, chunkread;
     size_t size;
     struct stat st;
 
@@ -73,9 +79,9 @@ int main(int argc, char **argv) {
                     fd = open(ARGS_VALUE(args, ARG_WRITELIST) + j, O_RDONLY);
                     PERROR_DIE(writeFile(ARGS_VALUE(args, ARG_WRITELIST) + j, rejstore_path), -1);
 
-                    for (i = 0; i <= st.st_size / CHUNK_SIZE; i++) {
+                    for (k = 0; k <= st.st_size / CHUNK_SIZE; k++) {
                         printf("\t:: file size %ld\n", st.st_size);
-                        printf("\t-- chunk %d/%ld\n", i + 1, st.st_size / CHUNK_SIZE + 1);
+                        printf("\t-- chunk %d/%ld\n", k + 1, st.st_size / CHUNK_SIZE + 1);
                         chunkread = read(fd, chunkbuf, CHUNK_SIZE);
                         if (chunkread > 0) {
                             PERROR_DIE(appendToFile(ARGS_VALUE(args, ARG_WRITELIST) + j, chunkbuf, chunkread, rejstore_path), -1);
@@ -92,13 +98,44 @@ int main(int argc, char **argv) {
         }
     }
 
+    if (!ARGS_ISNULL(args, ARG_SMALLD)) {
+        llogp(LOG_DBG, "Storing read files in:");
+        llogp(LOG_DBG, ARGS_VALUE(args, ARG_SMALLD));
+        readstore_path = ARGS_VALUE(args, ARG_SMALLD);
+    }
+
     if (!ARGS_ISNULL(args, ARG_READS)) {
         llogp(LOG_DBG, "Reading file requested:");
         llogp(LOG_DBG, ARGS_VALUE(args, ARG_READS));
-        PERROR_DIE(openFile(ARGS_VALUE(args, ARG_READS), 0), -1);
-        PERROR_DIE(readFile(ARGS_VALUE(args, ARG_READS), &buf, &size), -1);
-        write(STDOUT_FILENO, buf, size);
-        PERROR_DIE(closeFile(ARGS_VALUE(args, ARG_READS)), -1);
+
+        len = strlen(ARGS_VALUE(args, ARG_READS));
+        for (i = j = 0; i <= len + 2; i++) {
+            if (ARGS_VALUE(args, ARG_READS)[i] == ',') {
+                ARGS_VALUE(args, ARG_READS)[i] = '\0';
+            }
+
+            if (ARGS_VALUE(args, ARG_READS)[i] == '\0') {
+                llogp(LOG_DBG, ARGS_VALUE(args, ARG_READS) + j);
+
+                PERROR_DIE(openFile(ARGS_VALUE(args, ARG_READS) + j, 0), -1);
+                PERROR_DIE(readFile(ARGS_VALUE(args, ARG_READS) + j, &data, &size), -1);
+
+                if (readstore_path) {
+                    buf = newstrcat(readstore_path, ARGS_VALUE(args, ARG_READS) + j);
+                    PERROR_DIE(fd = open(buf, O_WRONLY | O_CREAT, 0644), -1);
+                    PERROR_DIE(write(fd, data, size), -1);
+                    close(fd);
+                    free(buf);
+                }
+
+                PERROR_DIE(closeFile(ARGS_VALUE(args, ARG_READS) + j), -1);
+                free(data);
+
+                ARGS_VALUE(args, ARG_READS)[i] = ',';
+                j = i + 1;
+            }
+        }
+
     }
 
 

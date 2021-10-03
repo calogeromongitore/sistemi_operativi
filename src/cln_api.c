@@ -287,7 +287,7 @@ int removeFile(const char* pathname) {
 }
 
 int writeFile(const char* pathname, const char* dirname) {
-    char reqframe[2048], fname[2048];
+    char reqframe[2048], *fname;
     char *buf2;
     struct reqcall reqc;
     size_t reqsize, filesize;
@@ -346,10 +346,11 @@ int writeFile(const char* pathname, const char* dirname) {
             reqframe[reqsize] = '\0';
 
             if (filesize > 0) {
-                sprintf(fname, "%s/%s", dirname, reqframe);
+                fname = newstrcat(dirname, reqframe);
                 PERROR_DIE(fd = open(fname, O_WRONLY | O_CREAT, 0644), -1);
                 write(fd, buf2, filesize);
                 close(fd);
+                free(fname);
             }
 
             free(buf2);
@@ -360,7 +361,7 @@ int writeFile(const char* pathname, const char* dirname) {
 }
 
 int appendToFile(const char* pathname, void* buf, size_t size, const char* dirname) {
-    char reqframe[2048], fname[2048];
+    char reqframe[2048], *fname;
     struct reqcall reqc;
     size_t reqsize, filesize;
     char *buf2;
@@ -402,10 +403,11 @@ int appendToFile(const char* pathname, void* buf, size_t size, const char* dirna
             reqframe[reqsize] = '\0';
 
             if (filesize > 0) {
-                sprintf(fname, "%s/%s", dirname, reqframe);
+                fname = newstrcat(dirname, reqframe);
                 PERROR_DIE(fd = open(fname, O_WRONLY | O_CREAT, 0644), -1);
                 write(fd, buf2, filesize);
                 close(fd);
+                free(fname);
             }
 
             free(buf2);

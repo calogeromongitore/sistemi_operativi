@@ -31,4 +31,6 @@
 #define IF_RETEQ(action, eq) if ((action) == eq) return eq;
 
 
+char *newstrcat(const char *str1, const char *str2);
+
 #endif

@@ -58,6 +58,15 @@ void prepareRequest(char *buf, size_t *size, reqcode_t req, struct reqcall *reqc
 
         buf[loc++] = PARAM_SEP;
     }
+
+    if (reqc->N != -1) {
+        buf[loc++] = PARAM_N;
+
+        memcpy(buf + loc, &reqc->N, sizeof reqc->N);
+        loc += sizeof reqc->N;
+
+        buf[loc++] = PARAM_SEP;
+    }
     
     *size = loc;
 

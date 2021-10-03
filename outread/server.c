@@ -87,7 +87,7 @@ void *th_routine(void *args) {
     size_t loc, filesize, fileretsize, rem;
     char buf[1024], buf3[1024], buf4[1024], rbuf2[1024];
     char *buf2;
-    int len, flags, retval, N;
+    int len, flags, retval;
     int thid;
 
     workers = (workers_t)args;
@@ -135,10 +135,6 @@ void *th_routine(void *args) {
                         memcpy(buf3, thargs_cpy.data + loc, filesize);
                         loc += filesize;
                         break;
-
-                    case PARAM_N:
-                        memcpy(&N, thargs_cpy.data + loc, sizeof N);
-                        loc += sizeof N;
 
                     default:
                         break;

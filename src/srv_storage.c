@@ -424,7 +424,7 @@ int storage_write(storage_t storage, int clientid, void *buf, size_t size, char 
     if (opened == NULL) {
         retval = E_NEXISTS;
     } else if (size > storage->totstorage) {
-        retval E_NOSPACE;
+        retval = E_NOSPACE;
     } else {
         // free(t1.filename); TODO
         storage_insert(storage, buf, size, filename);
@@ -472,5 +472,4 @@ int storage_append(storage_t storage, int clientid, void *buf, size_t size, char
     }
 
     return retval;
-
 }
