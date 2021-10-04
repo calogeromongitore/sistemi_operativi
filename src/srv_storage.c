@@ -473,3 +473,28 @@ int storage_append(storage_t storage, int clientid, void *buf, size_t size, char
 
     return retval;
 }
+
+int storage_retrieve(storage_t storage, int clientid, int N) {
+    struct node *inode;
+    int retval;
+
+    pthread_mutex_lock(&storage->storagemtx);
+
+    retval = E_ITSOK;
+    
+    if (!N) {
+        N = storage->actual_nfiles;
+    }
+
+    NODE_FOREACH(storage, inode) {
+        if (!NODE_ISNULL(*inode) && ___is_accessible(clientid, inode)) {
+            fifo_enqueue(storage->fiforet, inode, sizeof *inode);
+            if (!--N) {
+                break;
+            }
+        }
+    }
+
+    pthread_mutex_unlock(&storage->storagemtx);
+    return retval;
+}

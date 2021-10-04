@@ -84,10 +84,11 @@ void *th_routine(void *args) {
     workers_t workers;
     thargs_t thargs_cpy;
     reqcode_t req, reqst;
-    size_t loc, filesize, fileretsize, rem;
-    char buf[1024], buf3[1024], buf4[1024], rbuf2[1024];
+    size_t loc, fileretsize, rem;
+    struct reqcall reqc;
+    char rbuf2[1024], buf4[1024];
     char *buf2;
-    int len, flags, retval, N;
+    int retval, len;
     int thid;
 
     workers = (workers_t)args;
@@ -99,9 +100,9 @@ void *th_routine(void *args) {
 
         printf("[#%02d] Data read at 0x%p\n", thid, thargs_cpy.data);
 
-        filesize = 0;
         loc = 0;
         buf2 = rbuf2;
+        reqcall_default(&reqc);
         if (thargs_cpy.data[loc++] == PARAM_SEP) {
 
             req = thargs_cpy.data[loc++];
@@ -113,32 +114,29 @@ void *th_routine(void *args) {
                         memcpy(&len, thargs_cpy.data + loc, sizeof len);
                         loc += sizeof len;
 
-                        memcpy(buf, thargs_cpy.data + loc, len);
-                        buf[len] = '\0';
+                        reqc.pathname = thargs_cpy.data + loc;
                         loc += len;
 
                         break;
 
                     case PARAM_FLAGS:
-
-                        memcpy(&flags, thargs_cpy.data + loc, sizeof flags);
-                        loc += sizeof flags;
-
+                        memcpy(&reqc.flags, thargs_cpy.data + loc, sizeof reqc.flags);
+                        loc += sizeof reqc.flags;
                         break;
 
                     case PARAM_SIZE:
-                        memcpy(&filesize, thargs_cpy.data + loc, sizeof filesize);
-                        loc += sizeof filesize;
+                        memcpy(&reqc.size, thargs_cpy.data + loc, sizeof reqc.size);
+                        loc += sizeof reqc.size;
                         break;
                     
                     case PARAM_BUF:
-                        memcpy(buf3, thargs_cpy.data + loc, filesize);
-                        loc += filesize;
+                        reqc.buf = thargs_cpy.data + loc;
+                        loc += reqc.size;
                         break;
 
                     case PARAM_N:
-                        memcpy(&N, thargs_cpy.data + loc, sizeof N);
-                        loc += sizeof N;
+                        memcpy(&reqc.N, thargs_cpy.data + loc, sizeof reqc.N);
+                        loc += sizeof reqc.N;
 
                     default:
                         break;
@@ -154,7 +152,7 @@ void *th_routine(void *args) {
             switch(req) {
 
                 case REQ_OPEN:
-                    retval = storage_open(thargs_cpy.storage, thargs_cpy.sfd2, buf, flags);
+                    retval = storage_open(thargs_cpy.storage, thargs_cpy.sfd2, reqc.pathname, reqc.flags);
                     if (retval == A_LKWAIT) {
                         fifo_enqueue(thargs_cpy.fifo, &thargs_cpy, sizeof thargs_cpy);
                         printf("queued reqid %d\n", thargs_cpy.reqid);
@@ -165,17 +163,17 @@ void *th_routine(void *args) {
                     break;
 
                 case REQ_CLOSEFILE:
-                    retval = storage_close(thargs_cpy.storage, thargs_cpy.sfd2, buf);
+                    retval = storage_close(thargs_cpy.storage, thargs_cpy.sfd2, reqc.pathname);
                     workers_pipewrite(thargs_cpy.workersqueue, &thargs_cpy.fifo, sizeof thargs_cpy.fifo);
                     loc = 0;
                     break;
 
                 case REQ_READ:
-                    retval = storage_read(thargs_cpy.storage, thargs_cpy.sfd2, buf, (void *)&buf2, &loc);
+                    retval = storage_read(thargs_cpy.storage, thargs_cpy.sfd2, reqc.pathname, (void *)&buf2, &loc);
                     break;
 
                 case REQ_LOCK:
-                    retval = storage_lock(thargs_cpy.storage, thargs_cpy.sfd2, buf);
+                    retval = storage_lock(thargs_cpy.storage, thargs_cpy.sfd2, reqc.pathname);
                     if (retval == A_LKWAIT) {
                         fifo_enqueue(thargs_cpy.fifo, &thargs_cpy, sizeof thargs_cpy);
                         printf("queued reqid %d\n", thargs_cpy.reqid);
@@ -186,30 +184,34 @@ void *th_routine(void *args) {
                     break;
 
                 case REQ_UNLOCK:
-                    retval = storage_unlock(thargs_cpy.storage, thargs_cpy.sfd2, buf);
+                    retval = storage_unlock(thargs_cpy.storage, thargs_cpy.sfd2, reqc.pathname);
                     loc = 0;
                     break;
                 
                 case REQ_REMOVE:
-                    retval = storage_remove(thargs_cpy.storage, thargs_cpy.sfd2, buf);
+                    retval = storage_remove(thargs_cpy.storage, thargs_cpy.sfd2, reqc.pathname);
                     workers_pipewrite(thargs_cpy.workersqueue, &thargs_cpy.fifo, sizeof thargs_cpy.fifo);
                     loc = 0;
                     break;
 
                 case REQ_WRITE:
-                    retval = storage_write(thargs_cpy.storage, thargs_cpy.sfd2, buf3, filesize, buf);
+                    retval = storage_write(thargs_cpy.storage, thargs_cpy.sfd2, reqc.buf, reqc.size, (char *)reqc.pathname);
                     loc = 0;
                     break;
 
                 case REQ_APPEND:
-                    retval = storage_append(thargs_cpy.storage, thargs_cpy.sfd2, buf3, filesize, buf);
+                    retval = storage_append(thargs_cpy.storage, thargs_cpy.sfd2, reqc.buf, reqc.size, (char *)reqc.pathname);
                     loc = 0;
                     break;
 
                 case REQ_GETSIZ:
-                    retval = storage_getsize(thargs_cpy.storage, thargs_cpy.sfd2, buf, &loc);
+                    retval = storage_getsize(thargs_cpy.storage, thargs_cpy.sfd2, reqc.pathname, &loc);
                     memcpy(buf2, &loc, sizeof loc);
                     loc = sizeof loc;
+                    break;
+
+                case REQ_RNDREAD:
+                    retval = storage_retrieve(thargs_cpy.storage, thargs_cpy.sfd2, reqc.N);
                     break;
 
             }
@@ -220,7 +222,7 @@ void *th_routine(void *args) {
 
         if (reqst == REQ_FAILED) {
             write(thargs_cpy.sfd2, &retval, sizeof retval);
-        } else if (req == REQ_WRITE || req == REQ_APPEND) {
+        } else if (req == REQ_WRITE || req == REQ_APPEND || req == REQ_RNDREAD) {
 
             len = -1;
             while (storage_getremoved(thargs_cpy.storage, &rem, (void **)&buf2, &loc, buf4, &fileretsize), ++len, rem) {
@@ -331,21 +333,12 @@ int main(int argc, char **argv) {
     workers_start(workers, th_routine);
     SET_FDMAX(fdmax, workers_getmaxfd(workers));
 
-    storage = storage_init(15030, 4);
+    storage = storage_init(22690, 4);
     fifo = fifo_init(64 * sizeof(thargs_t));
 
     workers_queue = workers_init(1);
     workers_start(workers_queue, th_routine_queue);
-    SET_FDMAX(fdmax, workers_getmaxfd(workers));
-
-    // i = sprintf(buf, "ciaoaoaoaoaoaoaoaoaoaoaoaaoaooaoaoaoaaoaoaoao\n");
-    // i2 = sprintf(buf2, "asdassadasdasdasdasdasdasdsdada\n");
-    // storage_insert(storage, buf2, i2, "/home/pietra/roccia.txt");
-    // storage_insert(storage, buf2, i2, "/home/pietra/santa2.txt");
-    // storage_insert(storage, buf2, i2, "/home/pietra/roccia2.txt");
-    // storage_insert(storage, buf2, 1, "/home/pietra/signle.txt");
-    // storage_insert(storage, buf, i, "suca.txt");
-
+    SET_FDMAX(fdmax, workers_getmaxfd(workers_queue));
 
     while (1) {
         rfds_cpy = rfds;
@@ -398,8 +391,6 @@ int main(int argc, char **argv) {
                 workers_pipewrite(workers, &thargs, sizeof thargs);
 
                 // printf("\n\nData wrote at 0x%p: %c\n", thargs.data, thargs.data[0]);
-
-
             }
 
         }

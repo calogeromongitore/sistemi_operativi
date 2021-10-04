@@ -14,6 +14,7 @@ typedef enum {
     ARG_BIGD,
     ARG_SMALLD,
     ARG_READS,
+    ARG_RNDREAD,
     ARG_LAST_NOTVALID
 } flagarg_t;
 

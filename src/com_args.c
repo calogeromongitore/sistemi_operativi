@@ -34,11 +34,13 @@ void parse_args(int argc, char **argv, args__cont__t *argscont) {
             argscont->args[idx].arg_type = ARG_SMALLD;
         } else if (strcmp(argv[i], "-r") == 0) {
             argscont->args[idx].arg_type = ARG_READS;
+        } else if (strcmp(argv[i], "-R") == 0) {
+            argscont->args[idx].arg_type = ARG_RNDREAD;
         } else {
             continue;
         }
 
-        argscont->args[idx].value = argv[i+1];
+        argscont->args[idx].value = (i + 1 >= argc) ? "0" : argv[i+1];
         argscont->map[argscont->args[idx].arg_type] = idx;
         ++idx;
 

@@ -416,3 +416,57 @@ int appendToFile(const char* pathname, void* buf, size_t size, const char* dirna
 
     return 0;
 }
+
+int readNFiles(int N, const char* dirname) {
+    char reqframe[2048], *fname;
+    struct reqcall reqc;
+    size_t reqsize, filesize;
+    char *buf2;
+    int fd, len, lenret = 0;
+
+    if (sfd == -1) {
+        return -1; //TODO: set errno
+    }
+
+    reqcall_default(&reqc);
+    reqc.diname = dirname;
+    reqc.N = N;
+
+    prepareRequest((char *)reqframe, &reqsize, REQ_RNDREAD, &reqc);
+    if (write(sfd, reqframe, reqsize) != reqsize) {
+        return -1;
+    }
+
+    read(sfd, reqframe, SIZE_OF(len));
+    if (*((reqcode_t *)reqframe) == REQ_FAILED) {
+        errno = EACCES;
+        return -1;
+    }
+
+    memcpy(&len, reqframe + sizeof(reqcode_t), sizeof len);
+    lenret = len;
+
+    if (dirname) {
+        while (len--) {
+            read(sfd, &filesize, sizeof filesize);
+            buf2 = (char *)malloc(filesize * sizeof(char));
+            read(sfd, buf2, filesize);
+
+            read(sfd, &reqsize, sizeof reqsize);
+            read(sfd, reqframe, reqsize);
+            reqframe[reqsize] = '\0';
+
+            if (filesize > 0) {
+                fname = newstrcat(dirname, reqframe);
+                PERROR_DIE(fd = open(fname, O_WRONLY | O_CREAT, 0644), -1);
+                write(fd, buf2, filesize);
+                close(fd);
+                free(fname);
+            }
+
+            free(buf2);
+        }
+    }
+
+    return lenret;
+}

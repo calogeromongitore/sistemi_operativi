@@ -138,6 +138,11 @@ int main(int argc, char **argv) {
 
     }
 
+    if (!ARGS_ISNULL(args, ARG_RNDREAD)) {
+        llogp(LOG_DBG, "Random read file requested:");
+        llogp(LOG_DBG, ARGS_VALUE(args, ARG_READS));
+        readNFiles(ARGS_VALUE(args, ARG_RNDREAD)[0] == '-' ? 0 : atoi(ARGS_VALUE(args, ARG_RNDREAD)), readstore_path);
+    }
 
     // PERROR_DIE(openConnection((char *)ARGS_VALUE(args, ARG_SOCKETFILE), 500, absVal), -1);
 

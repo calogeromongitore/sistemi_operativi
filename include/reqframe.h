@@ -15,12 +15,13 @@ typedef enum {
     REQ_UNLOCK = 8,
     REQ_REMOVE = 9,
     REQ_WRITE = 10,
-    REQ_APPEND = 11
+    REQ_APPEND = 11,
+    REQ_RNDREAD = 12
 } reqcode_t;
 
 typedef enum {
-    PARAM_SEP = (char)-1,
-    PARAM_N = (char)0,
+    PARAM_SEP = (char)0, // DON'T TOUCH THIS!!!
+    PARAM_N = (char)1,
     PARAM_DIRNAME,
     PARAM_PATHNAME,
     PARAM_BUF,
