@@ -34,6 +34,8 @@ void parse_args(int argc, char **argv, args__cont__t *argscont) {
             argscont->args[idx].arg_type = ARG_SMALLD;
         } else if (strcmp(argv[i], "-r") == 0) {
             argscont->args[idx].arg_type = ARG_READS;
+        } else if (strcmp(argv[i], "-c") == 0) {
+            argscont->args[idx].arg_type = ARG_REMOVE;
         } else if (strcmp(argv[i], "-R") == 0) {
             argscont->args[idx].arg_type = ARG_RNDREAD;
         } else {

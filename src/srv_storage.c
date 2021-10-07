@@ -97,6 +97,9 @@ static int ___full_remove(storage_t storage, size_t size, struct node *inode) {
     while (nfiles > 0 && storage->actual_storage + size > storage->totstorage || (!inode && storage->actual_nfiles == storage->maxfiles)) {
 
         fifo_dequeue(storage->fifo, (void *)&i, sizeof i);
+        if (NODE_ISNULL(storage->memory[i])) {
+            continue;
+        }
 
         if (inode != &storage->memory[i]) {
             fifo_enqueue(storage->fiforet, &storage->memory[i], sizeof storage->memory[i]);
@@ -117,6 +120,20 @@ static int ___full_remove(storage_t storage, size_t size, struct node *inode) {
     }
 
     return i;
+}
+
+static void ___flush_fifo(storage_t storage) {
+    void *ptr;
+    int i;
+
+    while(fifo_usedspace(storage->fifo) > 0) {
+        if ((ptr = fifo_getfirst(storage->fifo)) && (fifo_read(storage->fifo, ptr, &i, sizeof i), !NODE_ISNULL(storage->memory[i]))) {
+            break;
+        }
+
+        fifo_dequeue(storage->fifo, NULL, sizeof i);
+    }
+
 }
 
 storage_t storage_init(size_t totstorage, int maxfiles) {
@@ -150,11 +167,10 @@ void storage_destroy(storage_t storage) {
     free(storage);
 }
 
-void storage_getremoved(storage_t storage, size_t *n, void **data, size_t *datasize, char *filename, size_t *filenamesize) {
+void storage_getremoved(storage_t storage, size_t *n, void **data, size_t *datasize, char *filename, size_t *filenamesize, char dofree) {
     struct node inode;
 
-    *n = fifo_usedspace(storage->fiforet) / sizeof(struct node);
-    if (*n) {
+    if (*n = fifo_usedspace(storage->fiforet) / sizeof(struct node)) {
         fifo_dequeue(storage->fiforet, (void *)&inode, sizeof inode);
 
         *data = inode.locptr;
@@ -163,7 +179,9 @@ void storage_getremoved(storage_t storage, size_t *n, void **data, size_t *datas
         strcpy(filename, inode.filename);
         *filenamesize = inode.filename_length;
         
-        free(inode.filename);
+        if (dofree) {
+            free(inode.filename);
+        }
     }
 
 }
@@ -177,6 +195,7 @@ void storage_insert(storage_t storage, void *buf, size_t size, char *filename) {
         fifo_dequeue(storage->fiforet, NULL, sizeof(struct node));
     }
 
+    ___flush_fifo(storage);
     if ((i = ___full_remove(storage, size, NULL)) < 0) {
         for (i = 0; i < storage->maxfiles && !NODE_ISNULL(storage->memory[i]); i++);
     }

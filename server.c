@@ -97,8 +97,7 @@ void *th_routine(void *args) {
     while(1) {
 
         workers_piperead(workers, &thargs_cpy, sizeof thargs_cpy);
-
-        printf("[#%02d] Data read at 0x%p\n", thid, thargs_cpy.data);
+        printf("[#%02d] Data read at 0x%p [%d bytes]\n", thid, thargs_cpy.data, thargs_cpy.bytes);
 
         loc = 0;
         buf2 = rbuf2;
@@ -225,7 +224,7 @@ void *th_routine(void *args) {
         } else if (req == REQ_WRITE || req == REQ_APPEND || req == REQ_RNDREAD) {
 
             len = -1;
-            while (storage_getremoved(thargs_cpy.storage, &rem, (void **)&buf2, &loc, buf4, &fileretsize), ++len, rem) {
+            while (storage_getremoved(thargs_cpy.storage, &rem, (void **)&buf2, &loc, buf4, &fileretsize, req != REQ_RNDREAD), ++len, rem) {
 
                 if (!len) {
                     write(thargs_cpy.sfd2, (void *)&rem, sizeof(int));
@@ -236,7 +235,10 @@ void *th_routine(void *args) {
                 write(thargs_cpy.sfd2, &fileretsize, sizeof fileretsize);
                 write(thargs_cpy.sfd2, buf4, fileretsize);
 
-                free(buf2);
+                if (req != REQ_RNDREAD) {
+                    free(buf2);
+                }
+
             }
 
             if (!len) {
@@ -292,9 +294,6 @@ int main(int argc, char **argv) {
     storage_t storage;
     fifo_t fifo;
     char buf[2048];
-    char *ptr, *data1, *data2;
-    char buf2[1024], buf3[1024], buf4[1024];
-    int i2, i3, i4;
     int reqid = 0;
     
     parse_args(argc, argv, &args);

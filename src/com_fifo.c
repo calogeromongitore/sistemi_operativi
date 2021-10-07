@@ -101,3 +101,12 @@ int fifo_dequeue(fifo_t fifo, void *dst, size_t len) {
 size_t fifo_usedspace(fifo_t fifo) {
     return fifo->used;
 }
+
+void *fifo_getfirst(fifo_t fifo) {
+
+    if (!fifo->used) {
+        return NULL;
+    }
+
+    return fifo->memfifo + ((fifo->first + 1) % fifo->length);
+}

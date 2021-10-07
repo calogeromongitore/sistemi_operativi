@@ -10,5 +10,6 @@ int fifo_read(fifo_t fifo, void *idx, void *buf, size_t len);
 void *fifo_enqueue(fifo_t fifo, void *buf, size_t len);
 int fifo_dequeue(fifo_t fifo, void *dst, size_t len);
 size_t fifo_usedspace(fifo_t fifo);
+void *fifo_getfirst(fifo_t fifo);
 
 #endif

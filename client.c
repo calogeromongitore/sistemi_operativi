@@ -22,8 +22,8 @@ void check_args(args__cont__t args) {
         exit(-1);
     }
 
-    if (!ARGS_ISNULL(args, ARG_SMALLD) && ARGS_ISNULL(args, ARG_READS)) {
-        fprintf(stderr, "-d is requested with -r\n");
+    if (!ARGS_ISNULL(args, ARG_SMALLD) && (ARGS_ISNULL(args, ARG_READS) && ARGS_ISNULL(args, ARG_RNDREAD))) {
+        fprintf(stderr, "-d is requested with -r or -R\n");
         exit(-1);
     }
 
@@ -52,10 +52,32 @@ int main(int argc, char **argv) {
         PERROR_DIE(openConnection((char *)ARGS_VALUE(args, ARG_SOCKETFILE), 500, absVal), -1);
     }
 
+    if (!ARGS_ISNULL(args, ARG_REMOVE)) {
+        llogp(LOG_DBG, "Delete file requested!");
+
+        len = strlen(ARGS_VALUE(args, ARG_REMOVE));
+        for (i = j = 0; i <= len + 2; i++) {
+            if (ARGS_VALUE(args, ARG_REMOVE)[i] == ',') {
+                ARGS_VALUE(args, ARG_REMOVE)[i] = '\0';
+            }
+
+            if (ARGS_VALUE(args, ARG_REMOVE)[i] == '\0') {
+                llogp(LOG_DBG, ARGS_VALUE(args, ARG_REMOVE) + j);
+
+                PERROR_DIE(openFile(ARGS_VALUE(args, ARG_REMOVE) + j, O_LOCK), -1);
+                llogp(LOG_DBG, "opened!");
+                PERROR_DIE(removeFile(ARGS_VALUE(args, ARG_REMOVE) + j), -1);
+
+                ARGS_VALUE(args, ARG_REMOVE)[i] = ',';
+                j = i + 1;
+            }
+        }
+    }
+
     if (!ARGS_ISNULL(args, ARG_BIGD)) {
         llogp(LOG_DBG, "Storing rejected files in:");
         llogp(LOG_DBG, ARGS_VALUE(args, ARG_BIGD));
-        rejstore_path = ARGS_VALUE(args, ARG_BIGD);
+        readstore_path = newstrcat(ARGS_VALUE(args, ARG_BIGD), "/");
     }
 
     if (!ARGS_ISNULL(args, ARG_WRITELIST)) {
@@ -101,7 +123,7 @@ int main(int argc, char **argv) {
     if (!ARGS_ISNULL(args, ARG_SMALLD)) {
         llogp(LOG_DBG, "Storing read files in:");
         llogp(LOG_DBG, ARGS_VALUE(args, ARG_SMALLD));
-        readstore_path = ARGS_VALUE(args, ARG_SMALLD);
+        readstore_path = newstrcat(ARGS_VALUE(args, ARG_SMALLD), "/");
     }
 
     if (!ARGS_ISNULL(args, ARG_READS)) {
@@ -140,7 +162,7 @@ int main(int argc, char **argv) {
 
     if (!ARGS_ISNULL(args, ARG_RNDREAD)) {
         llogp(LOG_DBG, "Random read file requested:");
-        llogp(LOG_DBG, ARGS_VALUE(args, ARG_READS));
+        llogp(LOG_DBG, ARGS_VALUE(args, ARG_RNDREAD));
         readNFiles(ARGS_VALUE(args, ARG_RNDREAD)[0] == '-' ? 0 : atoi(ARGS_VALUE(args, ARG_RNDREAD)), readstore_path);
     }
 
