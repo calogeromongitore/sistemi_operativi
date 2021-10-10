@@ -13,6 +13,19 @@
 #define NODE_ISNULL(node) ((node).locptr == NULL)
 #define NODE_FOREACH(storage, inode) for ((inode) = (storage)->memory; (inode) < (storage)->memory + (storage)->maxfiles; (inode)++)
 
+#define STORAGE_SETSIZ(__storage, __newsize) {\
+    __storage->actual_storage = __newsize;\
+    if (__storage->actual_storage > __storage->info.maxsize)\
+        __storage->info.maxsize = __storage->actual_storage;\
+}
+
+#define STORAGE_INCN(__storage) {\
+    if (++__storage->actual_nfiles > __storage->info.maxnum)\
+        __storage->info.maxnum = __storage->actual_nfiles;\
+}
+
+#define STORAGE_DECN(__storage) --__storage->actual_nfiles;
+
 
 struct lockstat {
     int index;
@@ -44,6 +57,7 @@ struct storage_s {
     fifo_t fifo;
     fifo_t fiforet;
     pthread_mutex_t storagemtx;
+    struct storage_info info;
 };
 
 static const struct lockstat lockstat_default = { .index = -1, .locked = 0 };
@@ -56,8 +70,8 @@ static void ___remove(storage_t storage, int index, char dofree) {
         free(storage->memory[index].filename);
     }
 
-    storage->actual_storage -= storage->memory[index].size;
-    storage->actual_nfiles--;
+    STORAGE_SETSIZ(storage, storage->actual_storage - storage->memory[index].size);
+    STORAGE_DECN(storage);
 }
 
 static struct node * ___get_inode(storage_t storage, const char *filename) {
@@ -104,6 +118,7 @@ static int ___full_remove(storage_t storage, size_t size, struct node *inode) {
         if (inode != &storage->memory[i]) {
             fifo_enqueue(storage->fiforet, &storage->memory[i], sizeof storage->memory[i]);
             ___remove(storage, i, 0);
+            storage->info.nkills++;
         } else {
             inode_i = i;
         }
@@ -149,6 +164,10 @@ storage_t storage_init(size_t totstorage, int maxfiles) {
     storage->actual_nfiles = 0;
     storage->tempopen = list_init();
 
+    storage->info.maxnum = 0;
+    storage->info.maxsize = 0;
+    storage->info.nkills = 0;
+
     pthread_mutex_init(&storage->storagemtx, NULL);
 
     for (i = 0; i < maxfiles; i++) {
@@ -167,7 +186,7 @@ void storage_destroy(storage_t storage) {
     free(storage);
 }
 
-void storage_getremoved(storage_t storage, size_t *n, void **data, size_t *datasize, char *filename, size_t *filenamesize, char dofree) {
+void storage_getremoved(storage_t storage, size_t *n, void **data, size_t *datasize, char *filename, size_t *filenamesize) {
     struct node inode;
 
     if (*n = fifo_usedspace(storage->fiforet) / sizeof(struct node)) {
@@ -179,9 +198,7 @@ void storage_getremoved(storage_t storage, size_t *n, void **data, size_t *datas
         strcpy(filename, inode.filename);
         *filenamesize = inode.filename_length;
         
-        if (dofree) {
-            free(inode.filename);
-        }
+        free(inode.filename);
     }
 
 }
@@ -210,8 +227,8 @@ void storage_insert(storage_t storage, void *buf, size_t size, char *filename) {
     memcpy(storage->memory[i].locptr, buf, size);
 
     fifo_enqueue(storage->fifo, (void *)&i, sizeof i);
-    storage->actual_storage += size;
-    storage->actual_nfiles++;
+    STORAGE_SETSIZ(storage, storage->actual_storage + size);
+    STORAGE_INCN(storage);
 
     pthread_mutex_unlock(&storage->storagemtx);
 }
@@ -486,7 +503,7 @@ int storage_append(storage_t storage, int clientid, void *buf, size_t size, char
         free(inode->locptr);
         inode->locptr = copyloc;
         inode->size += size;
-        storage->actual_storage += size;
+        STORAGE_SETSIZ(storage, storage->actual_storage + size);
 
     }
 
@@ -495,6 +512,7 @@ int storage_append(storage_t storage, int clientid, void *buf, size_t size, char
 
 int storage_retrieve(storage_t storage, int clientid, int N) {
     struct node *inode;
+    struct node cnode;
     int retval;
 
     pthread_mutex_lock(&storage->storagemtx);
@@ -507,7 +525,18 @@ int storage_retrieve(storage_t storage, int clientid, int N) {
 
     NODE_FOREACH(storage, inode) {
         if (!NODE_ISNULL(*inode) && ___is_accessible(clientid, inode)) {
-            fifo_enqueue(storage->fiforet, inode, sizeof *inode);
+
+            cnode = *inode;
+            cnode.filename = (char *)malloc(inode->filename_length);
+            cnode.locptr = malloc(inode->size);
+
+            memcpy(cnode.locptr, inode->locptr, inode->size);
+            strcpy(cnode.filename, inode->filename);
+            for (cnode.openby_length = 0; cnode.openby_length < inode->openby_length; cnode.openby_length++) {
+                cnode.openby[cnode.openby_length] = inode->openby[cnode.openby_length];
+            }
+
+            fifo_enqueue(storage->fiforet, &cnode, sizeof cnode);
             if (!--N) {
                 break;
             }
@@ -516,4 +545,8 @@ int storage_retrieve(storage_t storage, int clientid, int N) {
 
     pthread_mutex_unlock(&storage->storagemtx);
     return retval;
+}
+
+void storage_getinfo(storage_t storage, struct storage_info *info) {
+    *info = storage->info;
 }

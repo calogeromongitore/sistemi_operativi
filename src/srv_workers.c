@@ -91,6 +91,14 @@ int workers_pipewrite(workers_t workers, void *buf, size_t nbytes) {
     return retval;
 }
 
+void workers_multicast(workers_t workers, void *buf, size_t nbytes) {
+    int i;
+
+    for (i = 0; i < workers->n_workers; i++) {
+        workers_pipewrite(workers, buf, nbytes);
+    }
+}
+
 // int workers_pipereadback(workers_t workers, void *buf, size_t nbytes) {
 //     return read(workers->pipewbfds[PIPE_RFD], buf, nbytes);
 // }

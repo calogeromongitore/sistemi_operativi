@@ -5,6 +5,12 @@
 
 typedef struct storage_s *storage_t;
 
+struct storage_info {
+    size_t maxsize;
+    int maxnum;
+    int nkills;
+};
+
 storage_t storage_init(size_t totstorage, int maxfiles);
 void storage_destroy(storage_t storage);
 void storage_insert(storage_t storage, void *buf, size_t size, char *filename);
@@ -17,7 +23,8 @@ int storage_unlock(storage_t storage, int clientid, const char *filename);
 int storage_remove(storage_t storage, int clientid, const char *filename);
 int storage_write(storage_t storage, int clientid, void *buf, size_t size, char *filename);
 int storage_append(storage_t storage, int clientid, void *buf, size_t size, char *filename);
-void storage_getremoved(storage_t storage, size_t *n, void **data, size_t *datasize, char *filename, size_t *filenamesize, char dofree);
+void storage_getremoved(storage_t storage, size_t *n, void **data, size_t *datasize, char *filename, size_t *filenamesize);
 int storage_retrieve(storage_t storage, int clientid, int N);
+void storage_getinfo(storage_t storage, struct storage_info *info);
 
 #endif

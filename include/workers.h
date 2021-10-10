@@ -11,6 +11,7 @@ void workers_start(workers_t workers, void *(*routine)(void *));
 void workers_mainloop(workers_t workers);
 int workers_piperead(workers_t workers, void *buf, size_t nbytes);
 int workers_pipewrite(workers_t workers, void *buf, size_t nbytes);
+void workers_multicast(workers_t workers, void *buf, size_t nbytes);
 int workers_getmaxfd(workers_t workers);
 
 #endif

@@ -224,7 +224,7 @@ void *th_routine(void *args) {
         } else if (req == REQ_WRITE || req == REQ_APPEND || req == REQ_RNDREAD) {
 
             len = -1;
-            while (storage_getremoved(thargs_cpy.storage, &rem, (void **)&buf2, &loc, buf4, &fileretsize, req != REQ_RNDREAD), ++len, rem) {
+            while (storage_getremoved(thargs_cpy.storage, &rem, (void **)&buf2, &loc, buf4, &fileretsize), ++len, rem) {
 
                 if (!len) {
                     write(thargs_cpy.sfd2, (void *)&rem, sizeof(int));
@@ -235,10 +235,7 @@ void *th_routine(void *args) {
                 write(thargs_cpy.sfd2, &fileretsize, sizeof fileretsize);
                 write(thargs_cpy.sfd2, buf4, fileretsize);
 
-                if (req != REQ_RNDREAD) {
-                    free(buf2);
-                }
-
+                free(buf2);
             }
 
             if (!len) {
