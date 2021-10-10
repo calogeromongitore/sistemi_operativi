@@ -30,7 +30,7 @@
 #define IF_RET(action, eq, retval) if ((action) == eq) return retval;
 #define IF_RETEQ(action, eq) if ((action) == eq) return eq;
 
-
 char *newstrcat(const char *str1, const char *str2);
+char *err_str(int errcode, char *buf);
 
 #endif

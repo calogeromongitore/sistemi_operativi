@@ -40,5 +40,6 @@ struct reqcall {
 
 void reqcall_default(struct reqcall *req);
 void prepareRequest(char *buf, size_t *size, reqcode_t req, struct reqcall *reqc);
+char *req_str(reqcode_t req, char *buf);
 
 #endif

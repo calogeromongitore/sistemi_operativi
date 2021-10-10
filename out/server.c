@@ -102,7 +102,7 @@ void *th_routine(void *args) {
     reqcode_t req, reqst;
     size_t loc, fileretsize, rem;
     struct reqcall reqc;
-    char rbuf2[1024], buf4[1024];
+    char rbuf2[1024], buf4[1024], reqstr[0x10];
     char *buf2;
     int retval, len;
     int thid;
@@ -111,6 +111,7 @@ void *th_routine(void *args) {
     thid = rand() % 0x40;
 
     printf("[#%02d] Ready to work!\n", thid);
+    trace("[#%02d] Ready to work", thid);
 
     while(1) {
 
@@ -120,7 +121,8 @@ void *th_routine(void *args) {
             break;
         }
 
-        printf("[#%02d] Data read at 0x%p [%d bytes]\n", thid, thargs_cpy.data, thargs_cpy.bytes);
+        printf("[#%02d] Client %d sent %d bytes\n", thid, thargs_cpy.sfd2, thargs_cpy.bytes);
+        trace("[#%02d] Client %d sent %d bytes", thid, thargs_cpy.sfd2, thargs_cpy.bytes);
 
         loc = 0;
         buf2 = rbuf2;
@@ -239,6 +241,8 @@ void *th_routine(void *args) {
             }
         }
 
+        trace("\t-- REQ: %3d (%10s)\t RETURN VALUE: %3d", req, req_str(req, reqstr), retval);
+
         reqst = (retval != E_ITSOK) ? REQ_FAILED : REQ_SUCCESS; 
         write(thargs_cpy.sfd2, &reqst, sizeof reqst);
 
@@ -316,8 +320,10 @@ int main(int argc, char **argv) {
     thargs_t thargs;
     storage_t storage;
     fifo_t fifo;
+    size_t s1, s2, s3;
     char quit = 0;
     char buf[2048];
+    char *ptr;
     int reqid = 0;
     
     parse_args(argc, argv, &args);
@@ -419,6 +425,8 @@ int main(int argc, char **argv) {
                 NFD_SET(sfd2, &rfds, fdsetsiz);
                 SET_FDMAX(fdmax, sfd2);
 
+                trace("Client %d connected", sfd2);
+
             } else {
                 
                 //fd is non blocking, so do a while and call read till it returns -1
@@ -427,6 +435,7 @@ int main(int argc, char **argv) {
                 //at each successful read, realloc the buffer
                 if ((bytes = read(i, (void *)buf, 1024)) <= 0) {
                     NFD_CLR(i, &rfds, fdsetsiz);
+                    trace("Client %d disconnected", sfd2);
                     // close(i);
                     // TODO: do a funciton like storage.closeallfilesfrom(i) in order
                     // to close all the files opened by clientid = i
@@ -464,11 +473,19 @@ int main(int argc, char **argv) {
     printf("[#00] Stopping..\n");
 
     printf("\n\n");
-    printf("\t ! SERVER STATISTICS !\n\n");
+    printf("\t\t ! SERVER STATISTICS !\n\n");
 
     storage_getinfo(storage, &storinfo);
-    printf("%20s:\t%d\n", "MAX STORED FILES NUMBER", storinfo.maxnum);
-    printf("%20s:\t%ld\n", "MAX STORED FILES SIZE [MB]", storinfo.maxsize);
+    printf("%-38s:\t%d\n", "MAX STORED FILES NUMBER", storinfo.maxnum);
+    printf("%-38s:\t%.2f MB\n", "MAX STORED FILES SIZE", (storinfo.maxsize/((float)1024*1024)));
+    printf("%-38s:\t%d\n", "CACHE CLEAN NUMBER", storinfo.nkills);
+
+    printf("\n%-30s %8s\n", "FILE NAME", "SIZE [B]");
+    storage_retrieve(storage, 0, 0);
+    while (storage_getremoved(storage, &s3, NULL, &s1, buf, &s2), s3) {
+        printf("%-30s %8ld\n", buf, s1);
+    }
+
     printf("\n\n");
 
 

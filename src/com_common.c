@@ -12,3 +12,46 @@ char *newstrcat(const char *str1, const char *str2) {
 
     return buf;
 }
+
+char *err_str(int errcode, char *buf) {
+
+    switch (errcode) {
+        case E_ITSOK:
+            strcpy(buf, "E_ITSOK");
+            break;
+        
+        case E_GENERIC:
+            strcpy(buf, "E_GENERIC");
+            break;
+        
+        case E_LKNOACQ:
+            strcpy(buf, "E_LKNOACQ");
+            break;
+        
+        case E_NOPEN:
+            strcpy(buf, "E_NOPEN");
+            break;
+        
+        case E_NEXISTS:
+            strcpy(buf, "E_NEXISTS");
+            break;
+        
+        case E_DENIED:
+            strcpy(buf, "E_DENIED");
+            break;
+        
+        case E_EXISTS:
+            strcpy(buf, "E_EXISTS");
+            break;
+        
+        case E_NOSPACE:
+            strcpy(buf, "E_NOSPACE");
+            break;
+        
+        default:
+            strcpy(buf, "UNDEFINED");
+            break;
+    }
+    
+    return buf;
+}

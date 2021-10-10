@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <time.h>
+#include <stdarg.h>
 
 #include "../include/logger.h"
 
@@ -31,4 +32,25 @@ int llogf(int fd, char *level, char *message) {
 
     free(buf);
     return bytes;
+}
+
+void trace(char *frmt, ...) {
+    time_t ct;
+    struct tm *localt;
+    va_list argp;
+    FILE *fp;
+
+    ct = time(NULL);
+    localt = localtime(&ct);
+
+    fp = fopen("./log.txt", "a+");
+
+    va_start(argp, frmt);
+
+    fprintf(fp, "[%02d/%02d/%04d %02d:%02d:%02d] ", localt->tm_mday, localt->tm_mon + 1, localt->tm_year + 1900, localt->tm_hour, localt->tm_min, localt->tm_sec);
+    vfprintf(fp, frmt, argp);
+    fprintf(fp, "\n");
+
+    va_end(argp);
+    fclose(fp);
 }

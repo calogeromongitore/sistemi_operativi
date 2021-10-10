@@ -192,8 +192,10 @@ void storage_getremoved(storage_t storage, size_t *n, void **data, size_t *datas
     if (*n = fifo_usedspace(storage->fiforet) / sizeof(struct node)) {
         fifo_dequeue(storage->fiforet, (void *)&inode, sizeof inode);
 
-        *data = inode.locptr;
         *datasize = inode.size;
+        if (data) {
+            *data = inode.locptr;
+        } 
 
         strcpy(filename, inode.filename);
         *filenamesize = inode.filename_length;
@@ -524,7 +526,7 @@ int storage_retrieve(storage_t storage, int clientid, int N) {
     }
 
     NODE_FOREACH(storage, inode) {
-        if (!NODE_ISNULL(*inode) && ___is_accessible(clientid, inode)) {
+        if (!NODE_ISNULL(*inode) && (clientid < 0 || ___is_accessible(clientid, inode))) {
 
             cnode = *inode;
             cnode.filename = (char *)malloc(inode->filename_length);

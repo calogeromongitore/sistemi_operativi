@@ -71,3 +71,66 @@ void prepareRequest(char *buf, size_t *size, reqcode_t req, struct reqcall *reqc
     *size = loc;
 
 }
+
+char *req_str(reqcode_t req, char *buf) {
+
+    switch (req) {
+        case REQ_OPEN:
+            strcpy(buf, "REQ_OPEN");
+            break;
+        
+        case REQ_RNDREAD:
+            strcpy(buf, "REQ_RNDREAD");
+            break;
+        
+        case REQ_APPEND:
+            strcpy(buf, "REQ_APPEND");
+            break;
+        
+        case REQ_WRITE:
+            strcpy(buf, "REQ_WRITE");
+            break;
+        
+        case REQ_REMOVE:
+            strcpy(buf, "REQ_REMOVE");
+            break;
+        
+        case REQ_UNLOCK:
+            strcpy(buf, "REQ_UNLOCK");
+            break;
+        
+        case REQ_LOCK:
+            strcpy(buf, "REQ_LOCK");
+            break;
+        
+        case REQ_CLOSEFILE:
+            strcpy(buf, "REQ_CLOSEFILE");
+            break;
+        
+        case REQ_SUCCESS:
+            strcpy(buf, "REQ_SUCCESS");
+            break;
+        
+        case REQ_FAILED:
+            strcpy(buf, "REQ_FAILED");
+            break;
+        
+        case REQ_GETSIZ:
+            strcpy(buf, "REQ_GETSIZ");
+            break;
+        
+        case REQ_READ:
+            strcpy(buf, "REQ_READ");
+            break;
+        
+        case REQ_CLOSECONN:
+            strcpy(buf, "REQ_CLOSECONN");
+            break;
+        
+        default:
+            strcpy(buf, "UNDEFINED");
+            break;
+    }
+    
+    return buf;
+}

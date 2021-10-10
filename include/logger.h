@@ -5,5 +5,6 @@
 
 int llogp(char *level, char *message);
 int llogf(int fd, char *level, char *message);
+void trace(char *frmt, ...);
 
 #endif
