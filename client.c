@@ -46,6 +46,13 @@ int main(int argc, char **argv) {
         return 0;
     }
 
+    if (ARGS_ISNULL(args, ARG_DELAY)) {
+        set_interval(0);
+    } else {
+        set_interval(atoi(ARGS_VALUE(args, ARG_DELAY)));
+    }
+
+
     check_args(args);
     if (!ARGS_ISNULL(args, ARG_SOCKETFILE)) {
         llogp(LOG_DBG, "Opening socket file");
@@ -195,7 +202,7 @@ int main(int argc, char **argv) {
     // }
 
 
-    // PERROR_DIE(closeConnection((char *)ARGS_VALUE(args, ARG_SOCKETFILE)), -1);
+    PERROR_DIE(closeConnection((char *)ARGS_VALUE(args, ARG_SOCKETFILE)), -1);
     args_free(&args);
 
     return 0;

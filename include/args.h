@@ -9,13 +9,13 @@ typedef enum {
     ARG_SETTINGS,
     ARG_SOCKETFILE,
     ARG_HELP,
-    ARG_TIME,
     ARG_WRITELIST,
     ARG_BIGD,
     ARG_SMALLD,
     ARG_READS,
     ARG_RNDREAD,
     ARG_REMOVE,
+    ARG_DELAY,
     ARG_LAST_NOTVALID
 } flagarg_t;
 

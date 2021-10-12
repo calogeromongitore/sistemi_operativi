@@ -15,4 +15,6 @@ int writeFile(const char* pathname, const char* dirname);
 int appendToFile(const char* pathname, void* buf, size_t size, const char* dirname);
 int readNFiles(int N, const char* dirname);
 
+void set_interval(int ms);
+
 #endif

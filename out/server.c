@@ -241,6 +241,7 @@ void *th_routine(void *args) {
             }
         }
 
+        printf("\t-- REQ: %3d (%10s)\t RETURN VALUE: %3d (%10s)\n", req, req_str(req, reqstr), retval, err_str(retval, estr));
         trace("\t-- REQ: %3d (%10s)\t RETURN VALUE: %3d (%10s)", req, req_str(req, reqstr), retval, err_str(retval, estr));
 
         reqst = (retval != E_ITSOK) ? REQ_FAILED : REQ_SUCCESS; 
@@ -258,7 +259,7 @@ void *th_routine(void *args) {
                 }
 
                 if (!len) {
-                    write(thargs_cpy.sfd2, (void *)&rem, sizeof(int));
+                    write(thargs_cpy.sfd2, (void *)&rem, sizeof rem);
                 }
 
                 write(thargs_cpy.sfd2, &loc, sizeof loc);
@@ -378,7 +379,7 @@ int main(int argc, char **argv) {
     workers_start(workers, th_routine);
     SET_FDMAX(fdmax, workers_getmaxfd(workers));
 
-    storage = storage_init(15280, 4);
+    storage = storage_init(15400, 4);
     fifo = fifo_init(64 * sizeof(thargs_t));
 
     workers_queue = workers_init(1);
@@ -503,3 +504,26 @@ int main(int argc, char **argv) {
 
     return 0;
 }
+torage_getremoved(storage, &s3, NULL, &s1, buf, &s2), s3) {
+        printf("%-30s %8ld\n", buf, s1);
+    }
+
+    printf("\n\n");
+
+
+    /** FREE EVERYTHING **/
+    FD_ZERO(&rfds);
+    FD_ZERO(&rfds_cpy);
+    workers_delete(workers);
+    args_free(&args);
+    SOCKET_CLOSE(sfd);
+
+
+    return 0;
+}
+_CLOSE(sfd);
+
+
+    return 0;
+}
+

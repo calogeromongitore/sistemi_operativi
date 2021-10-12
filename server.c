@@ -259,7 +259,7 @@ void *th_routine(void *args) {
                 }
 
                 if (!len) {
-                    write(thargs_cpy.sfd2, (void *)&rem, sizeof(int));
+                    write(thargs_cpy.sfd2, (void *)&rem, sizeof rem);
                 }
 
                 write(thargs_cpy.sfd2, &loc, sizeof loc);
@@ -379,7 +379,7 @@ int main(int argc, char **argv) {
     workers_start(workers, th_routine);
     SET_FDMAX(fdmax, workers_getmaxfd(workers));
 
-    storage = storage_init(15280, 4);
+    storage = storage_init(15400, 4);
     fifo = fifo_init(64 * sizeof(thargs_t));
 
     workers_queue = workers_init(1);

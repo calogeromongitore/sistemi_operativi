@@ -17,6 +17,8 @@
 static struct sockaddr_un remote; 
 static int sfd = -1;
 static char socketname[108] = "";
+static struct timespec _ms = {.tv_sec = 0, .tv_nsec = 0};
+static struct timespec lastcall = {.tv_sec = 0, .tv_nsec = 0};
 
 
 static inline void timespec_diff(struct timespec *a, struct timespec *b, struct timespec *result) {
@@ -61,6 +63,27 @@ static int retry(struct timespec timeout, struct timespec *abstime) {
     return cmp;
 }
 
+static void wait_interval() {
+    struct timespec nowcall, diffcall, diffwait;
+
+    clock_gettime(CLOCK_THREAD_CPUTIME_ID, &nowcall);
+
+    if (!(lastcall.tv_sec == 0 && lastcall.tv_nsec == 0)) {
+        timespec_diff(&nowcall, &lastcall, &diffcall);
+        if (timecmp(diffcall, _ms) < 0) {
+            timespec_diff(&_ms, &diffcall, &diffwait);
+            nanosleep(&diffwait, NULL);
+        }
+    }
+
+    lastcall = nowcall;
+}
+
+void set_interval(int ms) {
+    _ms.tv_sec = ms / 1000;
+    _ms.tv_nsec = (ms % 1000) * 1e6;
+}
+
 int openConnection(const char* sockname, int msec, const struct timespec abstime) {
     struct timespec timeout, abstime_int;
     int len;
@@ -98,6 +121,7 @@ int closeConnection(const char* sockname) {
         return -1;
     } 
 
+    sleep(1);
     IF_RETEQ(close(sfd), -1);
     sfd = -1;
 
@@ -119,6 +143,7 @@ int openFile(const char* pathname, int flags) {
     reqc.flags = flags;
 
     prepareRequest((char *)reqframe, &reqsize, REQ_OPEN, &reqc);
+    wait_interval();
     if (write(sfd, reqframe, reqsize) != reqsize) {
         return -1;
     }
@@ -148,6 +173,7 @@ int readFile(const char* pathname, void** buf, size_t* size) {
     reqc.N = 1;
 
     prepareRequest((char *)reqframe, &reqsize, REQ_GETSIZ, &reqc);
+    wait_interval();
     if (write(sfd, reqframe, reqsize) != reqsize) {
         return -1;
     }
@@ -162,6 +188,7 @@ int readFile(const char* pathname, void** buf, size_t* size) {
 
 
     prepareRequest((char *)reqframe, &reqsize, REQ_READ, &reqc);
+    wait_interval();
     if (write(sfd, reqframe, reqsize) != reqsize) {
         return -1;
     }
@@ -192,6 +219,7 @@ int closeFile(const char* pathname) {
     reqc.N = 1;
 
     prepareRequest((char *)reqframe, &reqsize, REQ_CLOSEFILE, &reqc);
+    wait_interval();
     if (write(sfd, reqframe, reqsize) != reqsize) {
         return -1;
     }
@@ -219,6 +247,7 @@ int lockFile(const char* pathname) {
     reqc.N = 1;
 
     prepareRequest((char *)reqframe, &reqsize, REQ_LOCK, &reqc);
+    wait_interval();
     if (write(sfd, reqframe, reqsize) != reqsize) {
         return -1;
     }
@@ -246,6 +275,7 @@ int unlockFile(const char* pathname) {
     reqc.N = 1;
 
     prepareRequest((char *)reqframe, &reqsize, REQ_UNLOCK, &reqc);
+    wait_interval();
     if (write(sfd, reqframe, reqsize) != reqsize) {
         return -1;
     }
@@ -273,6 +303,7 @@ int removeFile(const char* pathname) {
     reqc.N = 1;
 
     prepareRequest((char *)reqframe, &reqsize, REQ_REMOVE, &reqc);
+    wait_interval();
     if (write(sfd, reqframe, reqsize) != reqsize) {
         return -1;
     }
@@ -290,7 +321,7 @@ int writeFile(const char* pathname, const char* dirname) {
     char reqframe[2048], *fname;
     char *buf2;
     struct reqcall reqc;
-    size_t reqsize, filesize;
+    size_t reqsize, filesize, rem;
     char *buf;
     int fd, len;
     struct stat st;
@@ -323,19 +354,19 @@ int writeFile(const char* pathname, const char* dirname) {
 
     close(fd);
     prepareRequest((char *)reqframe, &reqsize, REQ_WRITE, &reqc);
+    wait_interval();
     if (write(sfd, reqframe, reqsize) != reqsize) {
         return -1;
     }
 
-    read(sfd, reqframe, SIZE_OF(len));
+    rem = read(sfd, reqframe, sizeof(reqcode_t));
     if (*((reqcode_t *)reqframe) == REQ_FAILED) {
         errno = EACCES;
         return -1;
     }
 
-    memcpy(&len, reqframe + sizeof(reqcode_t), sizeof len);
-
-    while (len--) {
+    read(sfd, &rem, sizeof rem);
+    while (rem--) {
         read(sfd, &filesize, sizeof filesize);
         buf2 = (char *)malloc(filesize * sizeof(char));
         read(sfd, buf2, filesize);
@@ -361,7 +392,7 @@ int writeFile(const char* pathname, const char* dirname) {
 int appendToFile(const char* pathname, void* buf, size_t size, const char* dirname) {
     char reqframe[2048], *fname;
     struct reqcall reqc;
-    size_t reqsize, filesize;
+    size_t reqsize, filesize, rem;
     char *buf2;
     int fd, len;
 
@@ -378,19 +409,19 @@ int appendToFile(const char* pathname, void* buf, size_t size, const char* dirna
     reqc.N = 1;
 
     prepareRequest((char *)reqframe, &reqsize, REQ_APPEND, &reqc);
+    wait_interval();
     if (write(sfd, reqframe, reqsize) != reqsize) {
         return -1;
     }
 
-    read(sfd, reqframe, SIZE_OF(len));
+    rem = read(sfd, reqframe, sizeof(reqcode_t));
     if (*((reqcode_t *)reqframe) == REQ_FAILED) {
         errno = EACCES;
         return -1;
     }
 
-    memcpy(&len, reqframe + sizeof(reqcode_t), sizeof len);
-
-    while (len--) {
+    read(sfd, &rem, sizeof rem);
+    while (rem--) {
         read(sfd, &filesize, sizeof filesize);
         buf2 = (char *)malloc(filesize * sizeof(char));
         read(sfd, buf2, filesize);
@@ -429,6 +460,7 @@ int readNFiles(int N, const char* dirname) {
     reqc.N = N;
 
     prepareRequest((char *)reqframe, &reqsize, REQ_RNDREAD, &reqc);
+    wait_interval();
     if (write(sfd, reqframe, reqsize) != reqsize) {
         return -1;
     }
