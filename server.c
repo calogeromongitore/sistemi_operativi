@@ -241,6 +241,7 @@ void *th_routine(void *args) {
             }
         }
 
+        printf("\t-- REQ: %3d (%10s)\t RETURN VALUE: %3d (%10s)\n", req, req_str(req, reqstr), retval, err_str(retval, estr));
         trace("\t-- REQ: %3d (%10s)\t RETURN VALUE: %3d (%10s)", req, req_str(req, reqstr), retval, err_str(retval, estr));
 
         reqst = (retval != E_ITSOK) ? REQ_FAILED : REQ_SUCCESS; 
@@ -254,7 +255,7 @@ void *th_routine(void *args) {
             while (storage_getremoved(thargs_cpy.storage, &rem, (void **)&buf2, &loc, buf4, &fileretsize), ++len, rem) {
 
                 if (req != REQ_RNDREAD) {
-                    trace("\t\t-- CACHE OVLD! Returning %s [%ld bytes]", buf2, loc);
+                    trace("\t\t-- CACHE OVLD! Returning %s [%ld bytes]", buf4, loc);
                 }
 
                 if (!len) {
@@ -378,7 +379,7 @@ int main(int argc, char **argv) {
     workers_start(workers, th_routine);
     SET_FDMAX(fdmax, workers_getmaxfd(workers));
 
-    storage = storage_init(15100, 4);
+    storage = storage_init(15280, 4);
     fifo = fifo_init(64 * sizeof(thargs_t));
 
     workers_queue = workers_init(1);

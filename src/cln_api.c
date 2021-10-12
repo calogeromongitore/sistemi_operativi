@@ -335,26 +335,24 @@ int writeFile(const char* pathname, const char* dirname) {
 
     memcpy(&len, reqframe + sizeof(reqcode_t), sizeof len);
 
-    if (dirname) {
-        while (len--) {
-            read(sfd, &filesize, sizeof filesize);
-            buf2 = (char *)malloc(filesize * sizeof(char));
-            read(sfd, buf2, filesize);
+    while (len--) {
+        read(sfd, &filesize, sizeof filesize);
+        buf2 = (char *)malloc(filesize * sizeof(char));
+        read(sfd, buf2, filesize);
 
-            read(sfd, &reqsize, sizeof reqsize);
-            read(sfd, reqframe, reqsize);
-            reqframe[reqsize] = '\0';
+        read(sfd, &reqsize, sizeof reqsize);
+        read(sfd, reqframe, reqsize);
+        reqframe[reqsize] = '\0';
 
-            if (filesize > 0) {
-                fname = newstrcat(dirname, reqframe);
-                PERROR_DIE(fd = open(fname, O_WRONLY | O_CREAT, 0644), -1);
-                write(fd, buf2, filesize);
-                close(fd);
-                free(fname);
-            }
-
-            free(buf2);
+        if (filesize > 0) {
+            fname = newstrcat(dirname ? dirname : "/dev/", dirname ? reqframe : "null");
+            PERROR_DIE(fd = open(fname, O_WRONLY | O_CREAT, 0644), -1);
+            write(fd, buf2, filesize);
+            close(fd);
+            free(fname);
         }
+
+        free(buf2);
     }
 
     return 0;
@@ -392,26 +390,24 @@ int appendToFile(const char* pathname, void* buf, size_t size, const char* dirna
 
     memcpy(&len, reqframe + sizeof(reqcode_t), sizeof len);
 
-    if (dirname) {
-        while (len--) {
-            read(sfd, &filesize, sizeof filesize);
-            buf2 = (char *)malloc(filesize * sizeof(char));
-            read(sfd, buf2, filesize);
+    while (len--) {
+        read(sfd, &filesize, sizeof filesize);
+        buf2 = (char *)malloc(filesize * sizeof(char));
+        read(sfd, buf2, filesize);
 
-            read(sfd, &reqsize, sizeof reqsize);
-            read(sfd, reqframe, reqsize);
-            reqframe[reqsize] = '\0';
+        read(sfd, &reqsize, sizeof reqsize);
+        read(sfd, reqframe, reqsize);
+        reqframe[reqsize] = '\0';
 
-            if (filesize > 0) {
-                fname = newstrcat(dirname, reqframe);
-                PERROR_DIE(fd = open(fname, O_WRONLY | O_CREAT, 0644), -1);
-                write(fd, buf2, filesize);
-                close(fd);
-                free(fname);
-            }
-
-            free(buf2);
+        if (filesize > 0) {
+            fname = newstrcat(dirname ? dirname : "/dev/", dirname ? reqframe : "null");
+            PERROR_DIE(fd = open(fname, O_WRONLY | O_CREAT, 0644), -1);
+            write(fd, buf2, filesize);
+            close(fd);
+            free(fname);
         }
+
+        free(buf2);
     }
 
     return 0;
@@ -446,26 +442,24 @@ int readNFiles(int N, const char* dirname) {
     memcpy(&len, reqframe + sizeof(reqcode_t), sizeof len);
     lenret = len;
 
-    if (dirname) {
-        while (len--) {
-            read(sfd, &filesize, sizeof filesize);
-            buf2 = (char *)malloc(filesize * sizeof(char));
-            read(sfd, buf2, filesize);
+    while (len--) {
+        read(sfd, &filesize, sizeof filesize);
+        buf2 = (char *)malloc(filesize * sizeof(char));
+        read(sfd, buf2, filesize);
 
-            read(sfd, &reqsize, sizeof reqsize);
-            read(sfd, reqframe, reqsize);
-            reqframe[reqsize] = '\0';
+        read(sfd, &reqsize, sizeof reqsize);
+        read(sfd, reqframe, reqsize);
+        reqframe[reqsize] = '\0';
 
-            if (filesize > 0) {
-                fname = newstrcat(dirname, reqframe);
-                PERROR_DIE(fd = open(fname, O_WRONLY | O_CREAT, 0644), -1);
-                write(fd, buf2, filesize);
-                close(fd);
-                free(fname);
-            }
-
-            free(buf2);
+        if (filesize > 0) {
+            fname = newstrcat(dirname ? dirname : "/dev/", dirname ? reqframe : "null");
+            PERROR_DIE(fd = open(fname, O_WRONLY | O_CREAT, 0644), -1);
+            write(fd, buf2, filesize);
+            close(fd);
+            free(fname);
         }
+
+        free(buf2);
     }
 
     return lenret;

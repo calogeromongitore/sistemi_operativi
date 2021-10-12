@@ -77,7 +77,7 @@ int main(int argc, char **argv) {
     if (!ARGS_ISNULL(args, ARG_BIGD)) {
         llogp(LOG_DBG, "Storing rejected files in:");
         llogp(LOG_DBG, ARGS_VALUE(args, ARG_BIGD));
-        readstore_path = newstrcat(ARGS_VALUE(args, ARG_BIGD), "/");
+        rejstore_path = newstrcat(ARGS_VALUE(args, ARG_BIGD), "/");
     }
 
     if (!ARGS_ISNULL(args, ARG_WRITELIST)) {
@@ -110,11 +110,16 @@ int main(int argc, char **argv) {
                         }
                     }
 
+
                     close(fd);
                 }
 
                 PERROR_DIE(closeFile(ARGS_VALUE(args, ARG_WRITELIST) + j), -1);
-                ARGS_VALUE(args, ARG_WRITELIST)[i] = ',';
+
+                if (i < len) {
+                    ARGS_VALUE(args, ARG_WRITELIST)[i] = ',';
+                }
+
                 j = i + 1;
             }
         }
@@ -131,7 +136,7 @@ int main(int argc, char **argv) {
         llogp(LOG_DBG, ARGS_VALUE(args, ARG_READS));
 
         len = strlen(ARGS_VALUE(args, ARG_READS));
-        for (i = j = 0; i <= len + 2; i++) {
+        for (i = j = 0; i <= len; i++) {
             if (ARGS_VALUE(args, ARG_READS)[i] == ',') {
                 ARGS_VALUE(args, ARG_READS)[i] = '\0';
             }
@@ -153,7 +158,10 @@ int main(int argc, char **argv) {
                 PERROR_DIE(closeFile(ARGS_VALUE(args, ARG_READS) + j), -1);
                 free(data);
 
-                ARGS_VALUE(args, ARG_READS)[i] = ',';
+                if (i < len) {
+                    ARGS_VALUE(args, ARG_READS)[i] = ',';
+                }
+
                 j = i + 1;
             }
         }

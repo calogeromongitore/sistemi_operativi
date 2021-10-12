@@ -10,6 +10,7 @@
 #include <sys/socket.h>
 #include <sys/un.h>
 #include <sys/select.h>
+#include <sys/signalfd.h>
 
 #include "include/common.h"
 #include "include/logger.h"
@@ -21,6 +22,20 @@
 #include "include/list.h"
 
 #define SET_FDMAX(actual, newfd) actual = ((newfd > actual) ? newfd : actual)
+#define SOCKET_CLOSE(__sfd) if (__sfd) {\
+    close(__sfd); \
+    __sfd = 0;\
+}
+
+#define NFD_SET(__fd, __setptr, __cnt) {\
+    FD_SET(__fd, __setptr);\
+    __cnt++;\
+}
+
+#define NFD_CLR(__fd, __setptr, __cnt) {\
+    FD_CLR(__fd, __setptr);\
+    __cnt--;\
+}
 
 #define BUF_SIZ 512
 
@@ -39,6 +54,7 @@ typedef struct {
     workers_t workers;
     workers_t workersqueue;
     int reqid;
+    char quit;
 } thargs_t;
 
 
@@ -86,7 +102,7 @@ void *th_routine(void *args) {
     reqcode_t req, reqst;
     size_t loc, fileretsize, rem;
     struct reqcall reqc;
-    char rbuf2[1024], buf4[1024];
+    char rbuf2[1024], buf4[1024], reqstr[0x10], estr[0x20];
     char *buf2;
     int retval, len;
     int thid;
@@ -94,10 +110,19 @@ void *th_routine(void *args) {
     workers = (workers_t)args;
     thid = rand() % 0x40;
 
+    printf("[#%02d] Ready to work!\n", thid);
+    trace("[#%02d] Ready to work", thid);
+
     while(1) {
 
         workers_piperead(workers, &thargs_cpy, sizeof thargs_cpy);
-        printf("[#%02d] Data read at 0x%p [%d bytes]\n", thid, thargs_cpy.data, thargs_cpy.bytes);
+        if (thargs_cpy.quit) {
+            printf("[#%02d] Closing thread!\n", thid);
+            break;
+        }
+
+        printf("[#%02d] Client %d sent %d bytes\n", thid, thargs_cpy.sfd2, thargs_cpy.bytes);
+        trace("[#%02d] Client %d sent %d bytes", thid, thargs_cpy.sfd2, thargs_cpy.bytes);
 
         loc = 0;
         buf2 = rbuf2;
@@ -185,11 +210,7 @@ void *th_routine(void *args) {
                 case REQ_UNLOCK:
                     retval = storage_unlock(thargs_cpy.storage, thargs_cpy.sfd2, reqc.pathname);
                     loc = 0;
-                    break;
-                
-                case REQ_REMOVE:
-                    retval = storage_remove(thargs_cpy.storage, thargs_cpy.sfd2, reqc.pathname);
-                    workers_pipewrite(thargs_cpy.workersqueue, &thargs_cpy.fifo, sizeof thargs_cpy.fifo);
+  eof thargs_cpy.fifo);
                     loc = 0;
                     break;
 
@@ -216,6 +237,8 @@ void *th_routine(void *args) {
             }
         }
 
+        trace("\t-- REQ: %3d (%10s)\t RETURN VALUE: %3d (%10s)", req, req_str(req, reqstr), retval, err_str(retval, estr));
+
         reqst = (retval != E_ITSOK) ? REQ_FAILED : REQ_SUCCESS; 
         write(thargs_cpy.sfd2, &reqst, sizeof reqst);
 
@@ -225,6 +248,10 @@ void *th_routine(void *args) {
 
             len = -1;
             while (storage_getremoved(thargs_cpy.storage, &rem, (void **)&buf2, &loc, buf4, &fileretsize), ++len, rem) {
+
+                if (req != REQ_RNDREAD) {
+                    trace("\t\t-- CACHE OVLD! Returning %s [%ld bytes]", buf4, loc);
+                }
 
                 if (!len) {
                     write(thargs_cpy.sfd2, (void *)&rem, sizeof(int));
@@ -281,16 +308,22 @@ void *th_routine_queue(void *args) {
 }
 
 int main(int argc, char **argv) {
-    int sfd, sfd2, t, ready_fds, i, bytes, fdmax;
+    int sfd, sfd2, sigfd, t, ready_fds, i, bytes, fdmax, fdsetsiz = 0;
     fd_set rfds, rfds_cpy;
     struct sockaddr_un local, remote;
+    struct signalfd_siginfo fdsi;
+    struct storage_info storinfo;
     args__cont__t args;
     config_t conf;
     workers_t workers, workers_queue;
+    sigset_t mask;
     thargs_t thargs;
     storage_t storage;
     fifo_t fifo;
+    size_t s1, s2, s3;
+    char quit = 0;
     char buf[2048];
+    char *ptr;
     int reqid = 0;
     
     parse_args(argc, argv, &args);
@@ -321,24 +354,60 @@ int main(int argc, char **argv) {
 
     FD_ZERO(&rfds_cpy);
     FD_ZERO(&rfds);
-    FD_SET(sfd, &rfds);
+    NFD_SET(sfd, &rfds, fdsetsiz);
 
     signal(SIGPIPE, SIG_IGN);
+
+    sigemptyset(&mask);
+    sigaddset(&mask, SIGINT);
+    sigaddset(&mask, SIGQUIT);
+    sigaddset(&mask, SIGHUP);
+
+    // SIGINT SIGQUIT SIGHUP only handled by filedescriptors. 
+    // Disabling default handler or any other handler
+    PERROR_DIE(sigprocmask(SIG_BLOCK, &mask, NULL), -1);
+    PERROR_DIE(sigfd = signalfd(-1, &mask, 0), -1);
+    NFD_SET(sigfd, &rfds, fdsetsiz);
+    SET_FDMAX(fdmax, sigfd);
 
     workers = workers_init(4);
     workers_start(workers, th_routine);
     SET_FDMAX(fdmax, workers_getmaxfd(workers));
 
-    storage = storage_init(22690, 4);
+    storage = storage_init(15250, 4);
     fifo = fifo_init(64 * sizeof(thargs_t));
 
     workers_queue = workers_init(1);
     workers_start(workers_queue, th_routine_queue);
     SET_FDMAX(fdmax, workers_getmaxfd(workers_queue));
 
-    while (1) {
+    while (!quit && fdsetsiz > 0) {
         rfds_cpy = rfds;
         ready_fds = select(fdmax + 1, &rfds_cpy, NULL, NULL, NULL);
+
+        if (FD_ISSET(sigfd, &rfds_cpy)) {
+            read(sigfd, &fdsi, sizeof fdsi);
+
+            switch (fdsi.ssi_signo) {
+                case SIGINT:
+                case SIGQUIT:
+                    printf("SIGINT or SIGQUIT recv!\n");
+                    quit = 1;
+                    break;
+
+                case SIGHUP:
+                    printf("SIGHUP recv!\n");
+                    NFD_CLR(sigfd, &rfds, fdsetsiz);
+                    NFD_CLR(sfd, &rfds, fdsetsiz);
+                    SOCKET_CLOSE(sfd);
+                    break;
+                
+                default:
+                    break;
+            }
+
+            continue;
+        }
 
         //STDERR_FILENO = 2
         for (i = STDERR_FILENO + 1; i <= fdmax && ready_fds; i++) {
@@ -353,8 +422,10 @@ int main(int argc, char **argv) {
                 PERROR_DIE(sfd2 = accept(i, (struct sockaddr *)&remote, &t), -1);
 
                 // fcntl(sfd2, F_SETFL, fcntl(sfd2, F_GETFL, 0) | O_NONBLOCK);
-                FD_SET(sfd2, &rfds);
+                NFD_SET(sfd2, &rfds, fdsetsiz);
                 SET_FDMAX(fdmax, sfd2);
+
+                trace("Client %d connected", sfd2);
 
             } else {
                 
@@ -363,7 +434,8 @@ int main(int argc, char **argv) {
                 //if it returns 0 the fd must be deleted from the epoll
                 //at each successful read, realloc the buffer
                 if ((bytes = read(i, (void *)buf, 1024)) <= 0) {
-                    FD_CLR(i, &rfds);
+                    NFD_CLR(i, &rfds, fdsetsiz);
+                    trace("Client %d disconnected", sfd2);
                     // close(i);
                     // TODO: do a funciton like storage.closeallfilesfrom(i) in order
                     // to close all the files opened by clientid = i
@@ -383,6 +455,7 @@ int main(int argc, char **argv) {
                 thargs.workers = workers;
                 thargs.workersqueue = workers_queue;
                 thargs.reqid = reqid++;
+                thargs.quit = quit;
                 memcpy(thargs.data, buf, bytes);
                 workers_pipewrite(workers, &thargs, sizeof thargs);
 
@@ -393,14 +466,36 @@ int main(int argc, char **argv) {
 
     }
 
+    printf("[#00] Stopping..\n");
+    thargs.quit = 1;
+    workers_multicast(workers, &thargs, sizeof thargs);
     workers_mainloop(workers);
+    printf("[#00] Stopping..\n");
+
+    printf("\n\n");
+    printf("\t\t ! SERVER STATISTICS !\n\n");
+
+    storage_getinfo(storage, &storinfo);
+    printf("%-38s:\t%d\n", "MAX STORED FILES NUMBER", storinfo.maxnum);
+    printf("%-38s:\t%.2f MB\n", "MAX STORED FILES SIZE", (storinfo.maxsize/((float)1024*1024)));
+    printf("%-38s:\t%d\n", "CACHE CLEAN NUMBER", storinfo.nkills);
+
+    printf("\n%-30s %8s\n", "FILE NAME", "SIZE [B]");
+    storage_retrieve(storage, 0, 0);
+    while (storage_getremoved(storage, &s3, NULL, &s1, buf, &s2), s3) {
+        printf("%-30s %8ld\n", buf, s1);
+    }
+
+    printf("\n\n");
 
 
     /** FREE EVERYTHING **/
+    FD_ZERO(&rfds);
+    FD_ZERO(&rfds_cpy);
     workers_delete(workers);
     args_free(&args);
-    close(sfd);
+    SOCKET_CLOSE(sfd);
 
 
     return 0;
-};
+}
