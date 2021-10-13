@@ -130,15 +130,21 @@ int openFile(const char* pathname, int flags) {
     char reqframe[2048];
     struct reqcall reqc;
     size_t reqsize;
-    int err;
+    int err, len;
 
     if (sfd == -1) {
         errno = ENOTCONN;
         return -1; 
     }
 
+    for (len = strlen(pathname) - 1; len >= 0; len--) {
+        if (pathname[len] == '/') {
+            break;
+        }
+    }
+
     reqcall_default(&reqc);
-    reqc.pathname = pathname;
+    reqc.pathname = pathname + ++len;
     reqc.N = 1;
     reqc.flags = flags;
 
@@ -163,17 +169,23 @@ int readFile(const char* pathname, void** buf, size_t* size) {
     char reqframe[2048];
     struct reqcall reqc;
     size_t reqsize, filesize;
-    int err;
+    int err, len; 
 
     if (sfd == -1) {
         errno = ENOTCONN;
         return -1; 
     }
 
+    for (len = strlen(pathname) - 1; len >= 0; len--) {
+        if (pathname[len] == '/') {
+            break;
+        }
+    }
+
     *size = 0;
 
     reqcall_default(&reqc);
-    reqc.pathname = pathname;
+    reqc.pathname = pathname + ++len;
     reqc.N = 1;
 
     prepareRequest((char *)reqframe, &reqsize, REQ_GETSIZ, &reqc);
@@ -216,15 +228,21 @@ int closeFile(const char* pathname) {
     char reqframe[2048];
     struct reqcall reqc;
     size_t reqsize;
-    int err;
+    int err, len;
 
     if (sfd == -1) {
         errno = ENOTCONN;
         return -1; 
     }
 
+    for (len = strlen(pathname) - 1; len >= 0; len--) {
+        if (pathname[len] == '/') {
+            break;
+        }
+    }
+
     reqcall_default(&reqc);
-    reqc.pathname = pathname;
+    reqc.pathname = pathname + ++len;
     reqc.N = 1;
 
     prepareRequest((char *)reqframe, &reqsize, REQ_CLOSEFILE, &reqc);
@@ -248,15 +266,21 @@ int lockFile(const char* pathname) {
     char reqframe[2048];
     struct reqcall reqc;
     size_t reqsize;
-    int err;
+    int err, len;
 
     if (sfd == -1) {
         errno = ENOTCONN;
         return -1;
     }
 
+    for (len = strlen(pathname) - 1; len >= 0; len--) {
+        if (pathname[len] == '/') {
+            break;
+        }
+    }
+
     reqcall_default(&reqc);
-    reqc.pathname = pathname;
+    reqc.pathname = pathname + ++len;
     reqc.N = 1;
 
     prepareRequest((char *)reqframe, &reqsize, REQ_LOCK, &reqc);
@@ -280,15 +304,21 @@ int unlockFile(const char* pathname) {
     char reqframe[2048];
     struct reqcall reqc;
     size_t reqsize;
-    int err;
+    int err, len;
 
     if (sfd == -1) {
         errno = ENOTCONN;
         return -1;
     }
 
+    for (len = strlen(pathname) - 1; len >= 0; len--) {
+        if (pathname[len] == '/') {
+            break;
+        }
+    }
+
     reqcall_default(&reqc);
-    reqc.pathname = pathname;
+    reqc.pathname = pathname + ++len; 
     reqc.N = 1;
 
     prepareRequest((char *)reqframe, &reqsize, REQ_UNLOCK, &reqc);
@@ -312,15 +342,21 @@ int removeFile(const char* pathname) {
     char reqframe[2048];
     struct reqcall reqc;
     size_t reqsize;
-    int err;
+    int err, len;
 
     if (sfd == -1) {
         errno = ENOTCONN;
         return -1;
     }
 
+    for (len = strlen(pathname) - 1; len >= 0; len--) {
+        if (pathname[len] == '/') {
+            break;
+        }
+    }
+
     reqcall_default(&reqc);
-    reqc.pathname = pathname;
+    reqc.pathname = pathname + ++len;
     reqc.N = 1;
 
     prepareRequest((char *)reqframe, &reqsize, REQ_REMOVE, &reqc);
@@ -432,9 +468,15 @@ int appendToFile(const char* pathname, void* buf, size_t size, const char* dirna
 
     reqcall_default(&reqc);
 
+    for (len = strlen(pathname) - 1; len >= 0; len--) {
+        if (pathname[len] == '/') {
+            break;
+        }
+    }
+
     reqc.buf = buf;
     reqc.size = size;
-    reqc.pathname = pathname;
+    reqc.pathname = pathname + ++len;
     reqc.diname = dirname;
     reqc.N = 1;
 

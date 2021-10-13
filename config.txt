@@ -1,4 +1,5 @@
-workers: 10
-totalmb: 100
-chunks: 10
-maxqueue: 20
+workers: 4
+totalmb: 2
+maxfiles: 4
+maxqueue: 64
+maxincomingdata: 2048

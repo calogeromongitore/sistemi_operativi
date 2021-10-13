@@ -39,11 +39,13 @@
 
 #define BUF_SIZ 512
 
-typedef struct {
+struct config_data {
     int workers;
     int total_mb;
-    int chunks;
-} config_t;
+    int maxfiles;
+    int maxqueue;
+    int maxincomingdata;
+};
 
 typedef struct {
     char *data;
@@ -58,9 +60,9 @@ typedef struct {
 } thargs_t;
 
 
-config_t parse_config(char *path_config) {
+struct config_data parse_config(char *path_config) {
     FILE *fp;
-    config_t conf;
+    struct config_data conf;
     char buff[BUF_SIZ];
     char *ptr;
 
@@ -81,12 +83,16 @@ config_t parse_config(char *path_config) {
             }
         }
 
-        if (strcmp(buff, "workers") == 0) {
+        if (!strcmp(buff, "workers")) {
             conf.workers = atoi(ptr);
-        } else if (strcmp(buff, "totalmb") == 0) {
+        } else if (!strcmp(buff, "totalmb")) {
             conf.total_mb = atoi(ptr);
-        } else if (strcmp(buff, "chunks") == 0) {
-            conf.chunks = atoi(ptr);
+        } else if (!strcmp(buff, "maxfiles")) {
+            conf.maxfiles = atoi(ptr);
+        } else if (!strcmp(buff, "maxqueue")) {
+            conf.maxqueue = atoi(ptr);
+        } else if (!strcmp(buff, "maxincomingdata")) {
+            conf.maxincomingdata = atoi(ptr);
         }
 
     }
@@ -210,7 +216,11 @@ void *th_routine(void *args) {
                 case REQ_UNLOCK:
                     retval = storage_unlock(thargs_cpy.storage, thargs_cpy.sfd2, reqc.pathname);
                     loc = 0;
-  eof thargs_cpy.fifo);
+                    break;
+                
+                case REQ_REMOVE:
+                    retval = storage_remove(thargs_cpy.storage, thargs_cpy.sfd2, reqc.pathname);
+                    workers_pipewrite(thargs_cpy.workersqueue, &thargs_cpy.fifo, sizeof thargs_cpy.fifo);
                     loc = 0;
                     break;
 
@@ -237,6 +247,7 @@ void *th_routine(void *args) {
             }
         }
 
+        printf("\t-- REQ: %3d (%10s)\t RETURN VALUE: %3d (%10s)\n", req, req_str(req, reqstr), retval, err_str(retval, estr));
         trace("\t-- REQ: %3d (%10s)\t RETURN VALUE: %3d (%10s)", req, req_str(req, reqstr), retval, err_str(retval, estr));
 
         reqst = (retval != E_ITSOK) ? REQ_FAILED : REQ_SUCCESS; 
@@ -254,7 +265,7 @@ void *th_routine(void *args) {
                 }
 
                 if (!len) {
-                    write(thargs_cpy.sfd2, (void *)&rem, sizeof(int));
+                    write(thargs_cpy.sfd2, (void *)&rem, sizeof rem);
                 }
 
                 write(thargs_cpy.sfd2, &loc, sizeof loc);
@@ -314,7 +325,7 @@ int main(int argc, char **argv) {
     struct signalfd_siginfo fdsi;
     struct storage_info storinfo;
     args__cont__t args;
-    config_t conf;
+    struct config_data conf;
     workers_t workers, workers_queue;
     sigset_t mask;
     thargs_t thargs;
@@ -322,8 +333,7 @@ int main(int argc, char **argv) {
     fifo_t fifo;
     size_t s1, s2, s3;
     char quit = 0;
-    char buf[2048];
-    char *ptr;
+    char *buf;
     int reqid = 0;
     
     parse_args(argc, argv, &args);
@@ -341,6 +351,7 @@ int main(int argc, char **argv) {
 
     //TODO: check if config values are correct (like workers > 0)
 
+    buf = (char *)malloc(conf.maxincomingdata * sizeof *buf);
 
     PERROR_DIE(sfd = socket(AF_UNIX, SOCK_STREAM, 0), -1);
     SET_FDMAX(fdmax, sfd);
@@ -370,12 +381,12 @@ int main(int argc, char **argv) {
     NFD_SET(sigfd, &rfds, fdsetsiz);
     SET_FDMAX(fdmax, sigfd);
 
-    workers = workers_init(4);
+    workers = workers_init(conf.workers);
     workers_start(workers, th_routine);
     SET_FDMAX(fdmax, workers_getmaxfd(workers));
 
-    storage = storage_init(15250, 4);
-    fifo = fifo_init(64 * sizeof(thargs_t));
+    storage = storage_init(conf.total_mb * 1024 * 1024, conf.maxfiles);
+    fifo = fifo_init(conf.maxqueue * sizeof(thargs_t));
 
     workers_queue = workers_init(1);
     workers_start(workers_queue, th_routine_queue);
@@ -493,9 +504,12 @@ int main(int argc, char **argv) {
     FD_ZERO(&rfds);
     FD_ZERO(&rfds_cpy);
     workers_delete(workers);
+    workers_delete(workers_queue);
+    storage_destroy(storage);
+    fifo_destroy(fifo);
     args_free(&args);
     SOCKET_CLOSE(sfd);
-
+    free(buf);
 
     return 0;
 }
