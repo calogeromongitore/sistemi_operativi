@@ -26787,3 +26787,1494 @@
 [13/10/2021 01:13:01] [#39] Client 11 sent 22 bytes
 [13/10/2021 01:13:01] 	-- REQ:   6 (REQ_CLOSEFILE)	 RETURN VALUE:   0 (   E_ITSOK)
 [13/10/2021 01:13:02] Client 11 disconnected
+[13/10/2021 22:28:19] [#39] Ready to work
+[13/10/2021 22:28:19] [#51] Ready to work
+[13/10/2021 22:28:19] [#06] Ready to work
+[13/10/2021 22:28:19] [#41] Ready to work
+[13/10/2021 22:28:28] Client 9 connected
+[13/10/2021 22:28:28] [#39] Client 9 sent 30 bytes
+[13/10/2021 22:28:28] 	-- REQ:   0 (  REQ_OPEN)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#51] Client 9 sent 84 bytes
+[13/10/2021 22:28:28] 	-- REQ:  10 ( REQ_WRITE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#51] Client 9 sent 24 bytes
+[13/10/2021 22:28:28] 	-- REQ:   6 (REQ_CLOSEFILE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#41] Client 9 sent 28 bytes
+[13/10/2021 22:28:28] 	-- REQ:   0 (  REQ_OPEN)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#39] Client 9 sent 32 bytes
+[13/10/2021 22:28:28] 	-- REQ:  10 ( REQ_WRITE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#06] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#51] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#41] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#39] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#06] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#51] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#51] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#39] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#06] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#06] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#51] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#51] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#41] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#06] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#06] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#51] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#41] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#41] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#06] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#51] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#39] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#39] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#06] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#06] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#41] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#39] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#51] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#51] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#51] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#39] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#06] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#41] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#51] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#39] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#06] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#41] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#51] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#51] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#51] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#51] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#39] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#06] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#41] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#51] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#51] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#06] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#41] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#41] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#51] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#06] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#06] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#06] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#51] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#39] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#39] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#06] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#06] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#06] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#39] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#39] Client 9 sent 290 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] 		-- CACHE OVLD! Returning config.txt [48 bytes]
+[13/10/2021 22:28:28] [#41] Client 9 sent 43 bytes
+[13/10/2021 22:28:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#06] Client 9 sent 22 bytes
+[13/10/2021 22:28:28] 	-- REQ:   6 (REQ_CLOSEFILE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#06] Client 9 sent 28 bytes
+[13/10/2021 22:28:28] 	-- REQ:   0 (  REQ_OPEN)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#06] Client 9 sent 22 bytes
+[13/10/2021 22:28:28] 	-- REQ:   3 (REQ_GETSIZ)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#06] Client 9 sent 22 bytes
+[13/10/2021 22:28:28] 	-- REQ:   2 (  REQ_READ)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:28] [#06] Client 9 sent 22 bytes
+[13/10/2021 22:28:28] 	-- REQ:   6 (REQ_CLOSEFILE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:29] Client 9 disconnected
+[13/10/2021 22:28:57] Client 10 connected
+[13/10/2021 22:28:57] [#39] Client 10 sent 30 bytes
+[13/10/2021 22:28:57] 	-- REQ:   0 (  REQ_OPEN)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#39] Client 10 sent 84 bytes
+[13/10/2021 22:28:57] 	-- REQ:  10 ( REQ_WRITE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] 		-- CACHE OVLD! Returning server.c [15369 bytes]
+[13/10/2021 22:28:57] [#51] Client 10 sent 24 bytes
+[13/10/2021 22:28:57] 	-- REQ:   6 (REQ_CLOSEFILE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#06] Client 10 sent 28 bytes
+[13/10/2021 22:28:57] 	-- REQ:   0 (  REQ_OPEN)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#06] Client 10 sent 32 bytes
+[13/10/2021 22:28:57] 	-- REQ:  10 ( REQ_WRITE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#39] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#51] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#41] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#06] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#06] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#51] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#41] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#39] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#39] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#51] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#51] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#06] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#39] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#39] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#51] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#06] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#06] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#06] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#51] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#41] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#39] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#06] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#51] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#41] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#41] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#06] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#51] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#39] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#41] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#06] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#51] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#51] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#41] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#41] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#39] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#39] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#06] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#41] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#41] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#39] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#06] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#51] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#41] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#39] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#06] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#51] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#41] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#41] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#41] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#41] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#41] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#41] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#51] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#39] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#06] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#41] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#51] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:57] [#39] Client 10 sent 290 bytes
+[13/10/2021 22:28:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:58] [#39] Client 10 sent 290 bytes
+[13/10/2021 22:28:58] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:58] [#41] Client 10 sent 290 bytes
+[13/10/2021 22:28:58] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:58] 		-- CACHE OVLD! Returning config.txt [48 bytes]
+[13/10/2021 22:28:58] [#51] Client 10 sent 43 bytes
+[13/10/2021 22:28:58] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:58] [#51] Client 10 sent 22 bytes
+[13/10/2021 22:28:58] 	-- REQ:   6 (REQ_CLOSEFILE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:58] [#39] Client 10 sent 28 bytes
+[13/10/2021 22:28:58] 	-- REQ:   0 (  REQ_OPEN)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:58] [#41] Client 10 sent 22 bytes
+[13/10/2021 22:28:58] 	-- REQ:   3 (REQ_GETSIZ)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:58] [#06] Client 10 sent 22 bytes
+[13/10/2021 22:28:58] 	-- REQ:   2 (  REQ_READ)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:58] [#51] Client 10 sent 22 bytes
+[13/10/2021 22:28:58] 	-- REQ:   6 (REQ_CLOSEFILE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:59] Client 10 disconnected
+[13/10/2021 22:28:59] Client 11 connected
+[13/10/2021 22:28:59] [#39] Client 11 sent 30 bytes
+[13/10/2021 22:28:59] 	-- REQ:   0 (  REQ_OPEN)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:59] [#41] Client 11 sent 84 bytes
+[13/10/2021 22:28:59] 	-- REQ:  10 ( REQ_WRITE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:59] 		-- CACHE OVLD! Returning server.c [15369 bytes]
+[13/10/2021 22:28:59] [#06] Client 11 sent 24 bytes
+[13/10/2021 22:28:59] 	-- REQ:   6 (REQ_CLOSEFILE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:59] [#06] Client 11 sent 28 bytes
+[13/10/2021 22:28:59] 	-- REQ:   0 (  REQ_OPEN)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:59] [#39] Client 11 sent 32 bytes
+[13/10/2021 22:28:59] 	-- REQ:  10 ( REQ_WRITE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:59] [#41] Client 11 sent 290 bytes
+[13/10/2021 22:28:59] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:59] [#41] Client 11 sent 290 bytes
+[13/10/2021 22:28:59] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:59] [#06] Client 11 sent 290 bytes
+[13/10/2021 22:28:59] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:59] [#39] Client 11 sent 290 bytes
+[13/10/2021 22:28:59] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:59] [#51] Client 11 sent 290 bytes
+[13/10/2021 22:28:59] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:59] [#51] Client 11 sent 290 bytes
+[13/10/2021 22:28:59] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:59] [#06] Client 11 sent 290 bytes
+[13/10/2021 22:28:59] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:59] [#06] Client 11 sent 290 bytes
+[13/10/2021 22:28:59] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:59] [#41] Client 11 sent 290 bytes
+[13/10/2021 22:28:59] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:59] [#41] Client 11 sent 290 bytes
+[13/10/2021 22:28:59] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:59] [#41] Client 11 sent 290 bytes
+[13/10/2021 22:28:59] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:59] [#41] Client 11 sent 290 bytes
+[13/10/2021 22:28:59] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:59] [#51] Client 11 sent 290 bytes
+[13/10/2021 22:28:59] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:59] [#39] Client 11 sent 290 bytes
+[13/10/2021 22:28:59] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:59] [#06] Client 11 sent 290 bytes
+[13/10/2021 22:28:59] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:59] [#41] Client 11 sent 290 bytes
+[13/10/2021 22:28:59] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:59] [#51] Client 11 sent 290 bytes
+[13/10/2021 22:28:59] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:59] [#39] Client 11 sent 290 bytes
+[13/10/2021 22:28:59] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:59] [#06] Client 11 sent 290 bytes
+[13/10/2021 22:28:59] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:59] [#41] Client 11 sent 290 bytes
+[13/10/2021 22:28:59] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:59] [#51] Client 11 sent 290 bytes
+[13/10/2021 22:28:59] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:59] [#39] Client 11 sent 290 bytes
+[13/10/2021 22:28:59] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:59] [#06] Client 11 sent 290 bytes
+[13/10/2021 22:28:59] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:59] [#41] Client 11 sent 290 bytes
+[13/10/2021 22:28:59] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:59] [#51] Client 11 sent 290 bytes
+[13/10/2021 22:28:59] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:59] [#51] Client 11 sent 290 bytes
+[13/10/2021 22:28:59] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:59] [#06] Client 11 sent 290 bytes
+[13/10/2021 22:28:59] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:59] [#41] Client 11 sent 290 bytes
+[13/10/2021 22:28:59] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:59] [#39] Client 11 sent 290 bytes
+[13/10/2021 22:28:59] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:59] [#51] Client 11 sent 290 bytes
+[13/10/2021 22:28:59] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:59] [#06] Client 11 sent 290 bytes
+[13/10/2021 22:28:59] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:59] [#41] Client 11 sent 290 bytes
+[13/10/2021 22:28:59] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:59] [#39] Client 11 sent 290 bytes
+[13/10/2021 22:28:59] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:59] [#51] Client 11 sent 290 bytes
+[13/10/2021 22:28:59] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:59] [#51] Client 11 sent 290 bytes
+[13/10/2021 22:28:59] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:59] [#51] Client 11 sent 290 bytes
+[13/10/2021 22:28:59] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:59] [#39] Client 11 sent 290 bytes
+[13/10/2021 22:28:59] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:59] [#06] Client 11 sent 290 bytes
+[13/10/2021 22:28:59] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:59] [#41] Client 11 sent 290 bytes
+[13/10/2021 22:28:59] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:28:59] [#51] Client 11 sent 290 bytes
+[13/10/2021 22:28:59] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:00] [#51] Client 11 sent 290 bytes
+[13/10/2021 22:29:00] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:00] [#06] Client 11 sent 290 bytes
+[13/10/2021 22:29:00] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:00] [#41] Client 11 sent 290 bytes
+[13/10/2021 22:29:00] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:00] [#39] Client 11 sent 290 bytes
+[13/10/2021 22:29:00] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:00] [#51] Client 11 sent 290 bytes
+[13/10/2021 22:29:00] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:00] [#06] Client 11 sent 290 bytes
+[13/10/2021 22:29:00] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:00] [#41] Client 11 sent 290 bytes
+[13/10/2021 22:29:00] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:00] [#41] Client 11 sent 290 bytes
+[13/10/2021 22:29:00] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:00] [#51] Client 11 sent 290 bytes
+[13/10/2021 22:29:00] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:00] [#06] Client 11 sent 290 bytes
+[13/10/2021 22:29:00] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:00] [#39] Client 11 sent 290 bytes
+[13/10/2021 22:29:00] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:00] [#41] Client 11 sent 290 bytes
+[13/10/2021 22:29:00] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:00] [#51] Client 11 sent 290 bytes
+[13/10/2021 22:29:00] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:00] [#06] Client 11 sent 290 bytes
+[13/10/2021 22:29:00] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:00] [#06] Client 11 sent 290 bytes
+[13/10/2021 22:29:00] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:00] [#41] Client 11 sent 290 bytes
+[13/10/2021 22:29:00] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:00] [#41] Client 11 sent 290 bytes
+[13/10/2021 22:29:00] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:00] [#41] Client 11 sent 290 bytes
+[13/10/2021 22:29:00] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:00] [#41] Client 11 sent 290 bytes
+[13/10/2021 22:29:00] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:00] [#51] Client 11 sent 290 bytes
+[13/10/2021 22:29:00] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:00] 		-- CACHE OVLD! Returning config.txt [48 bytes]
+[13/10/2021 22:29:00] [#39] Client 11 sent 43 bytes
+[13/10/2021 22:29:00] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:00] [#39] Client 11 sent 22 bytes
+[13/10/2021 22:29:00] 	-- REQ:   6 (REQ_CLOSEFILE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:00] [#39] Client 11 sent 28 bytes
+[13/10/2021 22:29:00] 	-- REQ:   0 (  REQ_OPEN)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:00] [#51] Client 11 sent 22 bytes
+[13/10/2021 22:29:00] 	-- REQ:   3 (REQ_GETSIZ)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:00] [#06] Client 11 sent 22 bytes
+[13/10/2021 22:29:00] 	-- REQ:   2 (  REQ_READ)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:00] [#41] Client 11 sent 22 bytes
+[13/10/2021 22:29:00] 	-- REQ:   6 (REQ_CLOSEFILE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:01] Client 11 disconnected
+[13/10/2021 22:29:01] Client 12 connected
+[13/10/2021 22:29:01] [#39] Client 12 sent 30 bytes
+[13/10/2021 22:29:01] 	-- REQ:   0 (  REQ_OPEN)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:01] [#39] Client 12 sent 84 bytes
+[13/10/2021 22:29:01] 	-- REQ:  10 ( REQ_WRITE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:01] 		-- CACHE OVLD! Returning server.c [15369 bytes]
+[13/10/2021 22:29:01] [#39] Client 12 sent 24 bytes
+[13/10/2021 22:29:01] 	-- REQ:   6 (REQ_CLOSEFILE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:01] [#41] Client 12 sent 28 bytes
+[13/10/2021 22:29:01] 	-- REQ:   0 (  REQ_OPEN)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:01] [#51] Client 12 sent 32 bytes
+[13/10/2021 22:29:01] 	-- REQ:  10 ( REQ_WRITE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:01] [#51] Client 12 sent 290 bytes
+[13/10/2021 22:29:01] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:01] [#39] Client 12 sent 290 bytes
+[13/10/2021 22:29:01] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:01] [#41] Client 12 sent 290 bytes
+[13/10/2021 22:29:01] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:01] [#41] Client 12 sent 290 bytes
+[13/10/2021 22:29:01] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:01] [#51] Client 12 sent 290 bytes
+[13/10/2021 22:29:01] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:01] [#39] Client 12 sent 290 bytes
+[13/10/2021 22:29:01] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:01] [#06] Client 12 sent 290 bytes
+[13/10/2021 22:29:01] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:01] [#41] Client 12 sent 290 bytes
+[13/10/2021 22:29:01] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:01] [#51] Client 12 sent 290 bytes
+[13/10/2021 22:29:01] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:01] [#51] Client 12 sent 290 bytes
+[13/10/2021 22:29:01] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:01] [#51] Client 12 sent 290 bytes
+[13/10/2021 22:29:01] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:01] [#41] Client 12 sent 290 bytes
+[13/10/2021 22:29:01] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:01] [#39] Client 12 sent 290 bytes
+[13/10/2021 22:29:01] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:01] [#06] Client 12 sent 290 bytes
+[13/10/2021 22:29:01] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:01] [#51] Client 12 sent 290 bytes
+[13/10/2021 22:29:01] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:01] [#41] Client 12 sent 290 bytes
+[13/10/2021 22:29:01] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:01] [#39] Client 12 sent 290 bytes
+[13/10/2021 22:29:01] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:01] [#39] Client 12 sent 290 bytes
+[13/10/2021 22:29:01] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:01] [#51] Client 12 sent 290 bytes
+[13/10/2021 22:29:01] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:01] [#41] Client 12 sent 290 bytes
+[13/10/2021 22:29:01] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:01] [#41] Client 12 sent 290 bytes
+[13/10/2021 22:29:01] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:01] [#41] Client 12 sent 290 bytes
+[13/10/2021 22:29:01] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:01] [#51] Client 12 sent 290 bytes
+[13/10/2021 22:29:01] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:01] [#06] Client 12 sent 290 bytes
+[13/10/2021 22:29:01] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:01] [#39] Client 12 sent 290 bytes
+[13/10/2021 22:29:01] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:01] [#41] Client 12 sent 290 bytes
+[13/10/2021 22:29:01] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:02] [#51] Client 12 sent 290 bytes
+[13/10/2021 22:29:02] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:02] [#06] Client 12 sent 290 bytes
+[13/10/2021 22:29:02] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:02] [#39] Client 12 sent 290 bytes
+[13/10/2021 22:29:02] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:02] [#39] Client 12 sent 290 bytes
+[13/10/2021 22:29:02] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:02] [#51] Client 12 sent 290 bytes
+[13/10/2021 22:29:02] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:02] [#51] Client 12 sent 290 bytes
+[13/10/2021 22:29:02] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:02] [#51] Client 12 sent 290 bytes
+[13/10/2021 22:29:02] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:02] [#39] Client 12 sent 290 bytes
+[13/10/2021 22:29:02] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:02] [#06] Client 12 sent 290 bytes
+[13/10/2021 22:29:02] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:02] [#06] Client 12 sent 290 bytes
+[13/10/2021 22:29:02] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:02] [#06] Client 12 sent 290 bytes
+[13/10/2021 22:29:02] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:02] [#06] Client 12 sent 290 bytes
+[13/10/2021 22:29:02] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:02] [#41] Client 12 sent 290 bytes
+[13/10/2021 22:29:02] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:02] [#51] Client 12 sent 290 bytes
+[13/10/2021 22:29:02] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:02] [#39] Client 12 sent 290 bytes
+[13/10/2021 22:29:02] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:02] [#39] Client 12 sent 290 bytes
+[13/10/2021 22:29:02] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:02] [#39] Client 12 sent 290 bytes
+[13/10/2021 22:29:02] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:02] [#51] Client 12 sent 290 bytes
+[13/10/2021 22:29:02] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:02] [#51] Client 12 sent 290 bytes
+[13/10/2021 22:29:02] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:02] [#51] Client 12 sent 290 bytes
+[13/10/2021 22:29:02] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:02] [#51] Client 12 sent 290 bytes
+[13/10/2021 22:29:02] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:02] [#51] Client 12 sent 290 bytes
+[13/10/2021 22:29:02] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:02] [#41] Client 12 sent 290 bytes
+[13/10/2021 22:29:02] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:02] [#39] Client 12 sent 290 bytes
+[13/10/2021 22:29:02] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:02] [#06] Client 12 sent 290 bytes
+[13/10/2021 22:29:02] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:02] [#06] Client 12 sent 290 bytes
+[13/10/2021 22:29:02] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:02] [#41] Client 12 sent 290 bytes
+[13/10/2021 22:29:02] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:02] [#39] Client 12 sent 290 bytes
+[13/10/2021 22:29:02] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:02] [#51] Client 12 sent 290 bytes
+[13/10/2021 22:29:02] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:02] [#51] Client 12 sent 290 bytes
+[13/10/2021 22:29:02] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:02] [#51] Client 12 sent 290 bytes
+[13/10/2021 22:29:02] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:02] [#39] Client 12 sent 290 bytes
+[13/10/2021 22:29:02] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:02] [#06] Client 12 sent 290 bytes
+[13/10/2021 22:29:02] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:02] [#41] Client 12 sent 290 bytes
+[13/10/2021 22:29:02] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:02] 		-- CACHE OVLD! Returning config.txt [48 bytes]
+[13/10/2021 22:29:02] [#51] Client 12 sent 43 bytes
+[13/10/2021 22:29:02] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:02] [#39] Client 12 sent 22 bytes
+[13/10/2021 22:29:02] 	-- REQ:   6 (REQ_CLOSEFILE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:02] [#39] Client 12 sent 28 bytes
+[13/10/2021 22:29:02] 	-- REQ:   0 (  REQ_OPEN)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:02] [#39] Client 12 sent 22 bytes
+[13/10/2021 22:29:02] 	-- REQ:   3 (REQ_GETSIZ)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:02] [#51] Client 12 sent 22 bytes
+[13/10/2021 22:29:02] 	-- REQ:   2 (  REQ_READ)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:02] [#06] Client 12 sent 22 bytes
+[13/10/2021 22:29:02] 	-- REQ:   6 (REQ_CLOSEFILE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:03] Client 12 disconnected
+[13/10/2021 22:29:06] Client 13 connected
+[13/10/2021 22:29:06] [#41] Client 13 sent 30 bytes
+[13/10/2021 22:29:06] 	-- REQ:   0 (  REQ_OPEN)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:06] [#41] Client 13 sent 84 bytes
+[13/10/2021 22:29:06] 	-- REQ:  10 ( REQ_WRITE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:06] 		-- CACHE OVLD! Returning server.c [15369 bytes]
+[13/10/2021 22:29:06] [#51] Client 13 sent 24 bytes
+[13/10/2021 22:29:06] 	-- REQ:   6 (REQ_CLOSEFILE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:06] [#06] Client 13 sent 28 bytes
+[13/10/2021 22:29:06] 	-- REQ:   0 (  REQ_OPEN)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:06] [#39] Client 13 sent 32 bytes
+[13/10/2021 22:29:06] 	-- REQ:  10 ( REQ_WRITE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:06] [#41] Client 13 sent 290 bytes
+[13/10/2021 22:29:06] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:06] [#51] Client 13 sent 290 bytes
+[13/10/2021 22:29:06] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:06] [#06] Client 13 sent 290 bytes
+[13/10/2021 22:29:06] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:07] [#39] Client 13 sent 290 bytes
+[13/10/2021 22:29:07] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:07] [#41] Client 13 sent 290 bytes
+[13/10/2021 22:29:07] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:07] [#51] Client 13 sent 290 bytes
+[13/10/2021 22:29:07] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:07] [#06] Client 13 sent 290 bytes
+[13/10/2021 22:29:07] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:07] [#39] Client 13 sent 290 bytes
+[13/10/2021 22:29:07] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:07] [#41] Client 13 sent 290 bytes
+[13/10/2021 22:29:07] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:07] [#51] Client 13 sent 290 bytes
+[13/10/2021 22:29:07] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:07] [#06] Client 13 sent 290 bytes
+[13/10/2021 22:29:07] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:07] [#39] Client 13 sent 290 bytes
+[13/10/2021 22:29:07] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:07] [#41] Client 13 sent 290 bytes
+[13/10/2021 22:29:07] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:08] [#51] Client 13 sent 290 bytes
+[13/10/2021 22:29:08] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:08] [#06] Client 13 sent 290 bytes
+[13/10/2021 22:29:08] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:08] [#39] Client 13 sent 290 bytes
+[13/10/2021 22:29:08] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:08] [#41] Client 13 sent 290 bytes
+[13/10/2021 22:29:08] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:08] [#51] Client 13 sent 290 bytes
+[13/10/2021 22:29:08] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:08] [#06] Client 13 sent 290 bytes
+[13/10/2021 22:29:08] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:08] [#39] Client 13 sent 290 bytes
+[13/10/2021 22:29:08] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:08] [#41] Client 13 sent 290 bytes
+[13/10/2021 22:29:08] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:08] [#51] Client 13 sent 290 bytes
+[13/10/2021 22:29:08] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:08] [#06] Client 13 sent 290 bytes
+[13/10/2021 22:29:08] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:09] [#39] Client 13 sent 290 bytes
+[13/10/2021 22:29:09] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:09] [#41] Client 13 sent 290 bytes
+[13/10/2021 22:29:09] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:09] [#51] Client 13 sent 290 bytes
+[13/10/2021 22:29:09] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:09] [#06] Client 13 sent 290 bytes
+[13/10/2021 22:29:09] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:09] [#39] Client 13 sent 290 bytes
+[13/10/2021 22:29:09] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:09] [#41] Client 13 sent 290 bytes
+[13/10/2021 22:29:09] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:09] [#51] Client 13 sent 290 bytes
+[13/10/2021 22:29:09] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:09] [#51] Client 13 sent 290 bytes
+[13/10/2021 22:29:09] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:09] [#39] Client 13 sent 290 bytes
+[13/10/2021 22:29:09] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:09] [#41] Client 13 sent 290 bytes
+[13/10/2021 22:29:09] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:10] [#06] Client 13 sent 290 bytes
+[13/10/2021 22:29:10] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:10] [#51] Client 13 sent 290 bytes
+[13/10/2021 22:29:10] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:10] [#39] Client 13 sent 290 bytes
+[13/10/2021 22:29:10] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:10] [#41] Client 13 sent 290 bytes
+[13/10/2021 22:29:10] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:10] [#06] Client 13 sent 290 bytes
+[13/10/2021 22:29:10] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:10] [#51] Client 13 sent 290 bytes
+[13/10/2021 22:29:10] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:10] [#39] Client 13 sent 290 bytes
+[13/10/2021 22:29:10] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:10] [#39] Client 13 sent 290 bytes
+[13/10/2021 22:29:10] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:10] [#06] Client 13 sent 290 bytes
+[13/10/2021 22:29:10] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:10] [#51] Client 13 sent 290 bytes
+[13/10/2021 22:29:10] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:11] [#41] Client 13 sent 290 bytes
+[13/10/2021 22:29:11] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:11] [#39] Client 13 sent 290 bytes
+[13/10/2021 22:29:11] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:11] [#06] Client 13 sent 290 bytes
+[13/10/2021 22:29:11] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:11] [#51] Client 13 sent 290 bytes
+[13/10/2021 22:29:11] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:11] [#41] Client 13 sent 290 bytes
+[13/10/2021 22:29:11] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:11] [#39] Client 13 sent 290 bytes
+[13/10/2021 22:29:11] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:11] [#06] Client 13 sent 290 bytes
+[13/10/2021 22:29:11] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:11] [#51] Client 13 sent 290 bytes
+[13/10/2021 22:29:11] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:11] [#41] Client 13 sent 290 bytes
+[13/10/2021 22:29:11] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:11] [#39] Client 13 sent 290 bytes
+[13/10/2021 22:29:11] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:12] [#06] Client 13 sent 290 bytes
+[13/10/2021 22:29:12] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:12] [#51] Client 13 sent 290 bytes
+[13/10/2021 22:29:12] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:12] [#41] Client 13 sent 290 bytes
+[13/10/2021 22:29:12] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:12] [#39] Client 13 sent 290 bytes
+[13/10/2021 22:29:12] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:12] [#06] Client 13 sent 290 bytes
+[13/10/2021 22:29:12] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:12] [#51] Client 13 sent 290 bytes
+[13/10/2021 22:29:12] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:12] [#41] Client 13 sent 290 bytes
+[13/10/2021 22:29:12] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:12] 		-- CACHE OVLD! Returning config.txt [48 bytes]
+[13/10/2021 22:29:12] [#39] Client 13 sent 43 bytes
+[13/10/2021 22:29:12] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:12] [#06] Client 13 sent 22 bytes
+[13/10/2021 22:29:12] 	-- REQ:   6 (REQ_CLOSEFILE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:13] [#51] Client 13 sent 28 bytes
+[13/10/2021 22:29:13] 	-- REQ:   0 (  REQ_OPEN)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:13] [#41] Client 13 sent 22 bytes
+[13/10/2021 22:29:13] 	-- REQ:   3 (REQ_GETSIZ)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:13] [#39] Client 13 sent 22 bytes
+[13/10/2021 22:29:13] 	-- REQ:   2 (  REQ_READ)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:13] [#06] Client 13 sent 22 bytes
+[13/10/2021 22:29:13] 	-- REQ:   6 (REQ_CLOSEFILE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:14] Client 13 disconnected
+[13/10/2021 22:29:52] Client 14 connected
+[13/10/2021 22:29:52] [#51] Client 14 sent 30 bytes
+[13/10/2021 22:29:52] 	-- REQ:   0 (  REQ_OPEN)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:52] [#41] Client 14 sent 84 bytes
+[13/10/2021 22:29:52] 	-- REQ:  10 ( REQ_WRITE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:52] 		-- CACHE OVLD! Returning server.c [15369 bytes]
+[13/10/2021 22:29:52] [#39] Client 14 sent 24 bytes
+[13/10/2021 22:29:52] 	-- REQ:   6 (REQ_CLOSEFILE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:52] [#06] Client 14 sent 28 bytes
+[13/10/2021 22:29:52] 	-- REQ:   0 (  REQ_OPEN)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:52] [#51] Client 14 sent 32 bytes
+[13/10/2021 22:29:52] 	-- REQ:  10 ( REQ_WRITE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:52] [#41] Client 14 sent 290 bytes
+[13/10/2021 22:29:52] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:52] [#39] Client 14 sent 290 bytes
+[13/10/2021 22:29:52] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:52] [#06] Client 14 sent 290 bytes
+[13/10/2021 22:29:52] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:52] [#51] Client 14 sent 290 bytes
+[13/10/2021 22:29:52] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:52] [#41] Client 14 sent 290 bytes
+[13/10/2021 22:29:52] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:53] [#39] Client 14 sent 290 bytes
+[13/10/2021 22:29:53] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:53] [#06] Client 14 sent 290 bytes
+[13/10/2021 22:29:53] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:53] [#51] Client 14 sent 290 bytes
+[13/10/2021 22:29:53] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:53] [#41] Client 14 sent 290 bytes
+[13/10/2021 22:29:53] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:53] [#39] Client 14 sent 290 bytes
+[13/10/2021 22:29:53] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:53] [#06] Client 14 sent 290 bytes
+[13/10/2021 22:29:53] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:53] [#51] Client 14 sent 290 bytes
+[13/10/2021 22:29:53] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:53] [#41] Client 14 sent 290 bytes
+[13/10/2021 22:29:53] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:53] [#39] Client 14 sent 290 bytes
+[13/10/2021 22:29:53] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:53] [#06] Client 14 sent 290 bytes
+[13/10/2021 22:29:53] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:54] [#51] Client 14 sent 290 bytes
+[13/10/2021 22:29:54] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:54] [#41] Client 14 sent 290 bytes
+[13/10/2021 22:29:54] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:54] [#39] Client 14 sent 290 bytes
+[13/10/2021 22:29:54] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:54] [#06] Client 14 sent 290 bytes
+[13/10/2021 22:29:54] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:54] [#51] Client 14 sent 290 bytes
+[13/10/2021 22:29:54] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:54] [#41] Client 14 sent 290 bytes
+[13/10/2021 22:29:54] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:54] [#39] Client 14 sent 290 bytes
+[13/10/2021 22:29:54] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:54] [#06] Client 14 sent 290 bytes
+[13/10/2021 22:29:54] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:54] [#51] Client 14 sent 290 bytes
+[13/10/2021 22:29:54] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:54] [#41] Client 14 sent 290 bytes
+[13/10/2021 22:29:54] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:55] [#39] Client 14 sent 290 bytes
+[13/10/2021 22:29:55] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:55] [#06] Client 14 sent 290 bytes
+[13/10/2021 22:29:55] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:55] [#51] Client 14 sent 290 bytes
+[13/10/2021 22:29:55] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:55] [#41] Client 14 sent 290 bytes
+[13/10/2021 22:29:55] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:55] [#39] Client 14 sent 290 bytes
+[13/10/2021 22:29:55] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:55] [#06] Client 14 sent 290 bytes
+[13/10/2021 22:29:55] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:55] [#51] Client 14 sent 290 bytes
+[13/10/2021 22:29:55] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:55] [#41] Client 14 sent 290 bytes
+[13/10/2021 22:29:55] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:55] [#39] Client 14 sent 290 bytes
+[13/10/2021 22:29:55] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:55] [#06] Client 14 sent 290 bytes
+[13/10/2021 22:29:55] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:56] [#51] Client 14 sent 290 bytes
+[13/10/2021 22:29:56] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:56] [#41] Client 14 sent 290 bytes
+[13/10/2021 22:29:56] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:56] [#39] Client 14 sent 290 bytes
+[13/10/2021 22:29:56] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:56] [#06] Client 14 sent 290 bytes
+[13/10/2021 22:29:56] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:56] [#51] Client 14 sent 290 bytes
+[13/10/2021 22:29:56] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:56] [#41] Client 14 sent 290 bytes
+[13/10/2021 22:29:56] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:56] [#39] Client 14 sent 290 bytes
+[13/10/2021 22:29:56] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:56] [#06] Client 14 sent 290 bytes
+[13/10/2021 22:29:56] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:56] [#51] Client 14 sent 290 bytes
+[13/10/2021 22:29:56] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:56] [#41] Client 14 sent 290 bytes
+[13/10/2021 22:29:56] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:57] [#39] Client 14 sent 290 bytes
+[13/10/2021 22:29:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:57] [#06] Client 14 sent 290 bytes
+[13/10/2021 22:29:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:57] [#51] Client 14 sent 290 bytes
+[13/10/2021 22:29:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:57] [#41] Client 14 sent 290 bytes
+[13/10/2021 22:29:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:57] [#39] Client 14 sent 290 bytes
+[13/10/2021 22:29:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:57] [#06] Client 14 sent 290 bytes
+[13/10/2021 22:29:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:57] [#51] Client 14 sent 290 bytes
+[13/10/2021 22:29:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:57] [#41] Client 14 sent 290 bytes
+[13/10/2021 22:29:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:57] [#39] Client 14 sent 290 bytes
+[13/10/2021 22:29:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:58] [#06] Client 14 sent 290 bytes
+[13/10/2021 22:29:58] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:58] [#51] Client 14 sent 290 bytes
+[13/10/2021 22:29:58] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:58] [#41] Client 14 sent 290 bytes
+[13/10/2021 22:29:58] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:58] [#39] Client 14 sent 290 bytes
+[13/10/2021 22:29:58] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:58] [#06] Client 14 sent 290 bytes
+[13/10/2021 22:29:58] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:58] [#51] Client 14 sent 290 bytes
+[13/10/2021 22:29:58] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:58] 		-- CACHE OVLD! Returning config.txt [48 bytes]
+[13/10/2021 22:29:58] [#41] Client 14 sent 43 bytes
+[13/10/2021 22:29:58] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:58] [#39] Client 14 sent 22 bytes
+[13/10/2021 22:29:58] 	-- REQ:   6 (REQ_CLOSEFILE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:58] [#06] Client 14 sent 28 bytes
+[13/10/2021 22:29:58] 	-- REQ:   0 (  REQ_OPEN)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:58] [#51] Client 14 sent 22 bytes
+[13/10/2021 22:29:58] 	-- REQ:   3 (REQ_GETSIZ)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:59] [#41] Client 14 sent 22 bytes
+[13/10/2021 22:29:59] 	-- REQ:   2 (  REQ_READ)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:29:59] [#39] Client 14 sent 22 bytes
+[13/10/2021 22:29:59] 	-- REQ:   6 (REQ_CLOSEFILE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:30:00] Client 14 disconnected
+[13/10/2021 22:50:07] Client 15 connected
+[13/10/2021 22:50:07] [#06] Client 15 sent 30 bytes
+[13/10/2021 22:50:07] 	-- REQ:   0 (  REQ_OPEN)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:07] [#06] Client 15 sent 84 bytes
+[13/10/2021 22:50:07] 	-- REQ:  10 ( REQ_WRITE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:07] 		-- CACHE OVLD! Returning server.c [15369 bytes]
+[13/10/2021 22:50:07] [#41] Client 15 sent 24 bytes
+[13/10/2021 22:50:07] 	-- REQ:   6 (REQ_CLOSEFILE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:07] [#39] Client 15 sent 28 bytes
+[13/10/2021 22:50:07] 	-- REQ:   0 (  REQ_OPEN)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:08] [#51] Client 15 sent 32 bytes
+[13/10/2021 22:50:08] 	-- REQ:  10 ( REQ_WRITE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:08] [#06] Client 15 sent 290 bytes
+[13/10/2021 22:50:08] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:08] [#41] Client 15 sent 290 bytes
+[13/10/2021 22:50:08] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:08] [#39] Client 15 sent 290 bytes
+[13/10/2021 22:50:08] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:08] [#51] Client 15 sent 290 bytes
+[13/10/2021 22:50:08] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:08] [#06] Client 15 sent 290 bytes
+[13/10/2021 22:50:08] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:08] [#41] Client 15 sent 290 bytes
+[13/10/2021 22:50:08] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:08] [#39] Client 15 sent 290 bytes
+[13/10/2021 22:50:08] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:08] [#51] Client 15 sent 290 bytes
+[13/10/2021 22:50:08] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:08] [#06] Client 15 sent 290 bytes
+[13/10/2021 22:50:08] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:09] [#41] Client 15 sent 290 bytes
+[13/10/2021 22:50:09] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:09] [#39] Client 15 sent 290 bytes
+[13/10/2021 22:50:09] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:09] [#51] Client 15 sent 290 bytes
+[13/10/2021 22:50:09] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:09] [#06] Client 15 sent 290 bytes
+[13/10/2021 22:50:09] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:09] [#41] Client 15 sent 290 bytes
+[13/10/2021 22:50:09] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:09] [#39] Client 15 sent 290 bytes
+[13/10/2021 22:50:09] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:09] [#51] Client 15 sent 290 bytes
+[13/10/2021 22:50:09] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:09] [#06] Client 15 sent 290 bytes
+[13/10/2021 22:50:09] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:09] [#41] Client 15 sent 290 bytes
+[13/10/2021 22:50:09] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:10] [#39] Client 15 sent 290 bytes
+[13/10/2021 22:50:10] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:10] [#51] Client 15 sent 290 bytes
+[13/10/2021 22:50:10] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:10] [#06] Client 15 sent 290 bytes
+[13/10/2021 22:50:10] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:10] [#41] Client 15 sent 290 bytes
+[13/10/2021 22:50:10] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:10] [#39] Client 15 sent 290 bytes
+[13/10/2021 22:50:10] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:10] [#51] Client 15 sent 290 bytes
+[13/10/2021 22:50:10] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:10] [#06] Client 15 sent 290 bytes
+[13/10/2021 22:50:10] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:10] [#41] Client 15 sent 290 bytes
+[13/10/2021 22:50:10] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:10] [#39] Client 15 sent 290 bytes
+[13/10/2021 22:50:10] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:10] [#51] Client 15 sent 290 bytes
+[13/10/2021 22:50:10] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:11] [#06] Client 15 sent 290 bytes
+[13/10/2021 22:50:11] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:11] [#41] Client 15 sent 290 bytes
+[13/10/2021 22:50:11] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:11] [#39] Client 15 sent 290 bytes
+[13/10/2021 22:50:11] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:11] [#51] Client 15 sent 290 bytes
+[13/10/2021 22:50:11] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:11] [#06] Client 15 sent 290 bytes
+[13/10/2021 22:50:11] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:11] [#41] Client 15 sent 290 bytes
+[13/10/2021 22:50:11] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:11] [#41] Client 15 sent 290 bytes
+[13/10/2021 22:50:11] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:11] [#51] Client 15 sent 290 bytes
+[13/10/2021 22:50:11] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:11] [#06] Client 15 sent 290 bytes
+[13/10/2021 22:50:11] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:11] [#39] Client 15 sent 290 bytes
+[13/10/2021 22:50:11] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:12] [#41] Client 15 sent 290 bytes
+[13/10/2021 22:50:12] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:12] [#51] Client 15 sent 290 bytes
+[13/10/2021 22:50:12] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:12] [#06] Client 15 sent 290 bytes
+[13/10/2021 22:50:12] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:12] [#39] Client 15 sent 290 bytes
+[13/10/2021 22:50:12] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:12] [#41] Client 15 sent 290 bytes
+[13/10/2021 22:50:12] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:12] [#51] Client 15 sent 290 bytes
+[13/10/2021 22:50:12] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:12] [#06] Client 15 sent 290 bytes
+[13/10/2021 22:50:12] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:12] [#39] Client 15 sent 290 bytes
+[13/10/2021 22:50:12] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:12] [#41] Client 15 sent 290 bytes
+[13/10/2021 22:50:12] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:12] [#51] Client 15 sent 290 bytes
+[13/10/2021 22:50:12] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:13] [#06] Client 15 sent 290 bytes
+[13/10/2021 22:50:13] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:13] [#39] Client 15 sent 290 bytes
+[13/10/2021 22:50:13] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:13] [#41] Client 15 sent 290 bytes
+[13/10/2021 22:50:13] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:13] [#51] Client 15 sent 290 bytes
+[13/10/2021 22:50:13] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:13] [#06] Client 15 sent 290 bytes
+[13/10/2021 22:50:13] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:13] [#39] Client 15 sent 290 bytes
+[13/10/2021 22:50:13] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:13] [#41] Client 15 sent 290 bytes
+[13/10/2021 22:50:13] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:13] [#51] Client 15 sent 290 bytes
+[13/10/2021 22:50:13] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:13] [#06] Client 15 sent 290 bytes
+[13/10/2021 22:50:13] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:13] [#39] Client 15 sent 290 bytes
+[13/10/2021 22:50:13] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:14] [#41] Client 15 sent 290 bytes
+[13/10/2021 22:50:14] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:14] [#51] Client 15 sent 290 bytes
+[13/10/2021 22:50:14] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:14] 		-- CACHE OVLD! Returning config.txt [48 bytes]
+[13/10/2021 22:50:14] [#06] Client 15 sent 43 bytes
+[13/10/2021 22:50:14] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:14] [#39] Client 15 sent 22 bytes
+[13/10/2021 22:50:14] 	-- REQ:   6 (REQ_CLOSEFILE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:14] [#41] Client 15 sent 28 bytes
+[13/10/2021 22:50:14] 	-- REQ:   0 (  REQ_OPEN)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:14] [#51] Client 15 sent 22 bytes
+[13/10/2021 22:50:14] 	-- REQ:   3 (REQ_GETSIZ)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:14] [#06] Client 15 sent 22 bytes
+[13/10/2021 22:50:14] 	-- REQ:   2 (  REQ_READ)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:14] [#39] Client 15 sent 22 bytes
+[13/10/2021 22:50:14] 	-- REQ:   6 (REQ_CLOSEFILE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:15] Client 15 disconnected
+[13/10/2021 22:50:24] Client 16 connected
+[13/10/2021 22:50:24] [#41] Client 16 sent 30 bytes
+[13/10/2021 22:50:24] 	-- REQ:   0 (  REQ_OPEN)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:24] [#41] Client 16 sent 84 bytes
+[13/10/2021 22:50:24] 	-- REQ:  10 ( REQ_WRITE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:24] 		-- CACHE OVLD! Returning server.c [15369 bytes]
+[13/10/2021 22:50:24] [#06] Client 16 sent 24 bytes
+[13/10/2021 22:50:24] 	-- REQ:   6 (REQ_CLOSEFILE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:24] [#39] Client 16 sent 28 bytes
+[13/10/2021 22:50:24] 	-- REQ:   0 (  REQ_OPEN)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:24] [#51] Client 16 sent 32 bytes
+[13/10/2021 22:50:24] 	-- REQ:  10 ( REQ_WRITE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:24] [#41] Client 16 sent 290 bytes
+[13/10/2021 22:50:24] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:24] [#06] Client 16 sent 290 bytes
+[13/10/2021 22:50:24] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:24] [#39] Client 16 sent 290 bytes
+[13/10/2021 22:50:24] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:24] [#51] Client 16 sent 290 bytes
+[13/10/2021 22:50:24] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:25] [#41] Client 16 sent 290 bytes
+[13/10/2021 22:50:25] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:25] [#06] Client 16 sent 290 bytes
+[13/10/2021 22:50:25] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:25] [#39] Client 16 sent 290 bytes
+[13/10/2021 22:50:25] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:25] [#51] Client 16 sent 290 bytes
+[13/10/2021 22:50:25] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:25] [#41] Client 16 sent 290 bytes
+[13/10/2021 22:50:25] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:25] [#06] Client 16 sent 290 bytes
+[13/10/2021 22:50:25] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:25] [#39] Client 16 sent 290 bytes
+[13/10/2021 22:50:25] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:25] [#51] Client 16 sent 290 bytes
+[13/10/2021 22:50:25] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:25] [#41] Client 16 sent 290 bytes
+[13/10/2021 22:50:25] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:25] [#06] Client 16 sent 290 bytes
+[13/10/2021 22:50:25] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:26] [#39] Client 16 sent 290 bytes
+[13/10/2021 22:50:26] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:26] [#51] Client 16 sent 290 bytes
+[13/10/2021 22:50:26] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:26] [#41] Client 16 sent 290 bytes
+[13/10/2021 22:50:26] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:26] [#06] Client 16 sent 290 bytes
+[13/10/2021 22:50:26] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:26] [#39] Client 16 sent 290 bytes
+[13/10/2021 22:50:26] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:26] [#51] Client 16 sent 290 bytes
+[13/10/2021 22:50:26] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:26] [#41] Client 16 sent 290 bytes
+[13/10/2021 22:50:26] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:26] [#06] Client 16 sent 290 bytes
+[13/10/2021 22:50:26] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:26] [#39] Client 16 sent 290 bytes
+[13/10/2021 22:50:26] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:26] [#51] Client 16 sent 290 bytes
+[13/10/2021 22:50:26] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:27] [#41] Client 16 sent 290 bytes
+[13/10/2021 22:50:27] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:27] [#06] Client 16 sent 290 bytes
+[13/10/2021 22:50:27] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:27] [#39] Client 16 sent 290 bytes
+[13/10/2021 22:50:27] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:27] [#51] Client 16 sent 290 bytes
+[13/10/2021 22:50:27] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:27] [#41] Client 16 sent 290 bytes
+[13/10/2021 22:50:27] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:27] [#06] Client 16 sent 290 bytes
+[13/10/2021 22:50:27] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:27] [#39] Client 16 sent 290 bytes
+[13/10/2021 22:50:27] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:27] [#51] Client 16 sent 290 bytes
+[13/10/2021 22:50:27] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:27] [#41] Client 16 sent 290 bytes
+[13/10/2021 22:50:27] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:27] [#06] Client 16 sent 290 bytes
+[13/10/2021 22:50:27] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:28] [#39] Client 16 sent 290 bytes
+[13/10/2021 22:50:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:28] [#51] Client 16 sent 290 bytes
+[13/10/2021 22:50:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:28] [#41] Client 16 sent 290 bytes
+[13/10/2021 22:50:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:28] [#06] Client 16 sent 290 bytes
+[13/10/2021 22:50:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:28] [#39] Client 16 sent 290 bytes
+[13/10/2021 22:50:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:28] [#51] Client 16 sent 290 bytes
+[13/10/2021 22:50:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:28] [#41] Client 16 sent 290 bytes
+[13/10/2021 22:50:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:28] [#06] Client 16 sent 290 bytes
+[13/10/2021 22:50:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:28] [#39] Client 16 sent 290 bytes
+[13/10/2021 22:50:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:28] [#51] Client 16 sent 290 bytes
+[13/10/2021 22:50:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:29] [#41] Client 16 sent 290 bytes
+[13/10/2021 22:50:29] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:29] [#06] Client 16 sent 290 bytes
+[13/10/2021 22:50:29] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:29] [#39] Client 16 sent 290 bytes
+[13/10/2021 22:50:29] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:29] [#51] Client 16 sent 290 bytes
+[13/10/2021 22:50:29] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:29] [#41] Client 16 sent 290 bytes
+[13/10/2021 22:50:29] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:29] [#06] Client 16 sent 290 bytes
+[13/10/2021 22:50:29] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:29] [#39] Client 16 sent 290 bytes
+[13/10/2021 22:50:29] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:29] [#51] Client 16 sent 290 bytes
+[13/10/2021 22:50:29] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:29] [#41] Client 16 sent 290 bytes
+[13/10/2021 22:50:29] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:29] [#06] Client 16 sent 290 bytes
+[13/10/2021 22:50:29] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:30] [#39] Client 16 sent 290 bytes
+[13/10/2021 22:50:30] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:30] [#51] Client 16 sent 290 bytes
+[13/10/2021 22:50:30] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:30] [#41] Client 16 sent 290 bytes
+[13/10/2021 22:50:30] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:30] [#06] Client 16 sent 290 bytes
+[13/10/2021 22:50:30] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:30] [#39] Client 16 sent 290 bytes
+[13/10/2021 22:50:30] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:30] [#51] Client 16 sent 290 bytes
+[13/10/2021 22:50:30] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:30] 		-- CACHE OVLD! Returning config.txt [48 bytes]
+[13/10/2021 22:50:30] [#41] Client 16 sent 43 bytes
+[13/10/2021 22:50:30] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:30] [#06] Client 16 sent 22 bytes
+[13/10/2021 22:50:30] 	-- REQ:   6 (REQ_CLOSEFILE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:30] [#39] Client 16 sent 28 bytes
+[13/10/2021 22:50:30] 	-- REQ:   0 (  REQ_OPEN)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:31] [#51] Client 16 sent 22 bytes
+[13/10/2021 22:50:31] 	-- REQ:   3 (REQ_GETSIZ)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:31] [#41] Client 16 sent 22 bytes
+[13/10/2021 22:50:31] 	-- REQ:   2 (  REQ_READ)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:31] [#06] Client 16 sent 22 bytes
+[13/10/2021 22:50:31] 	-- REQ:   6 (REQ_CLOSEFILE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:32] Client 16 disconnected
+[13/10/2021 22:50:34] Client 17 connected
+[13/10/2021 22:50:34] [#39] Client 17 sent 30 bytes
+[13/10/2021 22:50:34] 	-- REQ:   0 (  REQ_OPEN)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:35] [#39] Client 17 sent 84 bytes
+[13/10/2021 22:50:35] 	-- REQ:  10 ( REQ_WRITE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:35] 		-- CACHE OVLD! Returning server.c [15369 bytes]
+[13/10/2021 22:50:36] [#41] Client 17 sent 24 bytes
+[13/10/2021 22:50:36] 	-- REQ:   6 (REQ_CLOSEFILE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:37] [#06] Client 17 sent 28 bytes
+[13/10/2021 22:50:37] 	-- REQ:   0 (  REQ_OPEN)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:38] [#51] Client 17 sent 32 bytes
+[13/10/2021 22:50:38] 	-- REQ:  10 ( REQ_WRITE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:39] [#39] Client 17 sent 290 bytes
+[13/10/2021 22:50:39] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:40] [#41] Client 17 sent 290 bytes
+[13/10/2021 22:50:40] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:41] [#06] Client 17 sent 290 bytes
+[13/10/2021 22:50:41] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:42] [#51] Client 17 sent 290 bytes
+[13/10/2021 22:50:42] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:43] [#39] Client 17 sent 290 bytes
+[13/10/2021 22:50:43] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:44] [#41] Client 17 sent 290 bytes
+[13/10/2021 22:50:44] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:45] [#41] Client 17 sent 290 bytes
+[13/10/2021 22:50:45] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:46] [#51] Client 17 sent 290 bytes
+[13/10/2021 22:50:46] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:47] [#39] Client 17 sent 290 bytes
+[13/10/2021 22:50:47] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:48] [#06] Client 17 sent 290 bytes
+[13/10/2021 22:50:48] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:49] [#41] Client 17 sent 290 bytes
+[13/10/2021 22:50:49] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:50] [#51] Client 17 sent 290 bytes
+[13/10/2021 22:50:50] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:51] [#39] Client 17 sent 290 bytes
+[13/10/2021 22:50:51] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:52] [#06] Client 17 sent 290 bytes
+[13/10/2021 22:50:52] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:53] [#41] Client 17 sent 290 bytes
+[13/10/2021 22:50:53] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:54] [#51] Client 17 sent 290 bytes
+[13/10/2021 22:50:54] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:55] [#39] Client 17 sent 290 bytes
+[13/10/2021 22:50:55] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:56] [#06] Client 17 sent 290 bytes
+[13/10/2021 22:50:56] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:57] [#41] Client 17 sent 290 bytes
+[13/10/2021 22:50:57] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:58] [#51] Client 17 sent 290 bytes
+[13/10/2021 22:50:58] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:50:59] [#39] Client 17 sent 290 bytes
+[13/10/2021 22:50:59] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:00] [#06] Client 17 sent 290 bytes
+[13/10/2021 22:51:00] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:01] [#41] Client 17 sent 290 bytes
+[13/10/2021 22:51:01] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:02] [#51] Client 17 sent 290 bytes
+[13/10/2021 22:51:02] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:03] [#39] Client 17 sent 290 bytes
+[13/10/2021 22:51:03] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:04] [#06] Client 17 sent 290 bytes
+[13/10/2021 22:51:04] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:05] [#41] Client 17 sent 290 bytes
+[13/10/2021 22:51:05] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:06] [#51] Client 17 sent 290 bytes
+[13/10/2021 22:51:06] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:07] [#39] Client 17 sent 290 bytes
+[13/10/2021 22:51:07] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:08] [#06] Client 17 sent 290 bytes
+[13/10/2021 22:51:08] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:09] [#41] Client 17 sent 290 bytes
+[13/10/2021 22:51:09] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:10] [#51] Client 17 sent 290 bytes
+[13/10/2021 22:51:10] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:11] [#39] Client 17 sent 290 bytes
+[13/10/2021 22:51:11] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:12] [#06] Client 17 sent 290 bytes
+[13/10/2021 22:51:12] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:13] [#41] Client 17 sent 290 bytes
+[13/10/2021 22:51:13] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:14] [#51] Client 17 sent 290 bytes
+[13/10/2021 22:51:14] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:15] [#39] Client 17 sent 290 bytes
+[13/10/2021 22:51:15] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:16] [#06] Client 17 sent 290 bytes
+[13/10/2021 22:51:16] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:17] [#41] Client 17 sent 290 bytes
+[13/10/2021 22:51:17] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:18] [#51] Client 17 sent 290 bytes
+[13/10/2021 22:51:18] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:19] [#39] Client 17 sent 290 bytes
+[13/10/2021 22:51:19] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:20] [#06] Client 17 sent 290 bytes
+[13/10/2021 22:51:20] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:21] [#41] Client 17 sent 290 bytes
+[13/10/2021 22:51:21] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:22] [#51] Client 17 sent 290 bytes
+[13/10/2021 22:51:22] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:23] [#39] Client 17 sent 290 bytes
+[13/10/2021 22:51:23] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:24] [#06] Client 17 sent 290 bytes
+[13/10/2021 22:51:24] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:25] [#41] Client 17 sent 290 bytes
+[13/10/2021 22:51:25] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:26] [#51] Client 17 sent 290 bytes
+[13/10/2021 22:51:26] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:27] [#39] Client 17 sent 290 bytes
+[13/10/2021 22:51:27] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:28] [#06] Client 17 sent 290 bytes
+[13/10/2021 22:51:28] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:29] [#41] Client 17 sent 290 bytes
+[13/10/2021 22:51:29] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:30] [#51] Client 17 sent 290 bytes
+[13/10/2021 22:51:30] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:31] [#39] Client 17 sent 290 bytes
+[13/10/2021 22:51:31] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:32] [#06] Client 17 sent 290 bytes
+[13/10/2021 22:51:32] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:33] [#41] Client 17 sent 290 bytes
+[13/10/2021 22:51:33] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:34] [#51] Client 17 sent 290 bytes
+[13/10/2021 22:51:34] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:35] [#39] Client 17 sent 290 bytes
+[13/10/2021 22:51:35] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:36] [#06] Client 17 sent 290 bytes
+[13/10/2021 22:51:36] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:37] [#41] Client 17 sent 290 bytes
+[13/10/2021 22:51:37] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:38] [#51] Client 17 sent 290 bytes
+[13/10/2021 22:51:38] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:38] 		-- CACHE OVLD! Returning config.txt [48 bytes]
+[13/10/2021 22:51:39] [#39] Client 17 sent 43 bytes
+[13/10/2021 22:51:39] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:40] [#06] Client 17 sent 22 bytes
+[13/10/2021 22:51:40] 	-- REQ:   6 (REQ_CLOSEFILE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:41] [#41] Client 17 sent 28 bytes
+[13/10/2021 22:51:41] 	-- REQ:   0 (  REQ_OPEN)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:42] [#51] Client 17 sent 22 bytes
+[13/10/2021 22:51:42] 	-- REQ:   3 (REQ_GETSIZ)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:43] [#39] Client 17 sent 22 bytes
+[13/10/2021 22:51:43] 	-- REQ:   2 (  REQ_READ)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:44] [#06] Client 17 sent 22 bytes
+[13/10/2021 22:51:44] 	-- REQ:   6 (REQ_CLOSEFILE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:51:45] Client 17 disconnected
+[13/10/2021 22:52:05] Client 18 connected
+[13/10/2021 22:52:05] [#41] Client 18 sent 30 bytes
+[13/10/2021 22:52:05] 	-- REQ:   0 (  REQ_OPEN)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:05] [#41] Client 18 sent 84 bytes
+[13/10/2021 22:52:05] 	-- REQ:  10 ( REQ_WRITE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:05] 		-- CACHE OVLD! Returning server.c [15369 bytes]
+[13/10/2021 22:52:05] [#39] Client 18 sent 24 bytes
+[13/10/2021 22:52:05] 	-- REQ:   6 (REQ_CLOSEFILE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:05] [#06] Client 18 sent 28 bytes
+[13/10/2021 22:52:05] 	-- REQ:   0 (  REQ_OPEN)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:05] [#51] Client 18 sent 32 bytes
+[13/10/2021 22:52:05] 	-- REQ:  10 ( REQ_WRITE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:05] [#41] Client 18 sent 290 bytes
+[13/10/2021 22:52:05] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:05] [#39] Client 18 sent 290 bytes
+[13/10/2021 22:52:05] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:05] [#06] Client 18 sent 290 bytes
+[13/10/2021 22:52:05] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:06] [#51] Client 18 sent 290 bytes
+[13/10/2021 22:52:06] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:06] [#41] Client 18 sent 290 bytes
+[13/10/2021 22:52:06] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:06] [#39] Client 18 sent 290 bytes
+[13/10/2021 22:52:06] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:06] [#06] Client 18 sent 290 bytes
+[13/10/2021 22:52:06] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:06] [#51] Client 18 sent 290 bytes
+[13/10/2021 22:52:06] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:06] [#41] Client 18 sent 290 bytes
+[13/10/2021 22:52:06] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:06] [#39] Client 18 sent 290 bytes
+[13/10/2021 22:52:06] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:06] [#06] Client 18 sent 290 bytes
+[13/10/2021 22:52:06] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:06] [#51] Client 18 sent 290 bytes
+[13/10/2021 22:52:06] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:06] [#41] Client 18 sent 290 bytes
+[13/10/2021 22:52:06] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:07] [#39] Client 18 sent 290 bytes
+[13/10/2021 22:52:07] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:07] [#06] Client 18 sent 290 bytes
+[13/10/2021 22:52:07] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:07] [#51] Client 18 sent 290 bytes
+[13/10/2021 22:52:07] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:07] [#41] Client 18 sent 290 bytes
+[13/10/2021 22:52:07] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:07] [#39] Client 18 sent 290 bytes
+[13/10/2021 22:52:07] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:07] [#06] Client 18 sent 290 bytes
+[13/10/2021 22:52:07] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:07] [#51] Client 18 sent 290 bytes
+[13/10/2021 22:52:07] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:07] [#41] Client 18 sent 290 bytes
+[13/10/2021 22:52:07] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:07] [#39] Client 18 sent 290 bytes
+[13/10/2021 22:52:07] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:07] [#06] Client 18 sent 290 bytes
+[13/10/2021 22:52:07] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:08] [#51] Client 18 sent 290 bytes
+[13/10/2021 22:52:08] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:08] [#41] Client 18 sent 290 bytes
+[13/10/2021 22:52:08] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:08] [#39] Client 18 sent 290 bytes
+[13/10/2021 22:52:08] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:08] [#06] Client 18 sent 290 bytes
+[13/10/2021 22:52:08] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:08] [#51] Client 18 sent 290 bytes
+[13/10/2021 22:52:08] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:08] [#41] Client 18 sent 290 bytes
+[13/10/2021 22:52:08] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:08] [#39] Client 18 sent 290 bytes
+[13/10/2021 22:52:08] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:08] [#06] Client 18 sent 290 bytes
+[13/10/2021 22:52:08] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:08] [#51] Client 18 sent 290 bytes
+[13/10/2021 22:52:08] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:08] [#41] Client 18 sent 290 bytes
+[13/10/2021 22:52:08] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:09] [#39] Client 18 sent 290 bytes
+[13/10/2021 22:52:09] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:09] [#06] Client 18 sent 290 bytes
+[13/10/2021 22:52:09] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:09] [#51] Client 18 sent 290 bytes
+[13/10/2021 22:52:09] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:09] [#41] Client 18 sent 290 bytes
+[13/10/2021 22:52:09] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:09] [#39] Client 18 sent 290 bytes
+[13/10/2021 22:52:09] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:09] [#06] Client 18 sent 290 bytes
+[13/10/2021 22:52:09] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:09] [#51] Client 18 sent 290 bytes
+[13/10/2021 22:52:09] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:09] [#41] Client 18 sent 290 bytes
+[13/10/2021 22:52:09] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:09] [#39] Client 18 sent 290 bytes
+[13/10/2021 22:52:09] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:09] [#06] Client 18 sent 290 bytes
+[13/10/2021 22:52:09] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:10] [#51] Client 18 sent 290 bytes
+[13/10/2021 22:52:10] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:10] [#41] Client 18 sent 290 bytes
+[13/10/2021 22:52:10] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:10] [#39] Client 18 sent 290 bytes
+[13/10/2021 22:52:10] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:10] [#06] Client 18 sent 290 bytes
+[13/10/2021 22:52:10] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:10] [#51] Client 18 sent 290 bytes
+[13/10/2021 22:52:10] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:10] [#41] Client 18 sent 290 bytes
+[13/10/2021 22:52:10] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:10] [#39] Client 18 sent 290 bytes
+[13/10/2021 22:52:10] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:10] [#06] Client 18 sent 290 bytes
+[13/10/2021 22:52:10] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:10] [#51] Client 18 sent 290 bytes
+[13/10/2021 22:52:10] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:10] [#41] Client 18 sent 290 bytes
+[13/10/2021 22:52:10] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:11] [#39] Client 18 sent 290 bytes
+[13/10/2021 22:52:11] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:11] [#06] Client 18 sent 290 bytes
+[13/10/2021 22:52:11] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:11] [#51] Client 18 sent 290 bytes
+[13/10/2021 22:52:11] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:11] [#41] Client 18 sent 290 bytes
+[13/10/2021 22:52:11] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:11] [#39] Client 18 sent 290 bytes
+[13/10/2021 22:52:11] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:11] [#06] Client 18 sent 290 bytes
+[13/10/2021 22:52:11] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:11] [#51] Client 18 sent 290 bytes
+[13/10/2021 22:52:11] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:11] 		-- CACHE OVLD! Returning config.txt [48 bytes]
+[13/10/2021 22:52:11] [#41] Client 18 sent 43 bytes
+[13/10/2021 22:52:11] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:11] [#39] Client 18 sent 22 bytes
+[13/10/2021 22:52:11] 	-- REQ:   6 (REQ_CLOSEFILE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:11] [#06] Client 18 sent 28 bytes
+[13/10/2021 22:52:11] 	-- REQ:   0 (  REQ_OPEN)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:12] [#51] Client 18 sent 22 bytes
+[13/10/2021 22:52:12] 	-- REQ:   3 (REQ_GETSIZ)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:12] [#41] Client 18 sent 22 bytes
+[13/10/2021 22:52:12] 	-- REQ:   2 (  REQ_READ)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:12] [#39] Client 18 sent 22 bytes
+[13/10/2021 22:52:12] 	-- REQ:   6 (REQ_CLOSEFILE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:52:13] Client 18 disconnected
+[13/10/2021 22:53:20] [#39] Ready to work
+[13/10/2021 22:53:20] [#06] Ready to work
+[13/10/2021 22:53:20] [#41] Ready to work
+[13/10/2021 22:53:20] [#51] Ready to work
+[13/10/2021 22:53:29] Client 9 connected
+[13/10/2021 22:53:29] [#39] Client 9 sent 30 bytes
+[13/10/2021 22:53:29] 	-- REQ:   0 (  REQ_OPEN)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:53:29] [#06] Client 9 sent 84 bytes
+[13/10/2021 22:53:29] 	-- REQ:  10 ( REQ_WRITE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:53:29] [#41] Client 9 sent 24 bytes
+[13/10/2021 22:53:29] 	-- REQ:   6 (REQ_CLOSEFILE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:53:29] [#51] Client 9 sent 28 bytes
+[13/10/2021 22:53:29] 	-- REQ:   0 (  REQ_OPEN)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:53:29] [#39] Client 9 sent 32 bytes
+[13/10/2021 22:53:29] 	-- REQ:  10 ( REQ_WRITE)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:53:29] [#06] Client 9 sent 290 bytes
+[13/10/2021 22:53:29] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:53:30] [#41] Client 9 sent 290 bytes
+[13/10/2021 22:53:30] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:53:30] [#51] Client 9 sent 290 bytes
+[13/10/2021 22:53:30] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:53:30] [#39] Client 9 sent 290 bytes
+[13/10/2021 22:53:30] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:53:30] [#06] Client 9 sent 290 bytes
+[13/10/2021 22:53:30] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:   0 (   E_ITSOK)
+[13/10/2021 22:53:30] [#41] Client 9 sent 290 bytes
+[13/10/2021 22:53:30] 	-- REQ:  11 (REQ_APPEND)	 RETURN VALUE:  -7 ( E_NOSPACE)
+[13/10/2021 22:53:30] Client 9 disconnected

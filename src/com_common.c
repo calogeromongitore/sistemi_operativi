@@ -55,3 +55,40 @@ char *err_str(int errcode, char *buf) {
     
     return buf;
 }
+
+void seterrno_of(int errcode) {
+
+    switch (errcode) {
+        case E_GENERIC:
+            errno = ECANCELED;
+            break;
+
+        case E_LKNOACQ:
+            errno = EPERM;
+            break;
+
+        case E_NOPEN:
+            errno = EBADF;
+            break;
+
+        case E_NEXISTS:
+            errno = ENOENT;
+            break;
+
+        case E_DENIED:
+            errno = EACCES;
+            break;
+
+        case E_EXISTS:
+            errno = EEXIST;
+            break;
+
+        case E_NOSPACE:
+            errno = ENOSPC;
+            break;
+        
+        default:
+            break;
+    }
+
+}

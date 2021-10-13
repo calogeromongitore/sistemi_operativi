@@ -32,5 +32,6 @@
 
 char *newstrcat(const char *str1, const char *str2);
 char *err_str(int errcode, char *buf);
+void seterrno_of(int errcode);
 
 #endif

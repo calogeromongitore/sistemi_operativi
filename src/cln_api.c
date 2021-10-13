@@ -12,8 +12,6 @@
 #include "../include/common.h"
 #include "../include/reqframe.h"
 
-#define SIZE_OF(of) (sizeof(reqcode_t) + sizeof of)
-
 static struct sockaddr_un remote; 
 static int sfd = -1;
 static char socketname[108] = "";
@@ -132,9 +130,11 @@ int openFile(const char* pathname, int flags) {
     char reqframe[2048];
     struct reqcall reqc;
     size_t reqsize;
+    int err;
 
     if (sfd == -1) {
-        return -1; //TODO: set errno
+        errno = ENOTCONN;
+        return -1; 
     }
 
     reqcall_default(&reqc);
@@ -145,12 +145,14 @@ int openFile(const char* pathname, int flags) {
     prepareRequest((char *)reqframe, &reqsize, REQ_OPEN, &reqc);
     wait_interval();
     if (write(sfd, reqframe, reqsize) != reqsize) {
+        errno = EPIPE;
         return -1;
     }
 
     read(sfd, reqframe, sizeof(reqcode_t));
     if (*((reqcode_t *)reqframe) == REQ_FAILED) {
-        errno = EACCES;
+        read(sfd, &err, sizeof err);
+        seterrno_of(err);
         return -1;
     }
 
@@ -161,9 +163,11 @@ int readFile(const char* pathname, void** buf, size_t* size) {
     char reqframe[2048];
     struct reqcall reqc;
     size_t reqsize, filesize;
+    int err;
 
     if (sfd == -1) {
-        return -1; //TODO: set errno
+        errno = ENOTCONN;
+        return -1; 
     }
 
     *size = 0;
@@ -175,27 +179,30 @@ int readFile(const char* pathname, void** buf, size_t* size) {
     prepareRequest((char *)reqframe, &reqsize, REQ_GETSIZ, &reqc);
     wait_interval();
     if (write(sfd, reqframe, reqsize) != reqsize) {
-        return -1;
-    }
-
-    read(sfd, reqframe, SIZE_OF(filesize));
-    if (*((reqcode_t *)reqframe) == REQ_FAILED) {
-        errno = EACCES;
-        return -1;
-    }
-
-    memcpy(&filesize, reqframe + sizeof(reqcode_t), sizeof filesize);
-
-
-    prepareRequest((char *)reqframe, &reqsize, REQ_READ, &reqc);
-    wait_interval();
-    if (write(sfd, reqframe, reqsize) != reqsize) {
+        errno = EPIPE;
         return -1;
     }
 
     read(sfd, reqframe, sizeof(reqcode_t));
     if (*((reqcode_t *)reqframe) == REQ_FAILED) {
-        errno = EACCES;
+        read(sfd, &err, sizeof err);
+        seterrno_of(err);
+        return -1;
+    }
+
+    read(sfd, &filesize, sizeof filesize);
+
+    prepareRequest((char *)reqframe, &reqsize, REQ_READ, &reqc);
+    wait_interval();
+    if (write(sfd, reqframe, reqsize) != reqsize) {
+        errno = EPIPE;
+        return -1;
+    }
+
+    read(sfd, reqframe, sizeof(reqcode_t));
+    if (*((reqcode_t *)reqframe) == REQ_FAILED) {
+        read(sfd, &err, sizeof err);
+        seterrno_of(err);
         return -1;
     }
 
@@ -209,9 +216,11 @@ int closeFile(const char* pathname) {
     char reqframe[2048];
     struct reqcall reqc;
     size_t reqsize;
+    int err;
 
     if (sfd == -1) {
-        return -1; //TODO: set errno
+        errno = ENOTCONN;
+        return -1; 
     }
 
     reqcall_default(&reqc);
@@ -221,12 +230,14 @@ int closeFile(const char* pathname) {
     prepareRequest((char *)reqframe, &reqsize, REQ_CLOSEFILE, &reqc);
     wait_interval();
     if (write(sfd, reqframe, reqsize) != reqsize) {
+        errno = EPIPE;
         return -1;
     }
 
     read(sfd, reqframe, sizeof(reqcode_t));
     if (*((reqcode_t *)reqframe) == REQ_FAILED) {
-        errno = EACCES;
+        read(sfd, &err, sizeof err);
+        seterrno_of(err);
         return -1;
     }
 
@@ -237,9 +248,11 @@ int lockFile(const char* pathname) {
     char reqframe[2048];
     struct reqcall reqc;
     size_t reqsize;
+    int err;
 
     if (sfd == -1) {
-        return -1; //TODO: set errno
+        errno = ENOTCONN;
+        return -1;
     }
 
     reqcall_default(&reqc);
@@ -249,12 +262,14 @@ int lockFile(const char* pathname) {
     prepareRequest((char *)reqframe, &reqsize, REQ_LOCK, &reqc);
     wait_interval();
     if (write(sfd, reqframe, reqsize) != reqsize) {
+        errno = EPIPE;
         return -1;
     }
 
     read(sfd, reqframe, sizeof(reqcode_t));
     if (*((reqcode_t *)reqframe) == REQ_FAILED) {
-        errno = EACCES;
+        read(sfd, &err, sizeof err);
+        seterrno_of(err);
         return -1;
     }
 
@@ -265,9 +280,11 @@ int unlockFile(const char* pathname) {
     char reqframe[2048];
     struct reqcall reqc;
     size_t reqsize;
+    int err;
 
     if (sfd == -1) {
-        return -1; //TODO: set errno
+        errno = ENOTCONN;
+        return -1;
     }
 
     reqcall_default(&reqc);
@@ -277,12 +294,14 @@ int unlockFile(const char* pathname) {
     prepareRequest((char *)reqframe, &reqsize, REQ_UNLOCK, &reqc);
     wait_interval();
     if (write(sfd, reqframe, reqsize) != reqsize) {
+        errno = EPIPE;
         return -1;
     }
 
     read(sfd, reqframe, sizeof(reqcode_t));
     if (*((reqcode_t *)reqframe) == REQ_FAILED) {
-        errno = EACCES;
+        read(sfd, &err, sizeof err);
+        seterrno_of(err);
         return -1;
     }
 
@@ -293,9 +312,11 @@ int removeFile(const char* pathname) {
     char reqframe[2048];
     struct reqcall reqc;
     size_t reqsize;
+    int err;
 
     if (sfd == -1) {
-        return -1; //TODO: set errno
+        errno = ENOTCONN;
+        return -1;
     }
 
     reqcall_default(&reqc);
@@ -305,12 +326,14 @@ int removeFile(const char* pathname) {
     prepareRequest((char *)reqframe, &reqsize, REQ_REMOVE, &reqc);
     wait_interval();
     if (write(sfd, reqframe, reqsize) != reqsize) {
+        errno = EPIPE;
         return -1;
     }
 
     read(sfd, reqframe, sizeof(reqcode_t));
     if (*((reqcode_t *)reqframe) == REQ_FAILED) {
-        errno = EACCES;
+        read(sfd, &err, sizeof err);
+        seterrno_of(err);
         return -1;
     }
 
@@ -325,13 +348,16 @@ int writeFile(const char* pathname, const char* dirname) {
     char *buf;
     int fd, len;
     struct stat st;
+    int err;
 
     if (sfd == -1) {
-        return -1; //TODO: set errno
+        errno = ENOTCONN;
+        return -1;
     }
 
     fd = open(pathname, O_RDONLY);
     if (fd < 0) {
+        errno = ENOENT;
         return -1;
     }
 
@@ -356,12 +382,14 @@ int writeFile(const char* pathname, const char* dirname) {
     prepareRequest((char *)reqframe, &reqsize, REQ_WRITE, &reqc);
     wait_interval();
     if (write(sfd, reqframe, reqsize) != reqsize) {
+        errno = EPIPE;
         return -1;
     }
 
     rem = read(sfd, reqframe, sizeof(reqcode_t));
     if (*((reqcode_t *)reqframe) == REQ_FAILED) {
-        errno = EACCES;
+        read(sfd, &err, sizeof err);
+        seterrno_of(err);
         return -1;
     }
 
@@ -395,9 +423,11 @@ int appendToFile(const char* pathname, void* buf, size_t size, const char* dirna
     size_t reqsize, filesize, rem;
     char *buf2;
     int fd, len;
+    int err;
 
     if (sfd == -1) {
-        return -1; //TODO: set errno
+        errno = ENOTCONN;
+        return -1;
     }
 
     reqcall_default(&reqc);
@@ -411,12 +441,14 @@ int appendToFile(const char* pathname, void* buf, size_t size, const char* dirna
     prepareRequest((char *)reqframe, &reqsize, REQ_APPEND, &reqc);
     wait_interval();
     if (write(sfd, reqframe, reqsize) != reqsize) {
+        errno = EPIPE;
         return -1;
     }
 
     rem = read(sfd, reqframe, sizeof(reqcode_t));
     if (*((reqcode_t *)reqframe) == REQ_FAILED) {
-        errno = EACCES;
+        read(sfd, &err, sizeof err);
+        seterrno_of(err);
         return -1;
     }
 
@@ -450,9 +482,11 @@ int readNFiles(int N, const char* dirname) {
     size_t reqsize, filesize;
     char *buf2;
     int fd, len, lenret = 0;
+    int err;
 
     if (sfd == -1) {
-        return -1; //TODO: set errno
+        errno = ENOTCONN;
+        return -1;
     }
 
     reqcall_default(&reqc);
@@ -462,16 +496,18 @@ int readNFiles(int N, const char* dirname) {
     prepareRequest((char *)reqframe, &reqsize, REQ_RNDREAD, &reqc);
     wait_interval();
     if (write(sfd, reqframe, reqsize) != reqsize) {
+        errno = EPIPE;
         return -1;
     }
 
-    read(sfd, reqframe, SIZE_OF(len));
+    read(sfd, reqframe, sizeof(reqcode_t));
     if (*((reqcode_t *)reqframe) == REQ_FAILED) {
-        errno = EACCES;
+        read(sfd, &err, sizeof err);
+        seterrno_of(err);
         return -1;
     }
 
-    memcpy(&len, reqframe + sizeof(reqcode_t), sizeof len);
+    read(sfd, &len, sizeof len);
     lenret = len;
 
     while (len--) {
