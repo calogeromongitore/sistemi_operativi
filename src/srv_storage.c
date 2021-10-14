@@ -63,7 +63,6 @@ struct storage_s {
 static const struct lockstat lockstat_default = { .index = -1, .locked = 0 };
 
 static void ___remove(storage_t storage, int index, char dofree) {
-    NODE_SETNULL(storage->memory[index]);
 
     if (dofree) {
         free(storage->memory[index].locptr);
@@ -72,6 +71,7 @@ static void ___remove(storage_t storage, int index, char dofree) {
 
     STORAGE_SETSIZ(storage, storage->actual_storage - storage->memory[index].size);
     STORAGE_DECN(storage);
+    NODE_SETNULL(storage->memory[index]);
 }
 
 static struct node * ___get_inode(storage_t storage, const char *filename) {
@@ -153,7 +153,7 @@ static void ___flush_fifo(storage_t storage) {
 
 storage_t storage_init(size_t totstorage, int maxfiles) {
     storage_t storage;
-    int i;
+    int i, j;
 
     storage = (storage_t)malloc(sizeof *storage);
     storage->memory = (struct node *)malloc(maxfiles * sizeof *storage->memory);
@@ -162,6 +162,7 @@ storage_t storage_init(size_t totstorage, int maxfiles) {
     storage->totstorage = totstorage;
     storage->maxfiles = maxfiles;
     storage->actual_nfiles = 0;
+    storage->actual_storage = 0;
     storage->tempopen = list_init();
 
     storage->info.maxnum = 0;
@@ -172,12 +173,28 @@ storage_t storage_init(size_t totstorage, int maxfiles) {
 
     for (i = 0; i < maxfiles; i++) {
         NODE_SETNULL(storage->memory[i]);
+        storage->memory[i].openby_length = 0;
+        for (j = 0; j < 0x20; j++) {
+            storage->memory[i].openby[j] = -1;
+        }
     }
 
     return storage;
 }
 
 void storage_destroy(storage_t storage) {
+    int i;
+    void *val;
+
+    while (fifo_usedspace(storage->fifo) > 0) {
+        fifo_dequeue(storage->fifo, &i, sizeof i);
+        ___remove(storage, i, 1);
+    }
+
+    while (val = list_getfirst(storage->tempopen)) {
+        free(val);
+    }
+
     free(storage->memory);
     fifo_destroy(storage->fifo);
     fifo_destroy(storage->fiforet);
@@ -195,7 +212,9 @@ void storage_getremoved(storage_t storage, size_t *n, void **data, size_t *datas
         *datasize = inode.size;
         if (data) {
             *data = inode.locptr;
-        } 
+        } else {
+            free(inode.locptr);
+        }
 
         strcpy(filename, inode.filename);
         *filenamesize = inode.filename_length;
@@ -442,7 +461,9 @@ static char ___searchfn(void *val, void *what) {
 
     ret = t1->clientid == t2->clientid && !strcmp(t1->filename, t2->filename);
 
-    if (ret) t1->filename = t2->filename;
+    if (ret) {
+        t2->filename = t1->filename;
+    }
 
     return ret;
 }
@@ -464,9 +485,11 @@ int storage_write(storage_t storage, int clientid, void *buf, size_t size, char 
     } else if (size > storage->totstorage) {
         retval = E_NOSPACE;
     } else {
-        // free(t1.filename); TODO
         storage_insert(storage, buf, size, filename);
         list_delete(storage->tempopen, opened);
+
+        free(t1.filename);
+        free(list_getvalue(storage->tempopen, opened));
 
         retval = storage_open(storage, clientid, filename, O_LOCK);
     }

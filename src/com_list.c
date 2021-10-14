@@ -96,3 +96,16 @@ void list_delete(list_t list, void *nodeptr) {
     }
 
 }
+
+void *list_getfirst(list_t list) {
+
+    if (list->head == NULL) {
+        return NULL;
+    }
+
+    return list->head->value;
+}
+
+void *list_getvalue(list_t list, void *nodeptr) {
+    return ((struct lnode *)nodeptr)->value;
+}

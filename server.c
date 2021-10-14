@@ -307,6 +307,11 @@ void *th_routine_queue(void *args) {
         while (fifosize > 0 && fifosize >= sizeof thargscpy) {
 
             fifo_dequeue(fifo, &thargscpy, sizeof thargscpy);
+            if (thargscpy.quit) {
+                printf("Exiting!\n");
+                return NULL;
+            }
+
             printf("dequeued reqid %d\n", thargscpy.reqid);
 
             workers_pipewrite(thargscpy.workers, &thargscpy, sizeof thargscpy);
@@ -478,9 +483,13 @@ int main(int argc, char **argv) {
     }
 
     printf("[#00] Stopping..\n");
+    memset(&thargs, (char)0, sizeof thargs);
     thargs.quit = 1;
     workers_multicast(workers, &thargs, sizeof thargs);
+    fifo_enqueue(fifo, &thargs, sizeof thargs);
+    workers_pipewrite(workers_queue, &fifo, sizeof fifo);
     workers_mainloop(workers);
+    workers_mainloop(workers_queue);
     printf("[#00] Stopping..\n");
 
     printf("\n\n");
@@ -509,6 +518,7 @@ int main(int argc, char **argv) {
     fifo_destroy(fifo);
     args_free(&args);
     SOCKET_CLOSE(sfd);
+    close(sigfd);
     free(buf);
 
     return 0;

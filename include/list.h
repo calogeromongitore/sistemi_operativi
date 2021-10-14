@@ -8,5 +8,7 @@ void list_destroy(list_t list);
 void list_append(list_t list, void *ptr);
 void *list_search(list_t list, void *what, char (*cmpfn)(void *val, void *what));
 void list_delete(list_t list, void *node);
+void *list_getfirst(list_t list);
+void *list_getvalue(list_t list, void *nodeptr);
 
 #endif
