@@ -397,6 +397,9 @@ int main(int argc, char **argv) {
     workers_start(workers_queue, th_routine_queue);
     SET_FDMAX(fdmax, workers_getmaxfd(workers_queue));
 
+    // Cleraing possible struct pads added by compiler
+    memset((void *)&thargs, 0, sizeof thargs);
+
     while (!quit && fdsetsiz > 0) {
         rfds_cpy = rfds;
         ready_fds = select(fdmax + 1, &rfds_cpy, NULL, NULL, NULL);

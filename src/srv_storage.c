@@ -486,12 +486,11 @@ int storage_write(storage_t storage, int clientid, void *buf, size_t size, char 
         retval = E_NOSPACE;
     } else {
         storage_insert(storage, buf, size, filename);
-        list_delete(storage->tempopen, opened);
+        retval = storage_open(storage, clientid, filename, O_LOCK);
 
         free(t1.filename);
         free(list_getvalue(storage->tempopen, opened));
-
-        retval = storage_open(storage, clientid, filename, O_LOCK);
+        list_delete(storage->tempopen, opened);
     }
 
     return retval;
@@ -552,7 +551,7 @@ int storage_retrieve(storage_t storage, int clientid, int N) {
         if (!NODE_ISNULL(*inode) && (clientid < 0 || ___is_accessible(clientid, inode))) {
 
             cnode = *inode;
-            cnode.filename = (char *)malloc(inode->filename_length);
+            cnode.filename = (char *)malloc(inode->filename_length + 1);
             cnode.locptr = malloc(inode->size);
 
             memcpy(cnode.locptr, inode->locptr, inode->size);
