@@ -10,6 +10,9 @@
 #include "include/args.h"
 #include "include/api.h"
 
+#define IFTRACE(__cond, __frmt...) if (__cond) ptrace(__frmt)
+#define IFDO(__cond, __cmd) if (__cond) __cmd
+
 void check_args(args__cont__t args) {
 
     if (ARGS_ISNULL(args, ARG_SOCKETFILE)) {
@@ -35,7 +38,7 @@ int main(int argc, char **argv) {
     char *buf, *rejstore_path = NULL, *readstore_path = NULL;
     void *data;
     char chunkbuf[CHUNK_SIZE];
-    int len, i, j, k, fd, chunkread;
+    int len, i, j, k, fd, chunkread, retval;
     size_t size;
     struct stat st;
 
@@ -55,12 +58,11 @@ int main(int argc, char **argv) {
 
     check_args(args);
     if (!ARGS_ISNULL(args, ARG_SOCKETFILE)) {
-        llogp(LOG_DBG, "Opening socket file");
+        IFTRACE(1, "Opening socket file %s", ARGS_VALUE(args, ARG_SOCKETFILE));
         PERROR_DIE(openConnection((char *)ARGS_VALUE(args, ARG_SOCKETFILE), 500, absVal), -1);
     }
 
     if (!ARGS_ISNULL(args, ARG_REMOVE)) {
-        llogp(LOG_DBG, "Delete file requested!");
 
         len = strlen(ARGS_VALUE(args, ARG_REMOVE));
         for (i = j = 0; i <= len + 2; i++) {
@@ -71,9 +73,11 @@ int main(int argc, char **argv) {
             if (ARGS_VALUE(args, ARG_REMOVE)[i] == '\0') {
                 llogp(LOG_DBG, ARGS_VALUE(args, ARG_REMOVE) + j);
 
-                PERROR_DIE(openFile(ARGS_VALUE(args, ARG_REMOVE) + j, O_LOCK), -1);
-                llogp(LOG_DBG, "opened!");
-                PERROR_DIE(removeFile(ARGS_VALUE(args, ARG_REMOVE) + j), -1);
+                retval = openFile(ARGS_VALUE(args, ARG_REMOVE) + j, O_LOCK);
+                IFTRACE(!retval, "TYPE: %s - FILE: %s - EXIT VAL: %d (%s)", "OPEN", ARGS_VALUE(args, ARG_REMOVE) + j, retval, strerror(errno));
+
+                IFDO(!retval, retval = removeFile(ARGS_VALUE(args, ARG_REMOVE) + j));
+                IFTRACE(!retval, "TYPE: %s - FILE: %s - EXIT VAL: %d (%s)", "REMOVE", ARGS_VALUE(args, ARG_REMOVE) + j, retval, strerror(errno));
 
                 ARGS_VALUE(args, ARG_REMOVE)[i] = ',';
                 j = i + 1;
@@ -82,13 +86,10 @@ int main(int argc, char **argv) {
     }
 
     if (!ARGS_ISNULL(args, ARG_BIGD)) {
-        llogp(LOG_DBG, "Storing rejected files in:");
-        llogp(LOG_DBG, ARGS_VALUE(args, ARG_BIGD));
         rejstore_path = newstrcat(ARGS_VALUE(args, ARG_BIGD), "/");
     }
 
     if (!ARGS_ISNULL(args, ARG_WRITELIST)) {
-        llogp(LOG_DBG, "Writing file requested!");
 
         len = strlen(ARGS_VALUE(args, ARG_WRITELIST));
         for (i = j = 0; i <= len + 2; i++) {
@@ -97,23 +98,26 @@ int main(int argc, char **argv) {
             }
 
             if (ARGS_VALUE(args, ARG_WRITELIST)[i] == '\0') {
-                llogp(LOG_DBG, ARGS_VALUE(args, ARG_WRITELIST) + j);
-                PERROR_DIE(openFile(ARGS_VALUE(args, ARG_WRITELIST) + j, O_CREATE | O_LOCK), -1);
+                retval = openFile(ARGS_VALUE(args, ARG_WRITELIST) + j, O_CREATE | O_LOCK);
+                IFTRACE(1, "TYPE: %s - FILE: %s - EXIT VAL: %d (%s)", "OPEN", ARGS_VALUE(args, ARG_WRITELIST) + j, retval, strerror(errno));
 
                 stat(ARGS_VALUE(args, ARG_WRITELIST) + j, &st);
                 if (st.st_size <= CHUNK_SIZE) {
-                    PERROR_DIE(writeFile(ARGS_VALUE(args, ARG_WRITELIST) + j, rejstore_path), -1);
+                    IFDO(!retval, retval = writeFile(ARGS_VALUE(args, ARG_WRITELIST) + j, rejstore_path));
+                    IFTRACE(!retval, "TYPE: %s - FILE: %s - SIZE: %d - EXIT VAL: %d (%s)", "WRITE", ARGS_VALUE(args, ARG_WRITELIST) + j, st.st_size, retval, strerror(errno));
                 } else {
 
                     fd = open(ARGS_VALUE(args, ARG_WRITELIST) + j, O_RDONLY);
-                    PERROR_DIE(writeFile(ARGS_VALUE(args, ARG_WRITELIST) + j, rejstore_path), -1);
+                    IFDO(!retval, retval = writeFile(ARGS_VALUE(args, ARG_WRITELIST) + j, rejstore_path));
+                    IFTRACE(!retval, "TYPE: %s - FILE: %s - SIZE: %d - EXIT VAL: %d (%s)", "WRITE", ARGS_VALUE(args, ARG_WRITELIST) + j, 0, retval, strerror(errno));
 
                     for (k = 0; k <= st.st_size / CHUNK_SIZE; k++) {
-                        printf("\t:: file size %ld\n", st.st_size);
-                        printf("\t-- chunk %d/%ld\n", k + 1, st.st_size / CHUNK_SIZE + 1);
+                        // printf("\t:: file size %ld\n", st.st_size);
+                        // printf("\t-- chunk %d/%ld\n", k + 1, st.st_size / CHUNK_SIZE + 1);
                         chunkread = read(fd, chunkbuf, CHUNK_SIZE);
                         if (chunkread > 0) {
-                            PERROR_DIE(appendToFile(ARGS_VALUE(args, ARG_WRITELIST) + j, chunkbuf, chunkread, rejstore_path), -1);
+                            IFDO(!retval, retval = appendToFile(ARGS_VALUE(args, ARG_WRITELIST) + j, chunkbuf, chunkread, rejstore_path));
+                            IFTRACE(!retval, "TYPE: %s - FILE: %s - SIZE: %d - EXIT VAL: %d (%s)", "APPEND", ARGS_VALUE(args, ARG_WRITELIST) + j, chunkread, retval, strerror(errno));
                         }
                     }
 
@@ -121,7 +125,8 @@ int main(int argc, char **argv) {
                     close(fd);
                 }
 
-                PERROR_DIE(closeFile(ARGS_VALUE(args, ARG_WRITELIST) + j), -1);
+                IFDO(!retval, retval = closeFile(ARGS_VALUE(args, ARG_WRITELIST) + j));
+                IFTRACE(!retval, "TYPE: %s - FILE: %s - EXIT VAL: %d (%s)", "CLOSE", ARGS_VALUE(args, ARG_WRITELIST) + j, retval, strerror(errno));
 
                 if (i < len) {
                     ARGS_VALUE(args, ARG_WRITELIST)[i] = ',';
@@ -180,27 +185,6 @@ int main(int argc, char **argv) {
         llogp(LOG_DBG, ARGS_VALUE(args, ARG_RNDREAD));
         readNFiles(ARGS_VALUE(args, ARG_RNDREAD)[0] == '-' ? 0 : atoi(ARGS_VALUE(args, ARG_RNDREAD)), readstore_path);
     }
-
-    // PERROR_DIE(openConnection((char *)ARGS_VALUE(args, ARG_SOCKETFILE), 500, absVal), -1);
-
-    // PERROR_DIE(openFile("/home/gabriele97/repos/sistemi_operativi/config.txt", O_CREATE | O_LOCK), -1);
-    // PERROR_DIE(writeFile("/home/gabriele97/repos/sistemi_operativi/config.txt", "./out/"), -1);
-    // PERROR_DIE(openFile("suca.txt", O_LOCK), -1);
-    // PERROR_DIE(readFile("suca.txt", (void *)&buf, &size), -1);
-
-    // printf("%s\n", buf);
-
-    // PERROR_DIE(closeFile("suca.txt"), -1);
-
-    // PERROR_DIE(appendToFile("/home/gabriele97/repos/sistemi_operativi/config.txt", buf, size, "./out/"), -1);
-    // PERROR_DIE(readFile("/home/gabriele97/repos/sistemi_operativi/config.txt", (void *)&buf, &size), -1);
-
-    // printf("%s\n", buf);
-
-    // while(1) {
-    //     sleep(20);
-    // }
-
 
     PERROR_DIE(closeConnection((char *)ARGS_VALUE(args, ARG_SOCKETFILE)), -1);
     args_free(&args);

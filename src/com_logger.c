@@ -34,6 +34,23 @@ int llogf(int fd, char *level, char *message) {
     return bytes;
 }
 
+void ptrace(char *frmt, ...) {
+    time_t ct;
+    struct tm *localt;
+    va_list argp;
+
+    ct = time(NULL);
+    localt = localtime(&ct);
+
+    va_start(argp, frmt);
+
+    printf("[%02d/%02d/%04d %02d:%02d:%02d] ", localt->tm_mday, localt->tm_mon + 1, localt->tm_year + 1900, localt->tm_hour, localt->tm_min, localt->tm_sec);
+    vprintf(frmt, argp);
+    printf("\n");
+
+    va_end(argp);
+}
+
 void trace(char *frmt, ...) {
     time_t ct;
     struct tm *localt;

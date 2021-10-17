@@ -116,18 +116,18 @@ void *th_routine(void *args) {
     workers = (workers_t)args;
     thid = rand() % 0x40;
 
-    printf("[#%02d] Ready to work!\n", thid);
+    // printf("[#%02d] Ready to work!\n", thid);
     trace("[#%02d] Ready to work", thid);
 
     while(1) {
 
         workers_piperead(workers, &thargs_cpy, sizeof thargs_cpy);
         if (thargs_cpy.quit) {
-            printf("[#%02d] Closing thread!\n", thid);
+            // printf("[#%02d] Closing thread!\n", thid);
             break;
         }
 
-        printf("[#%02d] Client %d sent %d bytes\n", thid, thargs_cpy.sfd2, thargs_cpy.bytes);
+        // printf("[#%02d] Client %d sent %d bytes\n", thid, thargs_cpy.sfd2, thargs_cpy.bytes);
         trace("[#%02d] Client %d sent %d bytes", thid, thargs_cpy.sfd2, thargs_cpy.bytes);
 
         loc = 0;
@@ -185,7 +185,7 @@ void *th_routine(void *args) {
                     retval = storage_open(thargs_cpy.storage, thargs_cpy.sfd2, reqc.pathname, reqc.flags);
                     if (retval == A_LKWAIT) {
                         fifo_enqueue(thargs_cpy.fifo, &thargs_cpy, sizeof thargs_cpy);
-                        printf("queued reqid %d\n", thargs_cpy.reqid);
+                        // printf("queued reqid %d\n", thargs_cpy.reqid);
                         continue;
                     }
 
@@ -206,7 +206,7 @@ void *th_routine(void *args) {
                     retval = storage_lock(thargs_cpy.storage, thargs_cpy.sfd2, reqc.pathname);
                     if (retval == A_LKWAIT) {
                         fifo_enqueue(thargs_cpy.fifo, &thargs_cpy, sizeof thargs_cpy);
-                        printf("queued reqid %d\n", thargs_cpy.reqid);
+                        // printf("queued reqid %d\n", thargs_cpy.reqid);
                         continue;
                     }
 
@@ -247,7 +247,7 @@ void *th_routine(void *args) {
             }
         }
 
-        printf("\t-- REQ: %3d (%10s)\t RETURN VALUE: %3d (%10s)\n", req, req_str(req, reqstr), retval, err_str(retval, estr));
+        // printf("\t-- REQ: %3d (%10s)\t RETURN VALUE: %3d (%10s)\n", req, req_str(req, reqstr), retval, err_str(retval, estr));
         trace("\t-- REQ: %3d (%10s)\t RETURN VALUE: %3d (%10s)", req, req_str(req, reqstr), retval, err_str(retval, estr));
 
         reqst = (retval != E_ITSOK) ? REQ_FAILED : REQ_SUCCESS; 
@@ -301,18 +301,18 @@ void *th_routine_queue(void *args) {
     while(1) {
 
         workers_piperead(workers, (void *)&fifo, sizeof fifo);
-        printf("Queue checking waked up!\n");
+        // printf("Queue checking waked up!\n");
 
         fifosize = fifo_usedspace(fifo);
         while (fifosize > 0 && fifosize >= sizeof thargscpy) {
 
             fifo_dequeue(fifo, &thargscpy, sizeof thargscpy);
             if (thargscpy.quit) {
-                printf("Exiting!\n");
+                // printf("Exiting!\n");
                 return NULL;
             }
 
-            printf("dequeued reqid %d\n", thargscpy.reqid);
+            // printf("dequeued reqid %d\n", thargscpy.reqid);
 
             workers_pipewrite(thargscpy.workers, &thargscpy, sizeof thargscpy);
             fifosize -= sizeof thargscpy;
@@ -444,6 +444,7 @@ int main(int argc, char **argv) {
                 NFD_SET(sfd2, &rfds, fdsetsiz);
                 SET_FDMAX(fdmax, sfd2);
 
+                printf("Client %d connected\n", sfd2);
                 trace("Client %d connected", sfd2);
 
             } else {

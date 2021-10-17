@@ -73,16 +73,21 @@ void list_delete(list_t list, void *nodeptr) {
 
     for (node = list->head; node != NULL; node = node->next) {
         if (node == nodeptr) {
-            
+
             if (node->prev == NULL) {
                 list->head = node->next;
+                if (node->next) {
+                    node->next->prev = NULL;
+                }
             } else {
 
                 if (list->tail == nodeptr) {
                     list->tail = list->tail->prev;
                 }
 
-                node->prev->next = node->next;
+                if (node->prev) {
+                    node->prev->next = node->next;
+                }
             }
 
             list->N--;

@@ -186,6 +186,7 @@ void storage_destroy(storage_t storage) {
     int i;
     void *val;
 
+    pthread_mutex_lock(&storage->storagemtx);
     while (fifo_usedspace(storage->fifo) > 0) {
         fifo_dequeue(storage->fifo, &i, sizeof i);
         ___remove(storage, i, 1);
@@ -194,6 +195,7 @@ void storage_destroy(storage_t storage) {
     while (val = list_getfirst(storage->tempopen)) {
         free(val);
     }
+    pthread_mutex_unlock(&storage->storagemtx);
 
     free(storage->memory);
     fifo_destroy(storage->fifo);
@@ -473,24 +475,32 @@ int storage_write(storage_t storage, int clientid, void *buf, size_t size, char 
     int retval;
     struct openstat t1;
     struct node *inode;
+    size_t storagesize;
 
     t1.filename = filename;
     t1.clientid = clientid;
 
+
     retval = E_ITSOK;
+    pthread_mutex_lock(&storage->storagemtx);
+    storagesize = storage->totstorage;
     opened = list_search(storage->tempopen, &t1, ___searchfn);
+    pthread_mutex_unlock(&storage->storagemtx);
 
     if (opened == NULL) {
         retval = E_NEXISTS;
-    } else if (size > storage->totstorage) {
+    } else if (size > storagesize) {
         retval = E_NOSPACE;
     } else {
         storage_insert(storage, buf, size, filename);
         retval = storage_open(storage, clientid, filename, O_LOCK);
 
+        pthread_mutex_lock(&storage->storagemtx);
+        opened = list_search(storage->tempopen, &t1, ___searchfn);
         free(t1.filename);
         free(list_getvalue(storage->tempopen, opened));
         list_delete(storage->tempopen, opened);
+        pthread_mutex_unlock(&storage->storagemtx);
     }
 
     return retval;
@@ -500,6 +510,8 @@ int storage_append(storage_t storage, int clientid, void *buf, size_t size, char
     int retval;
     struct node *inode;
     void *copyloc;
+
+    pthread_mutex_lock(&storage->storagemtx);
 
     retval = E_ITSOK;
     inode = ___get_inode(storage, filename);
@@ -531,6 +543,7 @@ int storage_append(storage_t storage, int clientid, void *buf, size_t size, char
 
     }
 
+    pthread_mutex_unlock(&storage->storagemtx);
     return retval;
 }
 
