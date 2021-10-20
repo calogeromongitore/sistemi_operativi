@@ -430,7 +430,7 @@ int storage_unlock(storage_t storage, int clientid, const char *filename) {
 
 int storage_remove(storage_t storage, int clientid, const char *filename) {
     struct node *inode;
-    int retval, i, idx;
+    int retval, i, idx, j;
 
     pthread_mutex_lock(&storage->storagemtx);
 
@@ -448,6 +448,16 @@ int storage_remove(storage_t storage, int clientid, const char *filename) {
     } else {
         for (i = 0; strcmp(filename, storage->memory[i].filename); i++);
         ___remove(storage, i, 1);
+
+        j = fifo_usedspace(storage->fifo);
+        while (j > 0) {
+            fifo_dequeue(storage->fifo, &idx, sizeof idx);
+            j -= sizeof idx;
+
+            if (idx != i) {
+                fifo_enqueue(storage->fifo, &idx, sizeof idx);
+            }
+        }
     }
 
     pthread_mutex_unlock(&storage->storagemtx);

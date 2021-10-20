@@ -16,6 +16,7 @@ typedef enum {
     ARG_RNDREAD,
     ARG_REMOVE,
     ARG_DELAY,
+    ARG_PRINT,
     ARG_LAST_NOTVALID
 } flagarg_t;
 

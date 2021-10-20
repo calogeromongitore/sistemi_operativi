@@ -16,15 +16,13 @@ void parse_args(int argc, char **argv, args__cont__t *argscont) {
     
     for (idx = 0, i = 1; i < argc; i++) {
 
-        if ((i+1) >= argc) {
-            continue;
-        } else if (strcmp(argv[i], "-s") == 0) {
+        if (strcmp(argv[i], "-s") == 0) {
             argscont->args[idx].arg_type = ARG_SETTINGS;
         } else if (strcmp(argv[i], "-f") == 0) {
             argscont->args[idx].arg_type = ARG_SOCKETFILE;
         } else if (strcmp(argv[i], "-h") == 0) {
             argscont->args[idx].arg_type = ARG_HELP;
-        } else if (strcmp(argv[i], "-w") == 0) {
+        } else if (strcmp(argv[i], "-W") == 0) {
             argscont->args[idx].arg_type = ARG_WRITELIST;
         } else if (strcmp(argv[i], "-D") == 0) {
             argscont->args[idx].arg_type = ARG_BIGD;
@@ -38,6 +36,8 @@ void parse_args(int argc, char **argv, args__cont__t *argscont) {
             argscont->args[idx].arg_type = ARG_DELAY;
         } else if (strcmp(argv[i], "-R") == 0) {
             argscont->args[idx].arg_type = ARG_RNDREAD;
+        } else if (strcmp(argv[i], "-p") == 0) {
+            argscont->args[idx].arg_type = ARG_PRINT;
         } else {
             continue;
         }

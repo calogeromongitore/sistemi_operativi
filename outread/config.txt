@@ -1,4 +1,0 @@
-workers: 10
-totalmb: 100
-chunks: 10
-maxqueue: 20

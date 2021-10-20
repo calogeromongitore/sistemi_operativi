@@ -21,7 +21,7 @@ void check_args(args__cont__t args) {
     }
 
     if (!ARGS_ISNULL(args, ARG_BIGD) && ARGS_ISNULL(args, ARG_WRITELIST)) {
-        fprintf(stderr, "-D is requested with -w\n");
+        fprintf(stderr, "-D is requested with -W\n");
         exit(-1);
     }
 
@@ -58,7 +58,7 @@ int main(int argc, char **argv) {
 
     check_args(args);
     if (!ARGS_ISNULL(args, ARG_SOCKETFILE)) {
-        IFTRACE(1, "Opening socket file %s", ARGS_VALUE(args, ARG_SOCKETFILE));
+        IFTRACE(!ARGS_ISNULL(args, ARG_PRINT), "Opening socket file %s", ARGS_VALUE(args, ARG_SOCKETFILE));
         PERROR_DIE(openConnection((char *)ARGS_VALUE(args, ARG_SOCKETFILE), 500, absVal), -1);
     }
 
@@ -71,13 +71,12 @@ int main(int argc, char **argv) {
             }
 
             if (ARGS_VALUE(args, ARG_REMOVE)[i] == '\0') {
-                llogp(LOG_DBG, ARGS_VALUE(args, ARG_REMOVE) + j);
 
                 retval = openFile(ARGS_VALUE(args, ARG_REMOVE) + j, O_LOCK);
-                IFTRACE(!retval, "TYPE: %s - FILE: %s - EXIT VAL: %d (%s)", "OPEN", ARGS_VALUE(args, ARG_REMOVE) + j, retval, strerror(errno));
+                IFTRACE(!retval && !ARGS_ISNULL(args, ARG_PRINT), "TYPE: %s - FILE: %s - EXIT VAL: %d (%s)", "OPEN", ARGS_VALUE(args, ARG_REMOVE) + j, retval, strerror(errno));
 
                 IFDO(!retval, retval = removeFile(ARGS_VALUE(args, ARG_REMOVE) + j));
-                IFTRACE(!retval, "TYPE: %s - FILE: %s - EXIT VAL: %d (%s)", "REMOVE", ARGS_VALUE(args, ARG_REMOVE) + j, retval, strerror(errno));
+                IFTRACE(!retval && !ARGS_ISNULL(args, ARG_PRINT), "TYPE: %s - FILE: %s - EXIT VAL: %d (%s)", "REMOVE", ARGS_VALUE(args, ARG_REMOVE) + j, retval, strerror(errno));
 
                 ARGS_VALUE(args, ARG_REMOVE)[i] = ',';
                 j = i + 1;
@@ -99,17 +98,17 @@ int main(int argc, char **argv) {
 
             if (ARGS_VALUE(args, ARG_WRITELIST)[i] == '\0') {
                 retval = openFile(ARGS_VALUE(args, ARG_WRITELIST) + j, O_CREATE | O_LOCK);
-                IFTRACE(1, "TYPE: %s - FILE: %s - EXIT VAL: %d (%s)", "OPEN", ARGS_VALUE(args, ARG_WRITELIST) + j, retval, strerror(errno));
+                IFTRACE(!ARGS_ISNULL(args, ARG_PRINT), "TYPE: %s - FILE: %s - EXIT VAL: %d (%s)", "OPEN", ARGS_VALUE(args, ARG_WRITELIST) + j, retval, strerror(errno));
 
                 stat(ARGS_VALUE(args, ARG_WRITELIST) + j, &st);
                 if (st.st_size <= CHUNK_SIZE) {
                     IFDO(!retval, retval = writeFile(ARGS_VALUE(args, ARG_WRITELIST) + j, rejstore_path));
-                    IFTRACE(!retval, "TYPE: %s - FILE: %s - SIZE: %d - EXIT VAL: %d (%s)", "WRITE", ARGS_VALUE(args, ARG_WRITELIST) + j, st.st_size, retval, strerror(errno));
+                    IFTRACE(!ARGS_ISNULL(args, ARG_PRINT), "TYPE: %s - FILE: %s - SIZE: %d - EXIT VAL: %d (%s)", "WRITE", ARGS_VALUE(args, ARG_WRITELIST) + j, st.st_size, retval, strerror(errno));
                 } else {
 
                     fd = open(ARGS_VALUE(args, ARG_WRITELIST) + j, O_RDONLY);
                     IFDO(!retval, retval = writeFile(ARGS_VALUE(args, ARG_WRITELIST) + j, rejstore_path));
-                    IFTRACE(!retval, "TYPE: %s - FILE: %s - SIZE: %d - EXIT VAL: %d (%s)", "WRITE", ARGS_VALUE(args, ARG_WRITELIST) + j, 0, retval, strerror(errno));
+                    IFTRACE(!ARGS_ISNULL(args, ARG_PRINT), "TYPE: %s - FILE: %s - SIZE: %d - EXIT VAL: %d (%s)", "WRITE", ARGS_VALUE(args, ARG_WRITELIST) + j, 0, retval, strerror(errno));
 
                     for (k = 0; k <= st.st_size / CHUNK_SIZE; k++) {
                         // printf("\t:: file size %ld\n", st.st_size);
@@ -117,7 +116,7 @@ int main(int argc, char **argv) {
                         chunkread = read(fd, chunkbuf, CHUNK_SIZE);
                         if (chunkread > 0) {
                             IFDO(!retval, retval = appendToFile(ARGS_VALUE(args, ARG_WRITELIST) + j, chunkbuf, chunkread, rejstore_path));
-                            IFTRACE(!retval, "TYPE: %s - FILE: %s - SIZE: %d - EXIT VAL: %d (%s)", "APPEND", ARGS_VALUE(args, ARG_WRITELIST) + j, chunkread, retval, strerror(errno));
+                            IFTRACE(!ARGS_ISNULL(args, ARG_PRINT), "TYPE: %s - FILE: %s - SIZE: %d - EXIT VAL: %d (%s)", "APPEND", ARGS_VALUE(args, ARG_WRITELIST) + j, chunkread, retval, strerror(errno));
                         }
                     }
 
@@ -126,7 +125,7 @@ int main(int argc, char **argv) {
                 }
 
                 IFDO(!retval, retval = closeFile(ARGS_VALUE(args, ARG_WRITELIST) + j));
-                IFTRACE(!retval, "TYPE: %s - FILE: %s - EXIT VAL: %d (%s)", "CLOSE", ARGS_VALUE(args, ARG_WRITELIST) + j, retval, strerror(errno));
+                IFTRACE(!ARGS_ISNULL(args, ARG_PRINT), "TYPE: %s - FILE: %s - EXIT VAL: %d (%s)", "CLOSE", ARGS_VALUE(args, ARG_WRITELIST) + j, retval, strerror(errno));
 
                 if (i < len) {
                     ARGS_VALUE(args, ARG_WRITELIST)[i] = ',';
@@ -138,14 +137,10 @@ int main(int argc, char **argv) {
     }
 
     if (!ARGS_ISNULL(args, ARG_SMALLD)) {
-        llogp(LOG_DBG, "Storing read files in:");
-        llogp(LOG_DBG, ARGS_VALUE(args, ARG_SMALLD));
         readstore_path = newstrcat(ARGS_VALUE(args, ARG_SMALLD), "/");
     }
 
     if (!ARGS_ISNULL(args, ARG_READS)) {
-        llogp(LOG_DBG, "Reading file requested:");
-        llogp(LOG_DBG, ARGS_VALUE(args, ARG_READS));
 
         len = strlen(ARGS_VALUE(args, ARG_READS));
         for (i = j = 0; i <= len; i++) {
@@ -154,10 +149,12 @@ int main(int argc, char **argv) {
             }
 
             if (ARGS_VALUE(args, ARG_READS)[i] == '\0') {
-                llogp(LOG_DBG, ARGS_VALUE(args, ARG_READS) + j);
 
-                PERROR_DIE(openFile(ARGS_VALUE(args, ARG_READS) + j, 0), -1);
-                PERROR_DIE(readFile(ARGS_VALUE(args, ARG_READS) + j, &data, &size), -1);
+                retval = openFile(ARGS_VALUE(args, ARG_READS) + j, 0);
+                IFTRACE(!ARGS_ISNULL(args, ARG_PRINT), "TYPE: %s - FILE: %s - EXIT VAL: %d (%s)", "OPEN", ARGS_VALUE(args, ARG_READS) + j, retval, strerror(errno));
+
+                IFDO(!retval, retval = readFile(ARGS_VALUE(args, ARG_READS) + j, &data, &size));
+                IFTRACE(!ARGS_ISNULL(args, ARG_PRINT), "TYPE: %s - FILE: %s - EXIT VAL: %d (%s)", "READ", ARGS_VALUE(args, ARG_READS) + j, retval, strerror(errno));
 
                 if (readstore_path) {
                     buf = newstrcat(readstore_path, ARGS_VALUE(args, ARG_READS) + j);
@@ -167,7 +164,7 @@ int main(int argc, char **argv) {
                     free(buf);
                 }
 
-                PERROR_DIE(closeFile(ARGS_VALUE(args, ARG_READS) + j), -1);
+                IFDO(!retval, retval = closeFile(ARGS_VALUE(args, ARG_READS) + j));
                 free(data);
 
                 if (i < len) {
@@ -181,13 +178,10 @@ int main(int argc, char **argv) {
     }
 
     if (!ARGS_ISNULL(args, ARG_RNDREAD)) {
-        llogp(LOG_DBG, "Random read file requested:");
-        llogp(LOG_DBG, ARGS_VALUE(args, ARG_RNDREAD));
         readNFiles(ARGS_VALUE(args, ARG_RNDREAD)[0] == '-' ? 0 : atoi(ARGS_VALUE(args, ARG_RNDREAD)), readstore_path);
     }
 
     PERROR_DIE(closeConnection((char *)ARGS_VALUE(args, ARG_SOCKETFILE)), -1);
-    args_free(&args);
 
     return 0;
 };

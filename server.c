@@ -444,7 +444,7 @@ int main(int argc, char **argv) {
                 NFD_SET(sfd2, &rfds, fdsetsiz);
                 SET_FDMAX(fdmax, sfd2);
 
-                printf("Client %d connected\n", sfd2);
+                // printf("Client %d connected\n", sfd2);
                 trace("Client %d connected", sfd2);
 
             } else {

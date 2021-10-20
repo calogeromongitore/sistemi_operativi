@@ -10,7 +10,16 @@ maxqueue: 64
 maxincomingdata: 2048
 endef
 
+define TEST2_CONFIG
+workers: 4
+totalmb: 1
+maxfiles: 10
+maxqueue: 64
+maxincomingdata: 2048
+endef
+
 export TEST1_CONFIG
+export TEST2_CONFIG
 
 TEST1_CONFIGFILE = config_makefile.txt
 TEST1_SRVPIDFILE = SERVER.PID
@@ -50,12 +59,47 @@ clean:
 test1: client server
 	@echo "$$TEST1_CONFIG" > $(TEST1_CONFIGFILE)
 	@valgrind --leak-check=full ./$(SERVER_NAME) -f /tmp/socketfile.sk -s $(TEST1_CONFIGFILE) & echo $$! > $(TEST1_SRVPIDFILE)
-	@sleep 5
-	@./$(CLIENT_NAME) -f /tmp/socketfile.sk -w $(SERVER_NAME)& ./$(CLIENT_NAME) -f /tmp/socketfile.sk -w $(TEST1_CONFIGFILE)  
 
+	@sleep 5
+	@./$(CLIENT_NAME) -f /tmp/socketfile.sk -W $(SERVER_NAME) -t 20 -p
+	@./$(CLIENT_NAME) -f /tmp/socketfile.sk -W $(TEST1_CONFIGFILE) -t 200 -p
+	@mkdir -p outread
+	@./$(CLIENT_NAME) -f /tmp/socketfile.sk -r $(SERVER_NAME) -d ./outread -t 200 -p
+	@echo "Content of outread:"
+	@ls -l outread
+	@./$(CLIENT_NAME) -f /tmp/socketfile.sk -R 0 -t 200 -d ./outread -p
+	@echo "Content of outread:"
+	@ls -l outread
+	@./$(CLIENT_NAME) -f /tmp/socketfile.sk -c $(TEST1_CONFIGFILE) -p
+
+	@rm -r outread
 	@if [ -e $(TEST1_SRVPIDFILE) ]; then \
 		kill -INT $$(cat $(TEST1_SRVPIDFILE)); \
 	fi;
 
 	@rm $(TEST1_SRVPIDFILE)
 	@sleep 5
+
+test2: client server
+	@echo "$$TEST2_CONFIG" > $(TEST1_CONFIGFILE)
+	@./$(SERVER_NAME) -f /tmp/socketfile.sk -s $(TEST1_CONFIGFILE) & echo $$! > $(TEST1_SRVPIDFILE)
+	@sleep 1
+
+	@mkdir -p outread
+	
+	@for i in 0 1 2 3 4 5 6 7 8 9 10; do \
+		cp $(TEST1_SRVPIDFILE) $(TEST1_SRVPIDFILE).$$i; \
+		./$(CLIENT_NAME) -f /tmp/socketfile.sk -W $(TEST1_SRVPIDFILE).$$i -D ./outread -p; \
+		rm $(TEST1_SRVPIDFILE).$$i; \
+	done
+
+	@echo "Content of outread (should contain $(TEST1_SRVPIDFILE).0):"
+	@ls -l outread
+
+	@rm -r outread
+	@if [ -e $(TEST1_SRVPIDFILE) ]; then \
+		kill -INT $$(cat $(TEST1_SRVPIDFILE)); \
+	fi;
+
+	@rm $(TEST1_SRVPIDFILE)
+	@sleep 1

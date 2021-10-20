@@ -521,7 +521,7 @@ int appendToFile(const char* pathname, void* buf, size_t size, const char* dirna
 int readNFiles(int N, const char* dirname) {
     char reqframe[2048], *fname;
     struct reqcall reqc;
-    size_t reqsize, filesize;
+    size_t reqsize, filesize, rem;
     char *buf2;
     int fd, len, lenret = 0;
     int err;
@@ -549,10 +549,10 @@ int readNFiles(int N, const char* dirname) {
         return -1;
     }
 
-    read(sfd, &len, sizeof len);
-    lenret = len;
+    read(sfd, &rem, sizeof rem);
+    lenret = rem;
 
-    while (len--) {
+    while (rem--) {
         read(sfd, &filesize, sizeof filesize);
         buf2 = (char *)malloc(filesize * sizeof(char));
         read(sfd, buf2, filesize);
