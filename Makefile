@@ -18,8 +18,17 @@ maxqueue: 64
 maxincomingdata: 2048
 endef
 
+define TEST3_CONFIG
+workers: 8
+totalmb: 1
+maxfiles: 100
+maxqueue: 64
+maxincomingdata: 2048
+endef
+
 export TEST1_CONFIG
 export TEST2_CONFIG
+export TEST3_CONFIG
 
 TEST1_CONFIGFILE = config_makefile.txt
 TEST1_SRVPIDFILE = SERVER.PID
@@ -98,8 +107,33 @@ test2: client server
 
 	@rm -r outread
 	@if [ -e $(TEST1_SRVPIDFILE) ]; then \
-		kill -INT $$(cat $(TEST1_SRVPIDFILE)); \
+		kill -HUP $$(cat $(TEST1_SRVPIDFILE)); \
 	fi;
+
+	@rm $(TEST1_SRVPIDFILE)
+	wait
+	@sleep 1
+
+test3: client server
+	@echo "$$TEST3_CONFIG" > $(TEST1_CONFIGFILE)
+	@./$(SERVER_NAME) -f /tmp/socketfile.sk -s $(TEST1_CONFIGFILE) & echo $$! > $(TEST1_SRVPIDFILE)
+	@sleep 1
+
+	for i in 1 2 3 4 5 6 7 8 9 10; do \
+		cp $(TEST1_SRVPIDFILE) $(TEST1_SRVPIDFILE).$$i; \
+	done
+
+	./script.sh $(CLIENT_NAME) $(TEST1_SRVPIDFILE)
+
+	for i in 1 2 3 4 5 6 7 8 9 10; do \
+		rm $(TEST1_SRVPIDFILE).$$i; \
+	done
+
+	@if [ -e $(TEST1_SRVPIDFILE) ]; then \
+		kill -HUP $$(cat $(TEST1_SRVPIDFILE)); \
+	fi;
+
+	wait
 
 	@rm $(TEST1_SRVPIDFILE)
 	@sleep 1
