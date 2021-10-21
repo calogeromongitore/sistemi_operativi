@@ -65,6 +65,12 @@ clean:
 	@rm -fv $(MAIN_DIR)/$(CLIENT_NAME)
 	@rm -fv $(MAIN_DIR)/$(TEST1_CONFIGFILE)
 
+cleanall:
+	@rm -fv $(MAIN_DIR)/$(SERVER_NAME)
+	@rm -fv $(MAIN_DIR)/$(CLIENT_NAME)
+	@rm -fv $(MAIN_DIR)/$(TEST1_CONFIGFILE)
+	@rm -fv log.txt
+
 test1: client server
 	@echo "$$TEST1_CONFIG" > $(TEST1_CONFIGFILE)
 	@valgrind --leak-check=full ./$(SERVER_NAME) -f /tmp/socketfile.sk -s $(TEST1_CONFIGFILE) & echo $$! > $(TEST1_SRVPIDFILE)

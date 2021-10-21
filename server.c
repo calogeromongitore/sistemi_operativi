@@ -248,7 +248,7 @@ void *th_routine(void *args) {
         }
 
         // printf("\t-- REQ: %3d (%10s)\t RETURN VALUE: %3d (%10s)\n", req, req_str(req, reqstr), retval, err_str(retval, estr));
-        trace("\t-- REQ: %3d (%10s)\t RETURN VALUE: %3d (%10s)", req, req_str(req, reqstr), retval, err_str(retval, estr));
+        trace("\t-- CLIENT: %3d\t REQ: %3d (%15s - %8ld B)\t RETURN VALUE: %3d (%10s)", thargs_cpy.sfd2, req, req_str(req, reqstr), (req == REQ_WRITE || req == REQ_APPEND) ? reqc.size : loc, retval, err_str(retval, estr));
 
         reqst = (retval != E_ITSOK) ? REQ_FAILED : REQ_SUCCESS; 
         write(thargs_cpy.sfd2, &reqst, sizeof reqst);
