@@ -70,7 +70,7 @@ test1: client server
 	@valgrind --leak-check=full ./$(SERVER_NAME) -f /tmp/socketfile.sk -s $(TEST1_CONFIGFILE) & echo $$! > $(TEST1_SRVPIDFILE)
 
 	@sleep 5
-	@./$(CLIENT_NAME) -f /tmp/socketfile.sk -W $(SERVER_NAME) -t 20 -p
+	@./$(CLIENT_NAME) -f /tmp/socketfile.sk -W $(SERVER_NAME) -t 200 -p
 	@./$(CLIENT_NAME) -f /tmp/socketfile.sk -W $(TEST1_CONFIGFILE) -t 200 -p
 	@mkdir -p outread
 	@./$(CLIENT_NAME) -f /tmp/socketfile.sk -r $(SERVER_NAME) -d ./outread -t 200 -p
@@ -119,21 +119,21 @@ test3: client server
 	@./$(SERVER_NAME) -f /tmp/socketfile.sk -s $(TEST1_CONFIGFILE) & echo $$! > $(TEST1_SRVPIDFILE)
 	@sleep 1
 
-	for i in 1 2 3 4 5 6 7 8 9 10; do \
-		cp $(TEST1_SRVPIDFILE) $(TEST1_SRVPIDFILE).$$i; \
+	@for i in 1 2 3 4 5 6 7 8 9 10; do \
+		cp $(SERVER_NAME) $(SERVER_NAME).$$i; \
 	done
 
-	./script.sh $(CLIENT_NAME) $(TEST1_SRVPIDFILE)
+	./script.sh $(CLIENT_NAME) $(SERVER_NAME)
 
-	for i in 1 2 3 4 5 6 7 8 9 10; do \
-		rm $(TEST1_SRVPIDFILE).$$i; \
+	@for i in 1 2 3 4 5 6 7 8 9 10; do \
+		rm $(SERVER_NAME).$$i; \
 	done
 
 	@if [ -e $(TEST1_SRVPIDFILE) ]; then \
 		kill -HUP $$(cat $(TEST1_SRVPIDFILE)); \
 	fi;
 
-	wait
+	@wait
 
 	@rm $(TEST1_SRVPIDFILE)
 	@sleep 1

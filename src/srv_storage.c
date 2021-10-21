@@ -195,6 +195,7 @@ void storage_destroy(storage_t storage) {
     while (val = list_getfirst(storage->tempopen)) {
         free(val);
     }
+
     pthread_mutex_unlock(&storage->storagemtx);
 
     free(storage->memory);
@@ -207,6 +208,8 @@ void storage_destroy(storage_t storage) {
 
 void storage_getremoved(storage_t storage, size_t *n, void **data, size_t *datasize, char *filename, size_t *filenamesize) {
     struct node inode;
+
+    pthread_mutex_lock(&storage->storagemtx);
 
     if (*n = fifo_usedspace(storage->fiforet) / sizeof(struct node)) {
         fifo_dequeue(storage->fiforet, (void *)&inode, sizeof inode);
@@ -224,6 +227,7 @@ void storage_getremoved(storage_t storage, size_t *n, void **data, size_t *datas
         free(inode.filename);
     }
 
+    pthread_mutex_unlock(&storage->storagemtx);
 }
 
 void storage_insert(storage_t storage, void *buf, size_t size, char *filename) {

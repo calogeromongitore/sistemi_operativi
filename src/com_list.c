@@ -7,12 +7,10 @@
 struct lnode {
     void *value;
     struct lnode *next;
-    struct lnode *prev;
 };
 
 struct list_s {
     struct lnode *head;
-    struct lnode *tail;
     int N;
 };
 
@@ -21,15 +19,19 @@ list_t list_init() {
 
     list = (list_t)malloc(sizeof *list);
     list->N = 0;
-    list->head = list->tail = NULL;
+    list->head = NULL;
 
     return list;
 }
 
 void list_destroy(list_t list) {
+    struct lnode *node;
 
     while(list->N) {
-        list_delete(list, 0);
+        node = list->head->next;
+        free(list->head);
+        list->head = node;
+        list->N--;
     }    
 
     free(list);
@@ -40,17 +42,18 @@ void list_append(list_t list, void *ptr) {
 
     toadd = malloc(sizeof *toadd);
 
-    toadd->prev = list->tail;
-    if (list->tail != NULL) {
-        list->tail->next = toadd;
+    for (node = list->head; node != NULL; node = node->next) {
+        if (!node->next) {
+            node->next = toadd;
+            break;
+        }
     }
 
     toadd->next = NULL;
     toadd->value = ptr;
-    list->tail = toadd;
 
     if (!list->head) {
-        list->head = list->tail;
+        list->head = toadd;
     }
 
     ++list->N;
@@ -69,31 +72,18 @@ void *list_search(list_t list, void *what, char (*cmpfn)(void *val, void *what))
 }
 
 void list_delete(list_t list, void *nodeptr) {
-    struct lnode *node;
+    struct lnode *node, *prevnode;
 
-    for (node = list->head; node != NULL; node = node->next) {
+    for (node = list->head, prevnode = NULL; node != NULL; prevnode = node, node = node->next) {
         if (node == nodeptr) {
 
-            if (node->prev == NULL) {
-                list->head = node->next;
-                if (node->next) {
-                    node->next->prev = NULL;
-                }
+            if (prevnode) {
+                prevnode->next = node->next;
             } else {
-
-                if (list->tail == nodeptr) {
-                    list->tail = list->tail->prev;
-                }
-
-                if (node->prev) {
-                    node->prev->next = node->next;
-                }
+                list->head = node->next;
             }
 
             list->N--;
-            if (!list->N) {
-                list->tail = list->head;
-            }
 
             free(node);
             return;

@@ -455,7 +455,7 @@ int main(int argc, char **argv) {
                 //at each successful read, realloc the buffer
                 if ((bytes = read(i, (void *)buf, 1024)) <= 0) {
                     NFD_CLR(i, &rfds, fdsetsiz);
-                    trace("Client %d disconnected", sfd2);
+                    trace("Client %d disconnected", i);
                     // close(i);
                     // TODO: do a funciton like storage.closeallfilesfrom(i) in order
                     // to close all the files opened by clientid = i
