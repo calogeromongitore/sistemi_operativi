@@ -106,6 +106,7 @@ void *th_routine(void *args) {
     workers_t workers;
     thargs_t thargs_cpy;
     reqcode_t req, reqst;
+    struct storage_info storinfo;
     size_t loc, fileretsize, rem;
     struct reqcall reqc;
     char rbuf2[1024], buf4[1024], reqstr[0x10], estr[0x20];
@@ -194,7 +195,7 @@ void *th_routine(void *args) {
 
                 case REQ_CLOSEFILE:
                     retval = storage_close(thargs_cpy.storage, thargs_cpy.sfd2, reqc.pathname);
-                    workers_pipewrite(thargs_cpy.workersqueue, &thargs_cpy.fifo, sizeof thargs_cpy.fifo);
+                    // workers_pipewrite(thargs_cpy.workersqueue, &thargs_cpy.fifo, sizeof thargs_cpy.fifo);
                     loc = 0;
                     break;
 
@@ -215,6 +216,7 @@ void *th_routine(void *args) {
 
                 case REQ_UNLOCK:
                     retval = storage_unlock(thargs_cpy.storage, thargs_cpy.sfd2, reqc.pathname);
+                    workers_pipewrite(thargs_cpy.workersqueue, &thargs_cpy.fifo, sizeof thargs_cpy.fifo);
                     loc = 0;
                     break;
                 
@@ -248,7 +250,8 @@ void *th_routine(void *args) {
         }
 
         // printf("\t-- REQ: %3d (%10s)\t RETURN VALUE: %3d (%10s)\n", req, req_str(req, reqstr), retval, err_str(retval, estr));
-        trace("\t-- CLIENT: %3d\t REQ: %3d (%15s - %8ld B)\t RETURN VALUE: %3d (%10s)", thargs_cpy.sfd2, req, req_str(req, reqstr), (req == REQ_WRITE || req == REQ_APPEND) ? reqc.size : loc, retval, err_str(retval, estr));
+        storage_getinfo(thargs_cpy.storage, &storinfo);
+        trace("\t-- CLIENT: %3d\t REQ: %3d (%15s - %8ld B)\t RETURN VALUE: %3d (%10s)\t V_: %d %d", thargs_cpy.sfd2, req, reqc.flags & O_LOCK ? "REQ_OPENLOCK" : req_str(req, reqstr), (req == REQ_WRITE || req == REQ_APPEND) ? reqc.size : loc, retval, err_str(retval, estr), storinfo.maxnum, storinfo.maxsize);
 
         reqst = (retval != E_ITSOK) ? REQ_FAILED : REQ_SUCCESS; 
         write(thargs_cpy.sfd2, &reqst, sizeof reqst);

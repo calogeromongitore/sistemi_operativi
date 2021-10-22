@@ -78,6 +78,8 @@ test1: client server
 	@sleep 5
 	@./$(CLIENT_NAME) -f /tmp/socketfile.sk -W $(SERVER_NAME) -t 200 -p
 	@./$(CLIENT_NAME) -f /tmp/socketfile.sk -W $(TEST1_CONFIGFILE) -t 200 -p
+	@./$(CLIENT_NAME) -f /tmp/socketfile.sk -l $(TEST1_CONFIGFILE) -p
+	@./$(CLIENT_NAME) -f /tmp/socketfile.sk -u $(TEST1_CONFIGFILE) -p
 	@mkdir -p outread
 	@./$(CLIENT_NAME) -f /tmp/socketfile.sk -r $(SERVER_NAME) -d ./outread -t 200 -p
 	@echo "Content of outread:"

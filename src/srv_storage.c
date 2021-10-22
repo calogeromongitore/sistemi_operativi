@@ -100,6 +100,7 @@ static int ___is_openedby(int clientid, struct node *inode) {
 
 static inline char ___is_accessible(int clientid, struct node *inode) {
     return ___is_openedby(clientid, inode) || !inode->locked.locked || (inode->locked.locked && inode->openby[inode->locked.index] == clientid);
+    // return ___is_openedby(clientid, inode) || !inode->locked.locked;
 }
 
 static int ___full_remove(storage_t storage, size_t size, struct node *inode) {
@@ -336,7 +337,8 @@ int storage_open(storage_t storage, int clientid, const char *filename, int flag
         retval = E_EXISTS;
     } else if (___is_openedby(clientid, inode) == E_NOPEN) {
 
-        if (inode->locked.locked && inode->openby[inode->locked.index] != clientid) {
+        // if (inode->locked.locked && inode->openby[inode->locked.index] != clientid) {
+        if (inode->locked.locked) {
             retval = A_LKWAIT;
         } else {
             inode->openby[inode->openby_length] = clientid;
@@ -374,9 +376,9 @@ int storage_close(storage_t storage, int clientid, const char *filename) {
             inode->openby[i] = inode->openby[i + 1];
         }
 
-        if (inode->locked.locked && inode->locked.index == idx) {
-            inode->locked.locked = 0;
-        }
+        // if (inode->locked.locked && inode->locked.index == idx) {
+        //     inode->locked.locked = 0;
+        // }
 
         --inode->openby_length;
     }
@@ -399,7 +401,8 @@ int storage_lock(storage_t storage, int clientid, const char *filename) {
     } else if ((idx = ___is_openedby(clientid, inode)) == E_NOPEN) {
         retval = E_NOPEN;
     } else {
-        if (inode->locked.locked && inode->locked.index != idx) {
+        // if (inode->locked.locked && inode->locked.index != idx) {
+        if (inode->locked.locked) {
             retval = A_LKWAIT;
         } else {
             inode->locked.locked = 1;
@@ -422,9 +425,10 @@ int storage_unlock(storage_t storage, int clientid, const char *filename) {
 
     if (inode == NULL) {
         retval = E_NEXISTS;
-    } else if ((idx = ___is_openedby(clientid, inode)) == E_NOPEN) {
-        retval = E_NOPEN;
-    } else if (inode->locked.locked && inode->locked.index == idx) {
+    // } else if ((idx = ___is_openedby(clientid, inode)) == E_NOPEN) {
+    //     retval = E_NOPEN;
+    // } else if (inode->locked.locked && inode->locked.index == idx) {
+    } else if (inode->locked.locked) {
         inode->locked.locked = 0;
     }
 

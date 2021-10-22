@@ -36,6 +36,10 @@ void parse_args(int argc, char **argv, args__cont__t *argscont) {
             argscont->args[idx].arg_type = ARG_DELAY;
         } else if (strcmp(argv[i], "-R") == 0) {
             argscont->args[idx].arg_type = ARG_RNDREAD;
+        } else if (strcmp(argv[i], "-l") == 0) {
+            argscont->args[idx].arg_type = ARG_LOCK;
+        } else if (strcmp(argv[i], "-u") == 0) {
+            argscont->args[idx].arg_type = ARG_UNLOCK;
         } else if (strcmp(argv[i], "-p") == 0) {
             argscont->args[idx].arg_type = ARG_PRINT;
         } else {

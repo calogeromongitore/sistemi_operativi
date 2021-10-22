@@ -41,6 +41,7 @@ int main(int argc, char **argv) {
     int len, i, j, k, fd, chunkread, retval;
     size_t size;
     struct stat st;
+    int flock;
 
     parse_args(argc, argv, &args);
 
@@ -55,11 +56,36 @@ int main(int argc, char **argv) {
         set_interval(atoi(ARGS_VALUE(args, ARG_DELAY)));
     }
 
+    flock = !ARGS_ISNULL(args, ARG_LOCK) << O_LOCK;
 
     check_args(args);
     if (!ARGS_ISNULL(args, ARG_SOCKETFILE)) {
         IFTRACE(!ARGS_ISNULL(args, ARG_PRINT), "Opening socket file %s", ARGS_VALUE(args, ARG_SOCKETFILE));
         PERROR_DIE(openConnection((char *)ARGS_VALUE(args, ARG_SOCKETFILE), 500, absVal), -1);
+        IFTRACE(!ARGS_ISNULL(args, ARG_PRINT), "Socket file %s opened!", ARGS_VALUE(args, ARG_SOCKETFILE));
+    }
+
+    if (!ARGS_ISNULL(args, ARG_UNLOCK)) {
+
+        len = strlen(ARGS_VALUE(args, ARG_UNLOCK));
+        for (i = j = 0; i <= len; i++) {
+            if (ARGS_VALUE(args, ARG_UNLOCK)[i] == ',') {
+                ARGS_VALUE(args, ARG_UNLOCK)[i] = '\0';
+            }
+
+            if (ARGS_VALUE(args, ARG_UNLOCK)[i] == '\0') {
+
+                retval = unlockFile(ARGS_VALUE(args, ARG_UNLOCK) + j);
+                IFTRACE(!retval && !ARGS_ISNULL(args, ARG_PRINT), "TYPE: %s - FILE: %s - EXIT VAL: %d (%s)", "UNLOCK", ARGS_VALUE(args, ARG_UNLOCK) + j, retval, strerror(errno));
+
+                if (i < len) {
+                    ARGS_VALUE(args, ARG_UNLOCK)[i] = ',';
+                }
+
+                j = i + 1;
+            }
+        }
+
     }
 
     if (!ARGS_ISNULL(args, ARG_REMOVE)) {
@@ -103,14 +129,14 @@ int main(int argc, char **argv) {
                 stat(ARGS_VALUE(args, ARG_WRITELIST) + j, &st);
                 if (st.st_size <= CHUNK_SIZE) {
                     IFDO(!retval, retval = writeFile(ARGS_VALUE(args, ARG_WRITELIST) + j, rejstore_path));
-                    IFTRACE(!ARGS_ISNULL(args, ARG_PRINT), "TYPE: %s - FILE: %s - SIZE: %d - EXIT VAL: %d (%s)", "WRITE", ARGS_VALUE(args, ARG_WRITELIST) + j, st.st_size, retval, strerror(errno));
+                    IFTRACE(!retval && !ARGS_ISNULL(args, ARG_PRINT), "TYPE: %s - FILE: %s - SIZE: %d - EXIT VAL: %d (%s)", "WRITE", ARGS_VALUE(args, ARG_WRITELIST) + j, st.st_size, retval, strerror(errno));
                 } else {
 
                     fd = open(ARGS_VALUE(args, ARG_WRITELIST) + j, O_RDONLY);
                     IFDO(!retval, retval = writeFile(ARGS_VALUE(args, ARG_WRITELIST) + j, rejstore_path));
-                    IFTRACE(!ARGS_ISNULL(args, ARG_PRINT), "TYPE: %s - FILE: %s - SIZE: %d - EXIT VAL: %d (%s)", "WRITE", ARGS_VALUE(args, ARG_WRITELIST) + j, 0, retval, strerror(errno));
+                    IFTRACE(!retval && !ARGS_ISNULL(args, ARG_PRINT), "TYPE: %s - FILE: %s - SIZE: %d - EXIT VAL: %d (%s)", "WRITE", ARGS_VALUE(args, ARG_WRITELIST) + j, 0, retval, strerror(errno));
 
-                    for (k = 0; k <= st.st_size / CHUNK_SIZE; k++) {
+                    for (k = 0; !retval && k <= st.st_size / CHUNK_SIZE; k++) {
                         // printf("\t:: file size %ld\n", st.st_size);
                         // printf("\t-- chunk %d/%ld\n", k + 1, st.st_size / CHUNK_SIZE + 1);
                         chunkread = read(fd, chunkbuf, CHUNK_SIZE);
@@ -124,8 +150,16 @@ int main(int argc, char **argv) {
                     close(fd);
                 }
 
+                // if (!retval && ARGS_ISNULL(args, ARG_LOCK) || !strstr(ARGS_VALUE(args, ARG_LOCK), ARGS_VALUE(args, ARG_WRITELIST) + j)) {
+                //     IFDO(!retval, retval = unlockFile(ARGS_VALUE(args, ARG_WRITELIST) + j));
+                //     IFTRACE(!ARGS_ISNULL(args, ARG_PRINT), "TYPE: %s - FILE: %s - SIZE: %d - EXIT VAL: %d (%s)", "UNLOCK", ARGS_VALUE(args, ARG_WRITELIST) + j, chunkread, retval, strerror(errno));
+                // }
+
+                IFDO(!retval, retval = unlockFile(ARGS_VALUE(args, ARG_WRITELIST) + j));
+                IFTRACE(!ARGS_ISNULL(args, ARG_PRINT), "TYPE: %s - FILE: %s - SIZE: %d - EXIT VAL: %d (%s)", "UNLOCK", ARGS_VALUE(args, ARG_WRITELIST) + j, chunkread, retval, strerror(errno));
+
                 IFDO(!retval, retval = closeFile(ARGS_VALUE(args, ARG_WRITELIST) + j));
-                IFTRACE(!ARGS_ISNULL(args, ARG_PRINT), "TYPE: %s - FILE: %s - EXIT VAL: %d (%s)", "CLOSE", ARGS_VALUE(args, ARG_WRITELIST) + j, retval, strerror(errno));
+                IFTRACE(!retval && !ARGS_ISNULL(args, ARG_PRINT), "TYPE: %s - FILE: %s - EXIT VAL: %d (%s)", "CLOSE", ARGS_VALUE(args, ARG_WRITELIST) + j, retval, strerror(errno));
 
                 if (i < len) {
                     ARGS_VALUE(args, ARG_WRITELIST)[i] = ',';
@@ -150,13 +184,18 @@ int main(int argc, char **argv) {
 
             if (ARGS_VALUE(args, ARG_READS)[i] == '\0') {
 
-                retval = openFile(ARGS_VALUE(args, ARG_READS) + j, 0);
+                if (ARGS_ISNULL(args, ARG_LOCK)) {
+                    retval = openFile(ARGS_VALUE(args, ARG_READS) + j, 0);
+                } else {
+                    retval = openFile(ARGS_VALUE(args, ARG_READS) + j, (strstr(ARGS_VALUE(args, ARG_LOCK), ARGS_VALUE(args, ARG_READS) + j) != NULL) << O_LOCK);
+                }
+
                 IFTRACE(!ARGS_ISNULL(args, ARG_PRINT), "TYPE: %s - FILE: %s - EXIT VAL: %d (%s)", "OPEN", ARGS_VALUE(args, ARG_READS) + j, retval, strerror(errno));
 
                 IFDO(!retval, retval = readFile(ARGS_VALUE(args, ARG_READS) + j, &data, &size));
-                IFTRACE(!ARGS_ISNULL(args, ARG_PRINT), "TYPE: %s - FILE: %s - EXIT VAL: %d (%s)", "READ", ARGS_VALUE(args, ARG_READS) + j, retval, strerror(errno));
+                IFTRACE(!retval && !ARGS_ISNULL(args, ARG_PRINT), "TYPE: %s - FILE: %s - EXIT VAL: %d (%s)", "READ", ARGS_VALUE(args, ARG_READS) + j, retval, strerror(errno));
 
-                if (readstore_path) {
+                if (!retval && readstore_path) {
                     buf = newstrcat(readstore_path, ARGS_VALUE(args, ARG_READS) + j);
                     PERROR_DIE(fd = open(buf, O_WRONLY | O_CREAT, 0644), -1);
                     PERROR_DIE(write(fd, data, size), -1);
@@ -165,6 +204,7 @@ int main(int argc, char **argv) {
                 }
 
                 IFDO(!retval, retval = closeFile(ARGS_VALUE(args, ARG_READS) + j));
+                IFTRACE(!retval && !ARGS_ISNULL(args, ARG_PRINT), "TYPE: %s - FILE: %s - EXIT VAL: %d (%s)", "CLOSE", ARGS_VALUE(args, ARG_READS) + j, retval, strerror(errno));
                 free(data);
 
                 if (i < len) {
@@ -179,6 +219,35 @@ int main(int argc, char **argv) {
 
     if (!ARGS_ISNULL(args, ARG_RNDREAD)) {
         readNFiles(ARGS_VALUE(args, ARG_RNDREAD)[0] == '-' ? 0 : atoi(ARGS_VALUE(args, ARG_RNDREAD)), readstore_path);
+    }
+
+    if (!ARGS_ISNULL(args, ARG_LOCK)) {
+
+        len = strlen(ARGS_VALUE(args, ARG_LOCK));
+        for (i = j = 0; i <= len; i++) {
+            if (ARGS_VALUE(args, ARG_LOCK)[i] == ',') {
+                ARGS_VALUE(args, ARG_LOCK)[i] = '\0';
+            }
+
+            if (ARGS_VALUE(args, ARG_LOCK)[i] == '\0') {
+
+                retval = openFile(ARGS_VALUE(args, ARG_LOCK) + j, 0);
+                IFTRACE(!ARGS_ISNULL(args, ARG_PRINT), "TYPE: %s - FILE: %s - EXIT VAL: %d (%s)", "OPEN", ARGS_VALUE(args, ARG_LOCK) + j, retval, strerror(errno));
+
+                IFDO(!retval, retval = lockFile(ARGS_VALUE(args, ARG_LOCK) + j));
+                IFTRACE(!retval && !ARGS_ISNULL(args, ARG_PRINT), "TYPE: %s - FILE: %s - EXIT VAL: %d (%s)", "LOCK", ARGS_VALUE(args, ARG_LOCK) + j, retval, strerror(errno));
+
+                IFDO(!retval, retval = closeFile(ARGS_VALUE(args, ARG_LOCK) + j));
+                IFTRACE(!retval && !ARGS_ISNULL(args, ARG_PRINT), "TYPE: %s - FILE: %s - EXIT VAL: %d (%s)", "CLOSE", ARGS_VALUE(args, ARG_LOCK) + j, retval, strerror(errno));
+
+                if (i < len) {
+                    ARGS_VALUE(args, ARG_UNLOCK)[i] = ',';
+                }
+
+                j = i + 1;
+            }
+        }
+
     }
 
     PERROR_DIE(closeConnection((char *)ARGS_VALUE(args, ARG_SOCKETFILE)), -1);
