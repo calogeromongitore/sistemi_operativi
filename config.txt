@@ -1,5 +1,5 @@
 workers: 8
 totalmb: 1
-maxfiles: 100
+maxfiles: 1
 maxqueue: 64
 maxincomingdata: 2048

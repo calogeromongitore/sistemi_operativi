@@ -63,6 +63,7 @@ void *list_search(list_t list, void *what, char (*cmpfn)(void *val, void *what))
     struct lnode *node;
 
     for (node = list->head; node != NULL; node = node->next) {
+        // what è ciò che sto cercando
         if (cmpfn(node->value, what)) {
             return (void *)node;
         }

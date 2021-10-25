@@ -5,9 +5,9 @@
 #include <stdlib.h>
 #include <errno.h>
 
-#define O_CREATE 0x1
-#define O_LOCK   0x2
-#define O_NULL   0x4
+#define O_CREATE 1
+#define O_LOCK   2
+#define O_NULL   4
 
 #define E_NOSPACE -7
 #define E_EXISTS  -6

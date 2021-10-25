@@ -131,11 +131,13 @@ void *th_routine(void *args) {
         // printf("[#%02d] Client %d sent %d bytes\n", thid, thargs_cpy.sfd2, thargs_cpy.bytes);
         trace("[#%02d] Client %d sent %d bytes", thid, thargs_cpy.sfd2, thargs_cpy.bytes);
 
+        //location: per la lettura byte per byte del .data
         loc = 0;
         buf2 = rbuf2;
         reqcall_default(&reqc);
         if (thargs_cpy.data[loc++] == PARAM_SEP) {
 
+            // salvataggio del codice richiesta
             req = thargs_cpy.data[loc++];
 
             while (loc < thargs_cpy.bytes) {
@@ -180,11 +182,13 @@ void *th_routine(void *args) {
 
             }
 
+            // loc ora assume un significato diverso: mi indica i bytes da inviare al client come risposta
             switch(req) {
 
                 case REQ_OPEN:
                     retval = storage_open(thargs_cpy.storage, thargs_cpy.sfd2, reqc.pathname, reqc.flags);
                     if (retval == A_LKWAIT) {
+                        // nel caso in cui ritorna A_LKWAIT, la richiesta attuale viene accodata in fifo 
                         fifo_enqueue(thargs_cpy.fifo, &thargs_cpy, sizeof thargs_cpy);
                         // printf("queued reqid %d\n", thargs_cpy.reqid);
                         continue;
@@ -253,6 +257,7 @@ void *th_routine(void *args) {
         storage_getinfo(thargs_cpy.storage, &storinfo);
         trace("\t-- CLIENT: %3d\t REQ: %3d (%15s - %8ld B)\t RETURN VALUE: %3d (%10s)\t V_: %d %d", thargs_cpy.sfd2, req, reqc.flags & O_LOCK ? "REQ_OPENLOCK" : req_str(req, reqstr), (req == REQ_WRITE || req == REQ_APPEND) ? reqc.size : loc, retval, err_str(retval, estr), storinfo.maxnum, storinfo.maxsize);
 
+        // invio al client per dire se l'operazione è andata a buon fine o meno
         reqst = (retval != E_ITSOK) ? REQ_FAILED : REQ_SUCCESS; 
         write(thargs_cpy.sfd2, &reqst, sizeof reqst);
 
@@ -279,6 +284,8 @@ void *th_routine(void *args) {
                 free(buf2);
             }
 
+            // nel caso in cui non ci siano files da ritornare al client
+            // devo comunque comunicare che sto ritornando 0 files
             if (!len) {
                 write(thargs_cpy.sfd2, (void *)&len, sizeof len);
             }
@@ -303,6 +310,7 @@ void *th_routine_queue(void *args) {
 
     while(1) {
 
+        // il thread si sveglia dopo una UNLOCK o REMOVE
         workers_piperead(workers, (void *)&fifo, sizeof fifo);
         // printf("Queue checking waked up!\n");
 
@@ -344,6 +352,7 @@ int main(int argc, char **argv) {
     char *buf;
     int reqid = 0;
     
+    // parsing degli argomenti dati da linea di comando
     parse_args(argc, argv, &args);
 
     if (ARGS_ISNULL(args, ARG_SETTINGS)) {
@@ -355,12 +364,33 @@ int main(int argc, char **argv) {
     }
 
     fdmax = STDERR_FILENO;
+    // parsing del file di configurazione passato come
     conf = parse_config((char *)ARGS_VALUE(args, ARG_SETTINGS));
 
-    //TODO: check if config values are correct (like workers > 0)
+    if (conf.workers <= 0) {
+        fprintf(stderr, "ERORR: config file, workers must be > 0\n");
+        exit(-1);
+    } else if (conf.maxfiles <= 0) {
+        fprintf(stderr, "ERORR: config file, maxfiles must be > 0\n");
+        exit(-1);
+    } else if (conf.maxincomingdata <= 300) {
+        // maxincomingdata deve essere almeno 300 bytes
+        // per compatibilità con le richieste inviate dal client
+        fprintf(stderr, "ERORR: config file, maxincomingdata must be > 300\n");
+        exit(-1);
+    } else if (conf.maxqueue <= 0) {
+        fprintf(stderr, "ERORR: config file, maxqueue must be > 0\n");
+        exit(-1);
+    } else if (conf.total_mb <= 0) {
+        fprintf(stderr, "ERORR: config file, total_mb must be > 0\n");
+        exit(-1);
+    }
 
+
+    // allocazione byte per ricezione richieste dai client
     buf = (char *)malloc(conf.maxincomingdata * sizeof *buf);
 
+    // creazione socket
     PERROR_DIE(sfd = socket(AF_UNIX, SOCK_STREAM, 0), -1);
     SET_FDMAX(fdmax, sfd);
 
@@ -368,15 +398,23 @@ int main(int argc, char **argv) {
     strcpy(local.sun_path, (char *)ARGS_VALUE(args, ARG_SOCKETFILE));
     unlink(local.sun_path);
 
+    // binding socket
     PERROR_DIE(bind(sfd, (struct sockaddr *)&local, strlen(local.sun_path) + sizeof(local.sun_family)), -1);
+
+    // inizio ascolto sul socket
     PERROR_DIE(listen(sfd, 10), -1);
 
+    // reset set di ascolto fd per select
     FD_ZERO(&rfds_cpy);
     FD_ZERO(&rfds);
+
+    // NFD_SET macro che incrementa conteggio fd e aggiunge fd al set 
     NFD_SET(sfd, &rfds, fdsetsiz);
 
+    // Ignoro segnale SIGPIPE per errori non gestibili da disconnessione client
     signal(SIGPIPE, SIG_IGN);
 
+    // creazione set per la gestione di SIGINT SIGQUIT SIGHUP
     sigemptyset(&mask);
     sigaddset(&mask, SIGINT);
     sigaddset(&mask, SIGQUIT);
@@ -385,28 +423,40 @@ int main(int argc, char **argv) {
     // SIGINT SIGQUIT SIGHUP only handled by filedescriptors. 
     // Disabling default handler or any other handler
     PERROR_DIE(sigprocmask(SIG_BLOCK, &mask, NULL), -1);
+
+    // ottengo fd per notifica eventi sui segnali contenuti nel set &mask
     PERROR_DIE(sigfd = signalfd(-1, &mask, 0), -1);
     NFD_SET(sigfd, &rfds, fdsetsiz);
     SET_FDMAX(fdmax, sigfd);
 
+    // inizializzazione workers (struttura dati per gestione threads)
     workers = workers_init(conf.workers);
+
+    // da il via all'esecuzione dei thread con routine th_routine
     workers_start(workers, th_routine);
     SET_FDMAX(fdmax, workers_getmaxfd(workers));
 
+    // inizializzazione della struttura dati per la gestione dello storage
     storage = storage_init(conf.total_mb * 1024 * 1024, conf.maxfiles);
+
+    // inizializzazione fifo per gestione richieste in sospeso causate da LOCK su file
     fifo = fifo_init(conf.maxqueue * sizeof(thargs_t));
 
+    // inizializzazione workers per gestione fifo
     workers_queue = workers_init(1);
     workers_start(workers_queue, th_routine_queue);
     SET_FDMAX(fdmax, workers_getmaxfd(workers_queue));
 
-    // Cleraing possible struct pads added by compiler
+    // thargs viene utilizzata per assegnare le richieste ai workers
+
+    // Setto a 0 tutti i possibili padding aggiunti dal compilatore alla struct thargs
     memset((void *)&thargs, 0, sizeof thargs);
 
     while (!quit && fdsetsiz > 0) {
         rfds_cpy = rfds;
         ready_fds = select(fdmax + 1, &rfds_cpy, NULL, NULL, NULL);
 
+        // controllo prima di tutti che ci sia qualche evento sui segnali
         if (FD_ISSET(sigfd, &rfds_cpy)) {
             read(sigfd, &fdsi, sizeof fdsi);
 
@@ -419,7 +469,9 @@ int main(int argc, char **argv) {
 
                 case SIGHUP:
                     printf("SIGHUP recv!\n");
+                    // rimozione fd dei segnali (non voglio riceverne altri)
                     NFD_CLR(sigfd, &rfds, fdsetsiz);
+                    // rimozione fd del socket (non nuove connessioni da nuovi client)
                     NFD_CLR(sfd, &rfds, fdsetsiz);
                     SOCKET_CLOSE(sfd);
                     break;
@@ -434,13 +486,17 @@ int main(int argc, char **argv) {
         //STDERR_FILENO = 2
         for (i = STDERR_FILENO + 1; i <= fdmax && ready_fds; i++) {
 
+            // controllo che i sia un fd pronto
             if (!FD_ISSET(i, &rfds_cpy)) {
                 continue;
             }
 
+            // numero di fd pronti (ritornato dalla select)
+            // decremento per eveitare loop inutili (for fino a fdmax)
             --ready_fds;
             if (i == sfd) {
                 t = sizeof(remote);
+                // sfd2 è l'fd del client
                 PERROR_DIE(sfd2 = accept(i, (struct sockaddr *)&remote, &t), -1);
 
                 // fcntl(sfd2, F_SETFL, fcntl(sfd2, F_GETFL, 0) | O_NONBLOCK);
@@ -452,18 +508,10 @@ int main(int argc, char **argv) {
 
             } else {
                 
-                //fd is non blocking, so do a while and call read till it returns -1
-                //check if errno == EAGAIN or EWOULDBLOCK, if so means ok
-                //if it returns 0 the fd must be deleted from the epoll
-                //at each successful read, realloc the buffer
-                if ((bytes = read(i, (void *)buf, 1024)) <= 0) {
+                // lettura richieste dai client
+                if ((bytes = read(i, (void *)buf, conf.maxincomingdata)) <= 0) {
                     NFD_CLR(i, &rfds, fdsetsiz);
                     trace("Client %d disconnected", i);
-                    // close(i);
-                    // TODO: do a funciton like storage.closeallfilesfrom(i) in order
-                    // to close all the files opened by clientid = i
-                    // then wake up the fifo thread
-                    // workers_pipewrite(workers_queue, &fifo, sizeof fifo);
                     continue;
                 }
 
@@ -491,10 +539,17 @@ int main(int argc, char **argv) {
 
     printf("[#00] Stopping..\n");
     memset(&thargs, (char)0, sizeof thargs);
+    // prima di terminare il main, è necessario fermare i thread indicandone l'uscita con quit=1
     thargs.quit = 1;
     workers_multicast(workers, &thargs, sizeof thargs);
+
+    // inserisco thargs nella fifo
     fifo_enqueue(fifo, &thargs, sizeof thargs);
+
+    // invio al thread gestore della fifo la fifo stessa
     workers_pipewrite(workers_queue, &fifo, sizeof fifo);
+
+    // faccio la join per aspettare che tutti i thread abbiano terminato
     workers_mainloop(workers);
     workers_mainloop(workers_queue);
     printf("[#00] Stopping..\n");
