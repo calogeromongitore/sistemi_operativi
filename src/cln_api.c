@@ -24,6 +24,9 @@ static inline void timespec_diff(struct timespec *a, struct timespec *b, struct 
     result->tv_sec = a->tv_sec - b->tv_sec;
     result->tv_nsec = a->tv_nsec - b->tv_nsec;
 
+    // nel caso in cui a < b,
+    // il risultato viene sistemato calcolando l'eccedenza della sottrazione
+    // non dovrebbe mai verificarsi perchè esternamente a > b sempre
     if (result->tv_nsec < 0) {
         --result->tv_sec;
         result->tv_nsec += 1000000000L;
@@ -45,8 +48,10 @@ static int retry(struct timespec timeout, struct timespec *abstime) {
     struct timespec cmpres;
     int cmp;
 
+    // possono accadere due casi: timeout > abstime o l'inverso
     cmp = timecmp(timeout, *abstime);
 
+    // se cmp > 0 significa che timeout > abstime, quindi devo solo aspettare abstime
     if (cmp > 0) {
         // printf ("abstime: %ld sec, %ld ns\n", abstime->tv_sec, abstime->tv_nsec);
         nanosleep(abstime, NULL);
@@ -54,6 +59,8 @@ static int retry(struct timespec timeout, struct timespec *abstime) {
         // printf ("timeout: %ld sec, %ld ns\n", timeout.tv_sec, timeout.tv_nsec);
         nanosleep(&timeout, NULL);
 
+        // sottraggo ad abstime il valore di timeout.
+        // il risultato viene salvato in cmpres
         timespec_diff(abstime, &timeout, &cmpres);
         *abstime = cmpres;
     }
@@ -64,12 +71,13 @@ static int retry(struct timespec timeout, struct timespec *abstime) {
 static void wait_interval() {
     struct timespec nowcall, diffcall, diffwait;
 
+    // prendo il tempo di esecuzione attuale del thread e lo salvo in nowcall
     clock_gettime(CLOCK_THREAD_CPUTIME_ID, &nowcall);
 
     if (!(lastcall.tv_sec == 0 && lastcall.tv_nsec == 0)) {
-        timespec_diff(&nowcall, &lastcall, &diffcall);
-        if (timecmp(diffcall, _ms) < 0) {
-            timespec_diff(&_ms, &diffcall, &diffwait);
+        timespec_diff(&nowcall, &lastcall, &diffcall); // calcolo tempo trascorso dall'attuale wait_interval() e la precedente
+        if (timecmp(diffcall, _ms) < 0) { // se è passato troppo poco tempo rispetto al timeout preimpostato, devo aspettare
+            timespec_diff(&_ms, &diffcall, &diffwait); // l'attesa è pari alla differenza di tempo tra le due chiamate e il timeout
             nanosleep(&diffwait, NULL);
         }
     }
@@ -86,11 +94,14 @@ int openConnection(const char* sockname, int msec, const struct timespec abstime
     struct timespec timeout, abstime_int;
     int len;
 
+    // torno errore se sfd != -1, cioè se è già stata effettuata una connessione con successo
     if (sfd != -1) {
         errno = EMFILE;
         return -1;
     }
 
+    // controllo che l'operazione di creazionel del socket vada a buon fine
+    // se torna -1, allora faccio return -1
     IF_RETEQ(sfd = socket(AF_UNIX, SOCK_STREAM, 0), -1);
 
     remote.sun_family = AF_UNIX;
@@ -115,7 +126,7 @@ int openConnection(const char* sockname, int msec, const struct timespec abstime
 int closeConnection(const char* sockname) {
 
     if (strcmp(socketname, sockname)) {
-        errno = ENOENT;
+        errno = ENOENT; // No such file or directory
         return -1;
     } 
 
@@ -132,30 +143,37 @@ int openFile(const char* pathname, int flags) {
     size_t reqsize;
     int err, len;
 
+    // controllo che è stata effettuata la connessione, altrimenti torno errore
     if (sfd == -1) {
         errno = ENOTCONN;
         return -1; 
     }
 
+    // trovo la prima slash partendo dalla fine del path e mi memorizzo 
+    // la sua posizione in len
     for (len = strlen(pathname) - 1; len >= 0; len--) {
         if (pathname[len] == '/') {
             break;
         }
     }
 
+    // preparo struct per la richiesta
     reqcall_default(&reqc);
     reqc.pathname = pathname + ++len;
     reqc.N = 1;
     reqc.flags = flags;
 
+    // preparo i byte da inviare al server
     prepareRequest((char *)reqframe, &reqsize, REQ_OPEN, &reqc);
     wait_interval();
-    if (write(sfd, reqframe, reqsize) != reqsize) {
+    if (write(sfd, reqframe, reqsize) != reqsize) { // invio richiesta al server
         errno = EPIPE;
         return -1;
     }
 
-    read(sfd, reqframe, sizeof(reqcode_t));
+    // aspetto e ricevo la risposta dal server
+    // leggo reqframe
+    read(sfd, reqframe, sizeof(reqcode_t)); 
     if (*((reqcode_t *)reqframe) == REQ_FAILED) {
         read(sfd, &err, sizeof err);
         seterrno_of(err);
@@ -398,7 +416,7 @@ int writeFile(const char* pathname, const char* dirname) {
     }
 
     reqcall_default(&reqc);
-    stat(pathname, &st);
+    stat(pathname, &st); // richiedo informazioni sul file (sono interessato alla dimensione del file da scrivere sul server)
 
     for (len = strlen(pathname) - 1; len >= 0; len--) {
         if (pathname[len] == '/') {
@@ -408,6 +426,10 @@ int writeFile(const char* pathname, const char* dirname) {
 
     len++;
     reqc.size = st.st_size;
+    // se voglio scrivere un file piccolo < CHUNK_SIZE, lo faccio direttamente con la write
+    // quindi mando il dato con la richiesta (campo .buf)
+    // altrimenti faccio una write di dimensione 0 e saranno successive append
+    // a scrivere l'intero file
     reqc.buf = (st.st_size > CHUNK_SIZE) ? NULL : malloc(reqc.size);
     reqc.size = (st.st_size > CHUNK_SIZE) ? 0 : read(fd, reqc.buf, reqc.size);
     reqc.pathname = pathname + len;
@@ -422,6 +444,7 @@ int writeFile(const char* pathname, const char* dirname) {
         return -1;
     }
 
+    // assegnazione a rem non utilizzata
     rem = read(sfd, reqframe, sizeof(reqcode_t));
     if (*((reqcode_t *)reqframe) == REQ_FAILED) {
         read(sfd, &err, sizeof err);
@@ -431,16 +454,20 @@ int writeFile(const char* pathname, const char* dirname) {
 
     read(sfd, &rem, sizeof rem);
     while (rem--) {
+        // leggo lunghezza file 
         read(sfd, &filesize, sizeof filesize);
         buf2 = (char *)malloc(filesize * sizeof(char));
+        // leggo l'intero file (conoscendone la lunghezza)
         read(sfd, buf2, filesize);
 
+        // leggo lunghezza nome file
         read(sfd, &reqsize, sizeof reqsize);
+        // leggo l'intero nome (conoscendone la lunghezza)
         read(sfd, reqframe, reqsize);
         reqframe[reqsize] = '\0';
 
         if (filesize > 0) {
-            fname = newstrcat(dirname ? dirname : "/dev/", dirname ? reqframe : "null");
+            fname = newstrcat(dirname ? dirname : "/dev/", dirname ? reqframe : "null"); // se non è null considero prima opzione if
             PERROR_DIE(fd = open(fname, O_WRONLY | O_CREAT, 0644), -1);
             write(fd, buf2, filesize);
             close(fd);

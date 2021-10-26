@@ -22,6 +22,7 @@ void prepareRequest(char *buf, size_t *size, reqcode_t req, struct reqcall *reqc
     buf[0] = PARAM_SEP;
     buf[1] = req;
 
+    // location: prossimo byte in cui scrivere nel buf
     loc = 2;
 
     if (reqc->size != -1) {

@@ -10,6 +10,7 @@
 #include "include/args.h"
 #include "include/api.h"
 
+// IFTRACE fa il trace sullo stdout (su console) dell'output
 #define IFTRACE(__cond, __frmt...) if (__cond) ptrace(__frmt)
 #define IFDO(__cond, __cmd) if (__cond) __cmd
 
@@ -34,7 +35,7 @@ void check_args(args__cont__t args) {
 
 int main(int argc, char **argv) {
     args__cont__t args;
-    struct timespec absVal = {.tv_sec = 0, .tv_nsec = 800000000};
+    struct timespec absVal = {.tv_sec = 0, .tv_nsec = 800000000}; // timeout connessione
     char *buf, *rejstore_path = NULL, *readstore_path = NULL;
     void *data;
     char chunkbuf[CHUNK_SIZE];
